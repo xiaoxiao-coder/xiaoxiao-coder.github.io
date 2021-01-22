@@ -15,5 +15,13 @@
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 <p>$$<br>x=4<br>$$</p>
 ]]></content>
+      <categories>
+        <category>数据分析</category>
+        <category>实战</category>
+      </categories>
+      <tags>
+        <tag>JAVA</tag>
+        <tag>数据分析</tag>
+      </tags>
   </entry>
 </search>
