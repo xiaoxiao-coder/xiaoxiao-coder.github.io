@@ -22,30 +22,34 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="你知道吗?两个人肩并肩看日出真的很美">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Apers&#39; Blog">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="现在写论文几乎都是在用latex，但是在latex中，只能生成pdf，无法生成word会给我们造成不便，网上有Tex2word等方法，但那些方法是很多年前的，用过发现也不太好用甚至不能用。所以就找到了pandoc这个很棒的工具，它可以将文档在 Markdown、LaTeX、reStructuredText、HTML、Word docx 等多种标记格式之间相互转换，并支持输出 PDF、EPUB、HT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="latex转word">
+<meta property="og:url" content="http://example.com/2021/01/24/latex%E8%BD%ACword/index.html">
 <meta property="og:site_name" content="Apers&#39; Blog">
-<meta property="og:description" content="你知道吗?两个人肩并肩看日出真的很美">
+<meta property="og:description" content="现在写论文几乎都是在用latex，但是在latex中，只能生成pdf，无法生成word会给我们造成不便，网上有Tex2word等方法，但那些方法是很多年前的，用过发现也不太好用甚至不能用。所以就找到了pandoc这个很棒的工具，它可以将文档在 Markdown、LaTeX、reStructuredText、HTML、Word docx 等多种标记格式之间相互转换，并支持输出 PDF、EPUB、HT">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-23T22:47:09.000Z">
+<meta property="article:modified_time" content="2021-01-23T15:25:58.269Z">
 <meta property="article:author" content="Apers">
+<meta property="article:tag" content="latex">
+<meta property="article:tag" content="word">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2021/01/24/latex%E8%BD%ACword/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>Apers' Blog</title>
+  <title>latex转word | Apers' Blog</title>
   
 
 
@@ -227,134 +231,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/19/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
-      <meta itemprop="name" content="Apers">
-      <meta itemprop="description" content="你知道吗?两个人肩并肩看日出真的很美">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Apers' Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/19/hello-world/" class="post-title-link" itemprop="url">博客搭建和规划</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-	
-    	<i class="fa fa-thumb-tack"></i>
-    	<font color=7D26CD>置顶</font>
-    	<span class="post-meta-divider">|</span>
-	
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-19 05:23:37" itemprop="dateCreated datePublished" datetime="2021-01-19T05:23:37Z">2021-01-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-23 14:39:27" itemprop="dateModified" datetime="2021-01-23T14:39:27Z">2021-01-23</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hexo/%E6%90%AD%E5%BB%BA/" itemprop="url" rel="index"><span itemprop="name">搭建</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/01/19/hello-world/" class="post-meta-item leancloud_visitors" data-flag-title="博客搭建和规划" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/01/19/hello-world/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/01/19/hello-world/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>398</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
 
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>欢迎来到<a target="_blank" rel="noopener external nofollow noreferrer" href="http://gezhilai.com/">我的博客</a>! 这是我的第一篇博客. 受到疫情影响，今年都无法留校，但早早的回家也不能荒废了时间，就参考了一些文章搭建了这个博客，一是为了记下自己学习的过程，二也是可以和大家分享知识。下面主要说一说博客搭建参考的文章和未来博客准备发的东西。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/01/19/hello-world/" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -370,10 +250,9 @@
       <meta itemprop="name" content="Apers' Blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/01/24/latex%E8%BD%ACword/" class="post-title-link" itemprop="url">latex转word</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          latex转word
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -403,6 +282,13 @@
               </span>
               <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
             </span>
   
   <span class="post-meta-item">
@@ -442,36 +328,78 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>现在写论文几乎都是在用latex，但是在latex中，只能生成pdf，无法生成word会给我们造成不便，网上有Tex2word等方法，但那些方法是很多年前的，用过发现也不太好用甚至不能用。所以就找到了pandoc这个很棒的工具，它可以将文档在 Markdown、LaTeX、reStructuredText、HTML、Word docx 等多种标记格式之间相互转换，并支持输出 PDF、EPUB、HTML 幻灯片等多种格式。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/01/24/latex%E8%BD%ACword/" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
+        <p>现在写论文几乎都是在用latex，但是在latex中，只能生成pdf，无法生成word会给我们造成不便，网上有Tex2word等方法，但那些方法是很多年前的，用过发现也不太好用甚至不能用。所以就找到了pandoc这个很棒的工具，它可以将文档在 Markdown、LaTeX、reStructuredText、HTML、Word docx 等多种标记格式之间相互转换，并支持输出 PDF、EPUB、HTML 幻灯片等多种格式。</p>
+<a id="more"></a>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>对于已经安装了anaconda的，pandoc已经被集成到anaconda中了，可以直接使用，如果没有anaconda的，可以在<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pandoc.org/installing.html">pandoc</a>官网下载。首先在cmd命令窗口中，将路径转到latex目录下，使用方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd D:\latex\latex_example1</span><br></pre></td></tr></table></figure>
+<p>将上述路径改为自己文件所在路径即可。</p>
+<p>然后输入如下命令，其中example.tex改为你需要转换的tex文件，example.doc是输出的doc文件名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pandoc example.tex -o example.doc</span><br></pre></td></tr></table></figure>
+<p>除了可以进行tex到word的转换，还可以在Markdown、latex、HTML、Word等之间转换，后缀名变成相应的格式即可。更多可以参考下述：</p>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.jianshu.com/p/6ba04f669d0b">Pandoc 安装与使用</a></p>
+
+          </blockquote>
+
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://segmentfault.com/a/1190000021698926">Pandoc——Pandoc安装、使用、快速上手</a></p>
+
+          </blockquote>
     </div>
 
     
     
     
+      
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Apers
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2021/01/24/latex%E8%BD%ACword/" title="latex转word">http://example.com/2021/01/24/latex转word/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
+          <div class="post-tags">
+              <a href="/tags/latex/" rel="tag"><i class="fa fa-ship"></i> latex</a>
+              <a href="/tags/word/" rel="tag"><i class="fa fa-ship"></i> word</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/19/hello-world/" rel="prev" title="博客搭建和规划">
+      <i class="fa fa-chevron-left"></i> 博客搭建和规划
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
       </footer>
+    
   </article>
   
   
   
 
 
-  
-
-
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -518,6 +446,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">使用</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
