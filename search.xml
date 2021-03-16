@@ -53,6 +53,39 @@
       </tags>
   </entry>
   <entry>
+    <title>数据量化</title>
+    <url>/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/</url>
+    <content><![CDATA[<p>在训练神经网络时候，参数存储是float类型，服务器或者电脑内存都较大，但是对于部署到硬件加速的时候，片上内存则非常珍贵，往往是不够用的，且硬件端需要存储的是整型，所以我们需要对参数进行量化。</p>
+<a id="more"></a>
+
+<h2 id="量化方法"><a href="#量化方法" class="headerlink" title="量化方法"></a>量化方法</h2><p>对于很多研究已经表明，深度学习的参数用16bit进行量化的时候，精度损失很小(甚至一些情况下可以用10bit/8bit进行量化)。对于参数值x，量化公式如下<br>$$<br>q(x)=floor(x/scale+zero)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1)<br>$$<br>这里举例介绍一下scale和zero含义，比如神经网络中float32类型的参数值都在[0,2]之间，那么我们需要将其量化为int8的话,就是说我们想把[0,2]内的值缩放到[0,255]，那么原始值在[0,2]之间的x，放缩到[0,255]之间为x’应该符合如下关系：<br>$$<br>\frac{x}{2}=\frac{x’}{255}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (2)<br>$$<br>分母代表区域界限大小：2=2-0,255=255-0。那么x‘就等于:<br>$$<br>x’=\frac{x}{\frac{2}{255}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (3)<br>$$<br>那么scale就是2/255,zero是0，所以说scale由原始范围和量化后范围决定。那么zero是用来干嘛的呢？上面是说float32的[0,2]量化为int8，int8是8位的，但是深度学习中参数是正负都有的，所以只有一个sscale一个参数无法确保量化到[0,255]这个固定范围,如果float32是在[-1,1]之间，那么通过上面的式子可以依旧确定scale是2/255，只有一个scale一个参数只能量化到[-127.5,127.5].而zero呢？zero是作为一个偏置，为了使得量化到固定范围，如果我们想量化到[0,255]范围那么zero值为:<br>$$<br>zero=x’<em>{max}-\frac{x</em>{max}}{scale}=127.5<br>$$<br>为什么式(1)要有一个floor进行截断呢，是由于量化后是要进行取整，则简单进行截断即可，此时量化范围为[0,255]。</p>
+<h2 id="解量化"><a href="#解量化" class="headerlink" title="解量化"></a>解量化</h2><p>在数值被量化后，就已经不是本身的值了，所以在每次卷积后需要进行解量化。</p>
+<blockquote class="blockquote-center">
+            <p>值得一提的是，对于回归类问题，是一定要进行解量化的，比如预测下一阶段某一动物的体重。但是对于分类问题，最终是比较相对大小，所以无需进行解量化，但是如果分类时为了不用解量化，记得不能使用zero，因为zero会导致初始参数的正负值和量化后的正负值不同</p>
+
+          </blockquote>
+
+<p>由于自己做的主要是分类问题，所以都没有用到解量化，不作详解。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>综上，对于分类问题，可以只用一个scale值进行简单的量化，也无需解量化。更多的量化类介绍可以参考如下链接</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/qq_38798425/article/details/107423892">基于FPGA的卷积神经网络实现（五）数据量化（1）</a></p>
+
+          </blockquote>
+
+<blockquote class="blockquote-center">
+            <p><a href="https://zhuanlan.zhihu.com/p/64744154">神经网络量化简介</a></p>
+
+          </blockquote>]]></content>
+      <categories>
+        <category>FPGA</category>
+      </categories>
+      <tags>
+        <tag>FPGA</tag>
+        <tag>CNN</tag>
+        <tag>加速器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>latex转word</title>
     <url>/2021/01/24/latex%E8%BD%ACword/</url>
     <content><![CDATA[<p>现在写论文几乎都是在用latex，但是在latex中，只能生成pdf，无法生成word会给我们造成不便，网上有Tex2word等方法，但那些方法是很多年前的，用过发现也不太好用甚至不能用。所以就找到了pandoc这个很棒的工具，它可以将文档在 Markdown、LaTeX、reStructuredText、HTML、Word docx 等多种标记格式之间相互转换，并支持输出 PDF、EPUB、HTML 幻灯片等多种格式。</p>

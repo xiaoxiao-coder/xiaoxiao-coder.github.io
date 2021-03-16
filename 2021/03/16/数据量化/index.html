@@ -24,19 +24,22 @@
     var CONFIG = {"hostname":"gezhilai.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="你知道吗?两个人肩并肩看日出真的很美">
-<meta property="og:type" content="website">
-<meta property="og:title" content="标签">
-<meta property="og:url" content="http://gezhilai.com/tags/index.html">
+  <meta name="description" content="在训练神经网络时候，参数存储是float类型，服务器或者电脑内存都较大，但是对于部署到硬件加速的时候，片上内存则非常珍贵，往往是不够用的，且硬件端需要存储的是整型，所以我们需要对参数进行量化。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据量化">
+<meta property="og:url" content="http://gezhilai.com/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/index.html">
 <meta property="og:site_name" content="Apers&#39; Blog">
-<meta property="og:description" content="你知道吗?两个人肩并肩看日出真的很美">
+<meta property="og:description" content="在训练神经网络时候，参数存储是float类型，服务器或者电脑内存都较大，但是对于部署到硬件加速的时候，片上内存则非常珍贵，往往是不够用的，且硬件端需要存储的是整型，所以我们需要对参数进行量化。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-01-20T22:32:03.000Z">
-<meta property="article:modified_time" content="2021-01-20T14:40:45.171Z">
+<meta property="article:published_time" content="2021-03-15T20:51:47.000Z">
+<meta property="article:modified_time" content="2021-03-16T06:31:58.000Z">
 <meta property="article:author" content="Apers">
+<meta property="article:tag" content="FPGA">
+<meta property="article:tag" content="CNN">
+<meta property="article:tag" content="加速器">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://gezhilai.com/tags/">
+<link rel="canonical" href="http://gezhilai.com/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/">
 
 
 <script id="page-configurations">
@@ -44,13 +47,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签 | Apers' Blog
-</title>
+  <title>数据量化 | Apers' Blog</title>
   
 
 
@@ -231,55 +233,185 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
-          <div class="content page posts-expand">
+          <div class="content post posts-expand">
             
 
     
-    
-    
-    <div class="post-block" lang="zh-CN">
-      <header class="post-header">
-
-<h1 class="post-title" itemprop="name headline">标签
-</h1>
-
-<div class="post-meta">
   
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/">
 
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
+      <meta itemprop="name" content="Apers">
+      <meta itemprop="description" content="你知道吗?两个人肩并肩看日出真的很美">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Apers' Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据量化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+	
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-03-15 20:51:47" itemprop="dateCreated datePublished" datetime="2021-03-15T20:51:47Z">2021-03-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-03-16 06:31:58" itemprop="dateModified" datetime="2021-03-16T06:31:58Z">2021-03-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/FPGA/" itemprop="url" rel="index"><span itemprop="name">FPGA</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/" class="post-meta-item leancloud_visitors" data-flag-title="数据量化" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在训练神经网络时候，参数存储是float类型，服务器或者电脑内存都较大，但是对于部署到硬件加速的时候，片上内存则非常珍贵，往往是不够用的，且硬件端需要存储的是整型，所以我们需要对参数进行量化。</p>
+<a id="more"></a>
+
+<h2 id="量化方法"><a href="#量化方法" class="headerlink" title="量化方法"></a>量化方法</h2><p>对于很多研究已经表明，深度学习的参数用16bit进行量化的时候，精度损失很小(甚至一些情况下可以用10bit/8bit进行量化)。对于参数值x，量化公式如下<br>$$<br>q(x)=floor(x/scale+zero)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1)<br>$$<br>这里举例介绍一下scale和zero含义，比如神经网络中float32类型的参数值都在[0,2]之间，那么我们需要将其量化为int8的话,就是说我们想把[0,2]内的值缩放到[0,255]，那么原始值在[0,2]之间的x，放缩到[0,255]之间为x’应该符合如下关系：<br>$$<br>\frac{x}{2}=\frac{x’}{255}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (2)<br>$$<br>分母代表区域界限大小：2=2-0,255=255-0。那么x‘就等于:<br>$$<br>x’=\frac{x}{\frac{2}{255}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (3)<br>$$<br>那么scale就是2/255,zero是0，所以说scale由原始范围和量化后范围决定。那么zero是用来干嘛的呢？上面是说float32的[0,2]量化为int8，int8是8位的，但是深度学习中参数是正负都有的，所以只有一个sscale一个参数无法确保量化到[0,255]这个固定范围,如果float32是在[-1,1]之间，那么通过上面的式子可以依旧确定scale是2/255，只有一个scale一个参数只能量化到[-127.5,127.5].而zero呢？zero是作为一个偏置，为了使得量化到固定范围，如果我们想量化到[0,255]范围那么zero值为:<br>$$<br>zero=x’<em>{max}-\frac{x</em>{max}}{scale}=127.5<br>$$<br>为什么式(1)要有一个floor进行截断呢，是由于量化后是要进行取整，则简单进行截断即可，此时量化范围为[0,255]。</p>
+<h2 id="解量化"><a href="#解量化" class="headerlink" title="解量化"></a>解量化</h2><p>在数值被量化后，就已经不是本身的值了，所以在每次卷积后需要进行解量化。</p>
+<blockquote class="blockquote-center">
+            <p>值得一提的是，对于回归类问题，是一定要进行解量化的，比如预测下一阶段某一动物的体重。但是对于分类问题，最终是比较相对大小，所以无需进行解量化，但是如果分类时为了不用解量化，记得不能使用zero，因为zero会导致初始参数的正负值和量化后的正负值不同</p>
+
+          </blockquote>
+
+<p>由于自己做的主要是分类问题，所以都没有用到解量化，不作详解。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>综上，对于分类问题，可以只用一个scale值进行简单的量化，也无需解量化。更多的量化类介绍可以参考如下链接</p>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/qq_38798425/article/details/107423892">基于FPGA的卷积神经网络实现（五）数据量化（1）</a></p>
+
+          </blockquote>
+
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/64744154">神经网络量化简介</a></p>
+
+          </blockquote>
+    </div>
+
+    
+    
+    
+      
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Apers
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://gezhilai.com/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/" title="数据量化">http://gezhilai.com/2021/03/16/数据量化/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
 </div>
 
-</header>
 
-      
-      
-      
-      <div class="post-body">
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-              目前共计 7 个标签
-            </div>
-            <div class="tag-cloud-tags">
-              <a href="/tags/CNN/" style="font-size: 12px; color: #ccc">CNN</a> <a href="/tags/FPGA/" style="font-size: 12px; color: #ccc">FPGA</a> <a href="/tags/Hexo/" style="font-size: 12px; color: #ccc">Hexo</a> <a href="/tags/latex/" style="font-size: 12px; color: #ccc">latex</a> <a href="/tags/word/" style="font-size: 12px; color: #ccc">word</a> <a href="/tags/%E5%8A%A0%E9%80%9F%E5%99%A8/" style="font-size: 12px; color: #ccc">加速器</a> <a href="/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" style="font-size: 12px; color: #ccc">博客搭建</a>
-            </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FPGA/" rel="tag"><i class="fa fa-ship"></i> FPGA</a>
+              <a href="/tags/CNN/" rel="tag"><i class="fa fa-ship"></i> CNN</a>
+              <a href="/tags/%E5%8A%A0%E9%80%9F%E5%99%A8/" rel="tag"><i class="fa fa-ship"></i> 加速器</a>
           </div>
-        
-      </div>
-      
-      
-      
-    </div>
-    
 
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/24/latex%E8%BD%ACword/" rel="prev" title="latex转word">
+      <i class="fa fa-chevron-left"></i> latex转word
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
     
-    
-    
+  </article>
+  
+  
+  
 
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -326,6 +458,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8F%E5%8C%96%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">量化方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%87%8F%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">解量化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -750,6 +883,59 @@ if(canvas.getContext){
   
 
   
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
