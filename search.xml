@@ -1,63 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>博客搭建和规划</title>
-    <url>/2021/01/19/hello-world/</url>
-    <content><![CDATA[<p>欢迎来到<a href="http://gezhilai.com/">我的博客</a>! 这是我的第一篇博客. 受到疫情影响，今年都无法留校，但早早的回家也不能荒废了时间，就参考了一些文章搭建了这个博客，一是为了记下自己学习的过程，二也是可以和大家分享知识。下面主要说一说博客搭建参考的文章和未来博客准备发的东西。</p>
-<a id="more"></a>
-<h2 id="博客搭建"><a href="#博客搭建" class="headerlink" title="博客搭建"></a>博客搭建</h2><h3 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h3><p>搭建过程中，参考了如下几篇文章</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.jianshu.com/p/39562a0d8eb6">可能是最详细的 Hexo + GitHub Pages 搭建博客的教程</a></p>
-
-          </blockquote>
-<blockquote class="blockquote-center">
-            <p><a href="https://zhuanlan.zhihu.com/p/26625249">GitHub+Hexo 搭建个人网站详细教程</a></p>
-
-          </blockquote>
-<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>在后续优化中，强烈推荐下面这个博主</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://tding.top/">小丁的个人博客</a></p>
-
-          </blockquote>
-<p>如果具体操作还有些问题，可以顺带看一下下面的视频，</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.bilibili.com/video/BV16W411t7mq?p=21">使用Hexo博客搭建的个人博客，使用Next主题来进行优化改造</a></p>
-
-          </blockquote>
-<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><p>1、公式无法显示问题参考如下博客，</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://blog.csdn.net/weixin_44489823/article/details/105028860">hexo next主题解决无法显示数学公式</a></p>
-
-          </blockquote>
-<p>其中mathjax开启可以在markdown顶部写如下命令进行开启显示数学公式</p>
-<blockquote class="blockquote-center">
-            <p>mathjax: true #显示数学公式</p>
-
-          </blockquote>
-<h2 id="博客规划"><a href="#博客规划" class="headerlink" title="博客规划"></a>博客规划</h2><p>在后续中，主要会写一写以前做过和学过的东西，包括FPGA、FPGA图像处理、深度学习、机器学习以及西瓜书、花书和凸优化等书的学习分享。当然必然不会仅限于此，但自己也不知道以后还会学些什么，所以暂且写这些吧，假期期间会把上述几本书仔细读一读。</p>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>
-
-
-
-
-
-
-
-]]></content>
-      <categories>
-        <category>Hexo</category>
-        <category>搭建</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>博客搭建</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数据量化</title>
     <url>/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/</url>
     <content><![CDATA[<p>在训练神经网络时候，参数存储是float类型，服务器或者电脑内存都较大，但是对于部署到硬件加速的时候，片上内存则非常珍贵，往往是不够用的，且硬件端需要存储的是整型，所以我们需要对参数进行量化。</p>
@@ -138,6 +81,63 @@ zero=x'_{max}-\frac{x_{max}}{scale}=127.5</script><p>为什么式(1)要有一个
       <tags>
         <tag>latex</tag>
         <tag>word</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客搭建和规划</title>
+    <url>/2021/01/19/hello-world/</url>
+    <content><![CDATA[<p>欢迎来到<a href="http://gezhilai.com/">我的博客</a>! 这是我的第一篇博客. 受到疫情影响，今年都无法留校，但早早的回家也不能荒废了时间，就参考了一些文章搭建了这个博客，一是为了记下自己学习的过程，二也是可以和大家分享知识。下面主要说一说博客搭建参考的文章和未来博客准备发的东西。</p>
+<a id="more"></a>
+<h2 id="博客搭建"><a href="#博客搭建" class="headerlink" title="博客搭建"></a>博客搭建</h2><h3 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h3><p>搭建过程中，参考了如下几篇文章</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.jianshu.com/p/39562a0d8eb6">可能是最详细的 Hexo + GitHub Pages 搭建博客的教程</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://zhuanlan.zhihu.com/p/26625249">GitHub+Hexo 搭建个人网站详细教程</a></p>
+
+          </blockquote>
+<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>在后续优化中，强烈推荐下面这个博主</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://tding.top/">小丁的个人博客</a></p>
+
+          </blockquote>
+<p>如果具体操作还有些问题，可以顺带看一下下面的视频，</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.bilibili.com/video/BV16W411t7mq?p=21">使用Hexo博客搭建的个人博客，使用Next主题来进行优化改造</a></p>
+
+          </blockquote>
+<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><p>1、公式无法显示问题参考如下博客，</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/weixin_44489823/article/details/105028860">hexo next主题解决无法显示数学公式</a></p>
+
+          </blockquote>
+<p>其中mathjax开启可以在markdown顶部写如下命令进行开启显示数学公式</p>
+<blockquote class="blockquote-center">
+            <p>mathjax: true #显示数学公式</p>
+
+          </blockquote>
+<h2 id="博客规划"><a href="#博客规划" class="headerlink" title="博客规划"></a>博客规划</h2><p>在后续中，主要会写一写以前做过和学过的东西，包括FPGA、FPGA图像处理、深度学习、机器学习以及西瓜书、花书和凸优化等书的学习分享。当然必然不会仅限于此，但自己也不知道以后还会学些什么，所以暂且写这些吧，假期期间会把上述几本书仔细读一读。</p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>搭建</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>博客搭建</tag>
       </tags>
   </entry>
 </search>
