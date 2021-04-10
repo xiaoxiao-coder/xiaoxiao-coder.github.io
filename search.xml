@@ -1,6 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>博客搭建和规划</title>
+    <url>/2021/01/19/hello-world/</url>
+    <content><![CDATA[<p>欢迎来到<a href="http://gezhilai.com/">我的博客</a>! 这是我的第一篇博客. 受到疫情影响，今年都无法留校，但早早的回家也不能荒废了时间，就参考了一些文章搭建了这个博客，一是为了记下自己学习的过程，二也是可以和大家分享知识。下面主要说一说博客搭建参考的文章和未来博客准备发的东西。</p>
+<a id="more"></a>
+<h2 id="博客搭建"><a href="#博客搭建" class="headerlink" title="博客搭建"></a>博客搭建</h2><h3 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h3><p>搭建过程中，参考了如下几篇文章</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.jianshu.com/p/39562a0d8eb6">可能是最详细的 Hexo + GitHub Pages 搭建博客的教程</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://zhuanlan.zhihu.com/p/26625249">GitHub+Hexo 搭建个人网站详细教程</a></p>
+
+          </blockquote>
+<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>在后续优化中，强烈推荐下面这个博主</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://tding.top/">小丁的个人博客</a></p>
+
+          </blockquote>
+<p>如果具体操作还有些问题，可以顺带看一下下面的视频，</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.bilibili.com/video/BV16W411t7mq?p=21">使用Hexo博客搭建的个人博客，使用Next主题来进行优化改造</a></p>
+
+          </blockquote>
+<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><p>1、公式无法显示问题参考如下博客，</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/weixin_44489823/article/details/105028860">hexo next主题解决无法显示数学公式</a></p>
+
+          </blockquote>
+<p>其中mathjax开启可以在markdown顶部写如下命令进行开启显示数学公式</p>
+<blockquote class="blockquote-center">
+            <p>mathjax: true #显示数学公式</p>
+
+          </blockquote>
+<h2 id="博客规划"><a href="#博客规划" class="headerlink" title="博客规划"></a>博客规划</h2><p>在后续中，主要会写一写以前做过和学过的东西，包括FPGA、FPGA图像处理、深度学习、机器学习以及西瓜书、花书和凸优化等书的学习分享。当然必然不会仅限于此，但自己也不知道以后还会学些什么，所以暂且写这些吧，假期期间会把上述几本书仔细读一读。</p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>搭建</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>博客搭建</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>jupyter lab实现跨文件的函数调用</title>
+    <url>/2021/04/10/jupyter%20lab%E5%AE%9E%E7%8E%B0%E8%B7%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/</url>
+    <content><![CDATA[<p>在python各类编译器中，jupyter notebook真的是非常非常棒的调试工具，但是jupyter notebook在大工程方面却是逊于pycharm的，其虽然调试很方便，但是却不是像pycharm一样打开一整个文件夹，所以其团队又开发了jupyter lab来弥补缺陷，而jupyter lab的代码补齐真的又一言难尽，由于jupyter lab本身并不是完善，用了kite工具辅助代码补齐，即使操作完全没问题，kite也可能不工作，工作了也发现kite速度真的超慢又浪费CPU。。。。</p>
+<p>算了，毕竟jupyter lab已经是一大进步了，平时我们写代码，模块化是非常重要的，所以经常会分文件进行写函数，然后跨文件调用，python中跨文件调用很简单，如果想在文件A中调用文件B中的max函数，如下即可：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment"># 待引用的py文件B路径加到了搜索列表里</span></span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) </span><br><span class="line"><span class="keyword">import</span> B</span><br><span class="line">B.<span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
+<p>或者如下</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment"># 待引用的py文件路径加到了搜索列表里</span></span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) </span><br><span class="line">form B <span class="keyword">import</span> <span class="built_in">max</span></span><br><span class="line"><span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
+<p>A和B若是在同一路径下，可以无需添加路径。</p>
+<p>但上述的方法是用来py文件跨文件调用的，而jupyter中的文件不是py而是ipynb文件，那么上述这个方法就没法在jupyter中用了，官方给出了一个解决方法，先在jupyter中建立一个文件，写入如下代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># In[ ]:</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io, os,sys,types</span><br><span class="line"><span class="keyword">from</span> IPython <span class="keyword">import</span> get_ipython</span><br><span class="line"><span class="keyword">from</span> nbformat <span class="keyword">import</span> read</span><br><span class="line"><span class="keyword">from</span> IPython.core.interactiveshell <span class="keyword">import</span> InteractiveShell</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotebookFinder</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Module finder that locates Jupyter Notebooks&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.loaders = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">find_module</span>(<span class="params">self, fullname, path=<span class="literal">None</span></span>):</span></span><br><span class="line">        nb_path = find_notebook(fullname, path)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> nb_path:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        key = path</span><br><span class="line">        <span class="keyword">if</span> path:</span><br><span class="line">            <span class="comment"># lists aren&#x27;t hashable</span></span><br><span class="line">            key = os.path.sep.join(path)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> self.loaders:</span><br><span class="line">            self.loaders[key] = NotebookLoader(path)</span><br><span class="line">        <span class="keyword">return</span> self.loaders[key]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_notebook</span>(<span class="params">fullname, path=<span class="literal">None</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;find a notebook, given its fully qualified name and an optional path</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    This turns &quot;foo.bar&quot; into &quot;foo/bar.ipynb&quot;</span></span><br><span class="line"><span class="string">    and tries turning &quot;Foo_Bar&quot; into &quot;Foo Bar&quot; if Foo_Bar</span></span><br><span class="line"><span class="string">    does not exist.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    name = fullname.rsplit(<span class="string">&#x27;.&#x27;</span>, <span class="number">1</span>)[-<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> path:</span><br><span class="line">        path = [<span class="string">&#x27;&#x27;</span>]</span><br><span class="line">    <span class="keyword">for</span> d <span class="keyword">in</span> path:</span><br><span class="line">        nb_path = os.path.join(d, name + <span class="string">&quot;.ipynb&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(nb_path):</span><br><span class="line">            <span class="keyword">return</span> nb_path</span><br><span class="line">        <span class="comment"># let import Notebook_Name find &quot;Notebook Name.ipynb&quot;</span></span><br><span class="line">        nb_path = nb_path.replace(<span class="string">&quot;_&quot;</span>, <span class="string">&quot; &quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(nb_path):</span><br><span class="line">            <span class="keyword">return</span> nb_path</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotebookLoader</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Module Loader for Jupyter Notebooks&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, path=<span class="literal">None</span></span>):</span></span><br><span class="line">        self.shell = InteractiveShell.instance()</span><br><span class="line">        self.path = path</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">load_module</span>(<span class="params">self, fullname</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;import a notebook as a module&quot;&quot;&quot;</span></span><br><span class="line">        path = find_notebook(fullname, self.path)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&quot;importing Jupyter notebook from %s&quot;</span> % path)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># load the notebook object</span></span><br><span class="line">        <span class="keyword">with</span> io.<span class="built_in">open</span>(path, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            nb = read(f, <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment"># create the module and add it to sys.modules</span></span><br><span class="line">        <span class="comment"># if name in sys.modules:</span></span><br><span class="line">        <span class="comment">#    return sys.modules[name]</span></span><br><span class="line">        mod = types.ModuleType(fullname)</span><br><span class="line">        mod.__file__ = path</span><br><span class="line">        mod.__loader__ = self</span><br><span class="line">        mod.__dict__[<span class="string">&#x27;get_ipython&#x27;</span>] = get_ipython</span><br><span class="line">        sys.modules[fullname] = mod</span><br><span class="line"></span><br><span class="line">        <span class="comment"># extra work to ensure that magics that would affect the user_ns</span></span><br><span class="line">        <span class="comment"># actually affect the notebook module&#x27;s ns</span></span><br><span class="line">        save_user_ns = self.shell.user_ns</span><br><span class="line">        self.shell.user_ns = mod.__dict__</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">          <span class="keyword">for</span> cell <span class="keyword">in</span> nb.cells:</span><br><span class="line">            <span class="keyword">if</span> cell.cell_type == <span class="string">&#x27;code&#x27;</span>:</span><br><span class="line">                <span class="comment"># transform the input to executable Python</span></span><br><span class="line">                code = self.shell.input_transformer_manager.transform_cell(cell.source)</span><br><span class="line">                <span class="comment"># run the code in themodule</span></span><br><span class="line">                exec(code, mod.__dict__)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            self.shell.user_ns = save_user_ns</span><br><span class="line">        <span class="keyword">return</span> mod</span><br><span class="line">sys.meta_path.append(NotebookFinder())</span><br></pre></td></tr></table></figure>
+<p>上述代码中try后的for在写入文件中的时候，编译器可能会提醒for的缩进有问题，会进行标红，不用管，缩进是没问题的。</p>
+<p>然后我们给这个文件另存为后缀为py的文件，在jupyter notebook中进行如下另存为。</p>
+<p>千万不要直接rename，直接rename是有问题的，所以不要直接rename。另存为py文件后，把这个文件放到和文件A同一个路径下，那么我们就可以如下在文件A中调用B中的函数了：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> 文件名 <span class="comment">#刚刚另存为py的那个文件名</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) <span class="comment"># 待引用的py文件B路径加到了搜索列表里</span></span><br><span class="line"><span class="keyword">import</span> B</span><br><span class="line">B.<span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
+<p>如果这时候提醒你另存为的那个文件找不到，那么就需要看看你的另存为py的那个文件名名字是否是<strong>大写字母开头</strong>，如果是小写开头也可能出问题(真的就巨坑)。</p>
+<p>然后在运行就不会提醒说找不到那个py文件了。但是有可能有如下这样报错</p>
+<p>说B文件中没有这个函数，这个一般是新建文件的时候在不同虚拟环境下创建的问题，如果是jupyter lab，如下修改即可</p>
+<p>如果是notebook，在命令行中修改。</p>
+<p>最后运行完全没问题，如果我们继续在B中写其他函数，或者修改原来的max函数，在A中运行却得不到想要的结果，这个就是A中对B进行了缓存导致的，所以需要shut down这个kernel（即文件A），然后再打开运行即可。</p>
+<p>深深体会到jupyter为什么在大工程方面被pycharm锤了，文件调用以及打开文件夹等功能真的需要改进:no way:</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>latex转word</title>
+    <url>/2021/01/24/latex%E8%BD%ACword/</url>
+    <content><![CDATA[<p>现在写论文几乎都是在用latex，但是在latex中，只能生成pdf，无法生成word会给我们造成不便，网上有Tex2word等方法，但那些方法是很多年前的，用过发现也不太好用甚至不能用。所以就找到了pandoc这个很棒的工具，它可以将文档在 Markdown、LaTeX、reStructuredText、HTML、Word docx 等多种标记格式之间相互转换，并支持输出 PDF、EPUB、HTML 幻灯片等多种格式。</p>
+<a id="more"></a>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>对于已经安装了anaconda的，pandoc已经被集成到anaconda中了，可以直接使用，如果没有anaconda的，可以在<a href="https://pandoc.org/installing.html">pandoc</a>官网下载。首先在cmd命令窗口中，将路径转到latex目录下，使用方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd D:\latex\latex_example1</span><br></pre></td></tr></table></figure>
+<p>将上述路径改为自己文件所在路径即可。</p>
+<p>然后输入如下命令，其中example.tex改为你需要转换的tex文件，example.doc是输出的doc文件名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex -o example.doc</span><br></pre></td></tr></table></figure>
+<p>除了可以进行tex到word的转换，还可以在Markdown、latex、HTML、Word等之间转换，后缀名变成相应的格式即可。更多可以参考下述：</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.jianshu.com/p/6ba04f669d0b">Pandoc 安装与使用</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://segmentfault.com/a/1190000021698926">Pandoc——Pandoc安装、使用、快速上手</a></p>
+
+          </blockquote>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>latex</category>
+      </categories>
+      <tags>
+        <tag>latex</tag>
+        <tag>word</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>一个有意思的面试题</title>
     <url>/2021/03/27/%E4%B8%80%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/</url>
     <content><![CDATA[<p>前两天室友面试深信服的时候，遇到了个有意思的题目，要求用c或者c++求解如下题目：用户输入一个可以包含加减乘除的数学表达式，你给这个表达式加上任意多的括号，使得这个表达式结果最大。</p>
@@ -78,103 +198,6 @@ zero=x'_{max}-\frac{x_{max}}{scale}=127.5</script><p>为什么式(1)要有一个
         <tag>FPGA</tag>
         <tag>CNN</tag>
         <tag>加速器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>latex转word</title>
-    <url>/2021/01/24/latex%E8%BD%ACword/</url>
-    <content><![CDATA[<p>现在写论文几乎都是在用latex，但是在latex中，只能生成pdf，无法生成word会给我们造成不便，网上有Tex2word等方法，但那些方法是很多年前的，用过发现也不太好用甚至不能用。所以就找到了pandoc这个很棒的工具，它可以将文档在 Markdown、LaTeX、reStructuredText、HTML、Word docx 等多种标记格式之间相互转换，并支持输出 PDF、EPUB、HTML 幻灯片等多种格式。</p>
-<a id="more"></a>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>对于已经安装了anaconda的，pandoc已经被集成到anaconda中了，可以直接使用，如果没有anaconda的，可以在<a href="https://pandoc.org/installing.html">pandoc</a>官网下载。首先在cmd命令窗口中，将路径转到latex目录下，使用方法如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd D:\latex\latex_example1</span><br></pre></td></tr></table></figure>
-<p>将上述路径改为自己文件所在路径即可。</p>
-<p>然后输入如下命令，其中example.tex改为你需要转换的tex文件，example.doc是输出的doc文件名</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex -o example.doc</span><br></pre></td></tr></table></figure>
-<p>除了可以进行tex到word的转换，还可以在Markdown、latex、HTML、Word等之间转换，后缀名变成相应的格式即可。更多可以参考下述：</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.jianshu.com/p/6ba04f669d0b">Pandoc 安装与使用</a></p>
-
-          </blockquote>
-<blockquote class="blockquote-center">
-            <p><a href="https://segmentfault.com/a/1190000021698926">Pandoc——Pandoc安装、使用、快速上手</a></p>
-
-          </blockquote>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>
-
-
-
-
-
-
-
-]]></content>
-      <categories>
-        <category>latex</category>
-      </categories>
-      <tags>
-        <tag>latex</tag>
-        <tag>word</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客搭建和规划</title>
-    <url>/2021/01/19/hello-world/</url>
-    <content><![CDATA[<p>欢迎来到<a href="http://gezhilai.com/">我的博客</a>! 这是我的第一篇博客. 受到疫情影响，今年都无法留校，但早早的回家也不能荒废了时间，就参考了一些文章搭建了这个博客，一是为了记下自己学习的过程，二也是可以和大家分享知识。下面主要说一说博客搭建参考的文章和未来博客准备发的东西。</p>
-<a id="more"></a>
-<h2 id="博客搭建"><a href="#博客搭建" class="headerlink" title="博客搭建"></a>博客搭建</h2><h3 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h3><p>搭建过程中，参考了如下几篇文章</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.jianshu.com/p/39562a0d8eb6">可能是最详细的 Hexo + GitHub Pages 搭建博客的教程</a></p>
-
-          </blockquote>
-<blockquote class="blockquote-center">
-            <p><a href="https://zhuanlan.zhihu.com/p/26625249">GitHub+Hexo 搭建个人网站详细教程</a></p>
-
-          </blockquote>
-<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>在后续优化中，强烈推荐下面这个博主</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://tding.top/">小丁的个人博客</a></p>
-
-          </blockquote>
-<p>如果具体操作还有些问题，可以顺带看一下下面的视频，</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.bilibili.com/video/BV16W411t7mq?p=21">使用Hexo博客搭建的个人博客，使用Next主题来进行优化改造</a></p>
-
-          </blockquote>
-<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><p>1、公式无法显示问题参考如下博客，</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://blog.csdn.net/weixin_44489823/article/details/105028860">hexo next主题解决无法显示数学公式</a></p>
-
-          </blockquote>
-<p>其中mathjax开启可以在markdown顶部写如下命令进行开启显示数学公式</p>
-<blockquote class="blockquote-center">
-            <p>mathjax: true #显示数学公式</p>
-
-          </blockquote>
-<h2 id="博客规划"><a href="#博客规划" class="headerlink" title="博客规划"></a>博客规划</h2><p>在后续中，主要会写一写以前做过和学过的东西，包括FPGA、FPGA图像处理、深度学习、机器学习以及西瓜书、花书和凸优化等书的学习分享。当然必然不会仅限于此，但自己也不知道以后还会学些什么，所以暂且写这些吧，假期期间会把上述几本书仔细读一读。</p>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>
-
-
-
-
-
-
-
-]]></content>
-      <categories>
-        <category>Hexo</category>
-        <category>搭建</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>博客搭建</tag>
       </tags>
   </entry>
 </search>

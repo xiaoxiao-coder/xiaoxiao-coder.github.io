@@ -24,22 +24,19 @@
     var CONFIG = {"hostname":"gezhilai.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="在训练神经网络时候，参数存储是float类型，服务器或者电脑内存都较大，但是对于部署到硬件加速的时候，片上内存则非常珍贵，往往是不够用的，且硬件端需要存储的是整型，所以我们需要对参数进行量化。">
+  <meta name="description" content="在python各类编译器中，jupyter notebook真的是非常非常棒的调试工具，但是jupyter notebook在大工程方面却是逊于pycharm的，其虽然调试很方便，但是却不是像pycharm一样打开一整个文件夹，所以其团队又开发了jupyter lab来弥补缺陷，而jupyter lab的代码补齐真的又一言难尽，由于jupyter lab本身并不是完善，用了kite工具辅助代码补齐">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据量化">
-<meta property="og:url" content="http://gezhilai.com/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/index.html">
+<meta property="og:title" content="jupyter lab实现跨文件的函数调用">
+<meta property="og:url" content="http://gezhilai.com/2021/04/10/jupyter%20lab%E5%AE%9E%E7%8E%B0%E8%B7%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/index.html">
 <meta property="og:site_name" content="Apers&#39; Blog">
-<meta property="og:description" content="在训练神经网络时候，参数存储是float类型，服务器或者电脑内存都较大，但是对于部署到硬件加速的时候，片上内存则非常珍贵，往往是不够用的，且硬件端需要存储的是整型，所以我们需要对参数进行量化。">
+<meta property="og:description" content="在python各类编译器中，jupyter notebook真的是非常非常棒的调试工具，但是jupyter notebook在大工程方面却是逊于pycharm的，其虽然调试很方便，但是却不是像pycharm一样打开一整个文件夹，所以其团队又开发了jupyter lab来弥补缺陷，而jupyter lab的代码补齐真的又一言难尽，由于jupyter lab本身并不是完善，用了kite工具辅助代码补齐">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-03-15T20:51:47.000Z">
-<meta property="article:modified_time" content="2021-03-26T11:33:49.119Z">
+<meta property="article:published_time" content="2021-04-09T19:53:10.000Z">
+<meta property="article:modified_time" content="2021-04-10T08:14:03.328Z">
 <meta property="article:author" content="Apers">
-<meta property="article:tag" content="FPGA">
-<meta property="article:tag" content="CNN">
-<meta property="article:tag" content="加速器">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://gezhilai.com/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/">
+<link rel="canonical" href="http://gezhilai.com/2021/04/10/jupyter%20lab%E5%AE%9E%E7%8E%B0%E8%B7%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/">
 
 
 <script id="page-configurations">
@@ -52,7 +49,7 @@
   };
 </script>
 
-  <title>数据量化 | Apers' Blog</title>
+  <title>jupyter lab实现跨文件的函数调用 | Apers' Blog</title>
   
 
 
@@ -241,7 +238,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/04/10/jupyter%20lab%E5%AE%9E%E7%8E%B0%E8%B7%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
@@ -254,7 +251,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          数据量化
+          jupyter lab实现跨文件的函数调用
         </h1>
 
         <div class="post-meta">
@@ -265,27 +262,18 @@
 	
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-03-15 20:51:47" itemprop="dateCreated datePublished" datetime="2021-03-15T20:51:47Z">2021-03-15</time>
+              <time title="创建时间：2021-04-09 19:53:10" itemprop="dateCreated datePublished" datetime="2021-04-09T19:53:10Z">2021-04-09</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-26 11:33:49" itemprop="dateModified" datetime="2021-03-26T11:33:49Z">2021-03-26</time>
+                <time title="修改时间：2021-04-10 08:14:03" itemprop="dateModified" datetime="2021-04-10T08:14:03Z">2021-04-10</time>
               </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/FPGA/" itemprop="url" rel="index"><span itemprop="name">FPGA</span></a>
-                </span>
-            </span>
 
           
-            <span id="/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/" class="post-meta-item leancloud_visitors" data-flag-title="数据量化" title="阅读次数">
+            <span id="/2021/04/10/jupyter%20lab%E5%AE%9E%E7%8E%B0%E8%B7%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/" class="post-meta-item leancloud_visitors" data-flag-title="jupyter lab实现跨文件的函数调用" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -307,8 +295,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/04/10/jupyter%20lab%E5%AE%9E%E7%8E%B0%E8%B7%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/04/10/jupyter%20lab%E5%AE%9E%E7%8E%B0%E8%B7%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -318,14 +306,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.2k</span>
+              <span>3.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>3 分钟</span>
             </span>
 
         </div>
@@ -337,37 +325,25 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>在训练神经网络时候，参数存储是float类型，服务器或者电脑内存都较大，但是对于部署到硬件加速的时候，片上内存则非常珍贵，往往是不够用的，且硬件端需要存储的是整型，所以我们需要对参数进行量化。</p>
-<a id="more"></a>
-<h2 id="量化方法"><a href="#量化方法" class="headerlink" title="量化方法"></a>量化方法</h2><p>对于很多研究已经表明，深度学习的参数用16bit进行量化的时候，精度损失很小(甚至一些情况下可以用10bit/8bit进行量化)。对于参数值x，量化公式如下</p>
-<script type="math/tex; mode=display">
-q(x)=floor(x/scale+zero)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1)</script><p>这里举例介绍一下scale和zero含义，比如神经网络中float32类型的参数值都在[0,2]之间，那么我们需要将其量化为int8的话,就是说我们想把[0,2]内的值缩放到[0,255]，那么原始值在[0,2]之间的x，放缩到[0,255]之间为x’应该符合如下关系：</p>
-<script type="math/tex; mode=display">
-\frac{x}{2}=\frac{x'}{255}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (2)</script><p>分母代表区域界限大小：2=2-0,255=255-0。那么x‘就等于:</p>
-<script type="math/tex; mode=display">
-x'=\frac{x}{\frac{2}{255}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (3)</script><p>那么scale就是2/255,zero是0，所以说scale由原始范围和量化后范围决定。那么zero是用来干嘛的呢？上面是说float32的[0,2]量化为int8，int8是8位的，但是深度学习中参数是正负都有的，所以只有一个sscale一个参数无法确保量化到[0,255]这个固定范围,如果float32是在[-1,1]之间，那么通过上面的式子可以依旧确定scale是2/255，只有一个scale一个参数只能量化到[-127.5,127.5].而zero呢？zero是作为一个偏置，为了使得量化到固定范围，如果我们想量化到[0,255]范围那么zero值为:</p>
-<script type="math/tex; mode=display">
-zero=x'_{max}-\frac{x_{max}}{scale}=127.5</script><p>为什么式(1)要有一个floor进行截断呢，是由于量化后是要进行取整，则简单进行截断即可，此时量化范围为[0,255]。</p>
-<h2 id="解量化"><a href="#解量化" class="headerlink" title="解量化"></a>解量化</h2><p>在数值被量化后，就已经不是本身的值了，所以在每次卷积后需要进行解量化。</p>
-<blockquote class="blockquote-center">
-            <p>值得一提的是，对于回归类问题，是一定要进行解量化的，比如预测下一阶段某一动物的体重。但是对于分类问题，最终是比较相对大小，所以无需进行解量化，但是如果分类时为了不用解量化，记得不能使用zero，因为zero会导致初始参数的正负值和量化后的正负值不同</p>
+        <p>在python各类编译器中，jupyter notebook真的是非常非常棒的调试工具，但是jupyter notebook在大工程方面却是逊于pycharm的，其虽然调试很方便，但是却不是像pycharm一样打开一整个文件夹，所以其团队又开发了jupyter lab来弥补缺陷，而jupyter lab的代码补齐真的又一言难尽，由于jupyter lab本身并不是完善，用了kite工具辅助代码补齐，即使操作完全没问题，kite也可能不工作，工作了也发现kite速度真的超慢又浪费CPU。。。。</p>
+<p>算了，毕竟jupyter lab已经是一大进步了，平时我们写代码，模块化是非常重要的，所以经常会分文件进行写函数，然后跨文件调用，python中跨文件调用很简单，如果想在文件A中调用文件B中的max函数，如下即可：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment"># 待引用的py文件B路径加到了搜索列表里</span></span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) </span><br><span class="line"><span class="keyword">import</span> B</span><br><span class="line">B.<span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
+<p>或者如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment"># 待引用的py文件路径加到了搜索列表里</span></span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) </span><br><span class="line">form B <span class="keyword">import</span> <span class="built_in">max</span></span><br><span class="line"><span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
+<p>A和B若是在同一路径下，可以无需添加路径。</p>
+<p>但上述的方法是用来py文件跨文件调用的，而jupyter中的文件不是py而是ipynb文件，那么上述这个方法就没法在jupyter中用了，官方给出了一个解决方法，先在jupyter中建立一个文件，写入如下代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># In[ ]:</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io, os,sys,types</span><br><span class="line"><span class="keyword">from</span> IPython <span class="keyword">import</span> get_ipython</span><br><span class="line"><span class="keyword">from</span> nbformat <span class="keyword">import</span> read</span><br><span class="line"><span class="keyword">from</span> IPython.core.interactiveshell <span class="keyword">import</span> InteractiveShell</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotebookFinder</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Module finder that locates Jupyter Notebooks&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.loaders = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">find_module</span>(<span class="params">self, fullname, path=<span class="literal">None</span></span>):</span></span><br><span class="line">        nb_path = find_notebook(fullname, path)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> nb_path:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        key = path</span><br><span class="line">        <span class="keyword">if</span> path:</span><br><span class="line">            <span class="comment"># lists aren&#x27;t hashable</span></span><br><span class="line">            key = os.path.sep.join(path)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> self.loaders:</span><br><span class="line">            self.loaders[key] = NotebookLoader(path)</span><br><span class="line">        <span class="keyword">return</span> self.loaders[key]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_notebook</span>(<span class="params">fullname, path=<span class="literal">None</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;find a notebook, given its fully qualified name and an optional path</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    This turns &quot;foo.bar&quot; into &quot;foo/bar.ipynb&quot;</span></span><br><span class="line"><span class="string">    and tries turning &quot;Foo_Bar&quot; into &quot;Foo Bar&quot; if Foo_Bar</span></span><br><span class="line"><span class="string">    does not exist.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    name = fullname.rsplit(<span class="string">&#x27;.&#x27;</span>, <span class="number">1</span>)[-<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> path:</span><br><span class="line">        path = [<span class="string">&#x27;&#x27;</span>]</span><br><span class="line">    <span class="keyword">for</span> d <span class="keyword">in</span> path:</span><br><span class="line">        nb_path = os.path.join(d, name + <span class="string">&quot;.ipynb&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(nb_path):</span><br><span class="line">            <span class="keyword">return</span> nb_path</span><br><span class="line">        <span class="comment"># let import Notebook_Name find &quot;Notebook Name.ipynb&quot;</span></span><br><span class="line">        nb_path = nb_path.replace(<span class="string">&quot;_&quot;</span>, <span class="string">&quot; &quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(nb_path):</span><br><span class="line">            <span class="keyword">return</span> nb_path</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotebookLoader</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Module Loader for Jupyter Notebooks&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, path=<span class="literal">None</span></span>):</span></span><br><span class="line">        self.shell = InteractiveShell.instance()</span><br><span class="line">        self.path = path</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">load_module</span>(<span class="params">self, fullname</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;import a notebook as a module&quot;&quot;&quot;</span></span><br><span class="line">        path = find_notebook(fullname, self.path)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&quot;importing Jupyter notebook from %s&quot;</span> % path)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># load the notebook object</span></span><br><span class="line">        <span class="keyword">with</span> io.<span class="built_in">open</span>(path, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            nb = read(f, <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment"># create the module and add it to sys.modules</span></span><br><span class="line">        <span class="comment"># if name in sys.modules:</span></span><br><span class="line">        <span class="comment">#    return sys.modules[name]</span></span><br><span class="line">        mod = types.ModuleType(fullname)</span><br><span class="line">        mod.__file__ = path</span><br><span class="line">        mod.__loader__ = self</span><br><span class="line">        mod.__dict__[<span class="string">&#x27;get_ipython&#x27;</span>] = get_ipython</span><br><span class="line">        sys.modules[fullname] = mod</span><br><span class="line"></span><br><span class="line">        <span class="comment"># extra work to ensure that magics that would affect the user_ns</span></span><br><span class="line">        <span class="comment"># actually affect the notebook module&#x27;s ns</span></span><br><span class="line">        save_user_ns = self.shell.user_ns</span><br><span class="line">        self.shell.user_ns = mod.__dict__</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">          <span class="keyword">for</span> cell <span class="keyword">in</span> nb.cells:</span><br><span class="line">            <span class="keyword">if</span> cell.cell_type == <span class="string">&#x27;code&#x27;</span>:</span><br><span class="line">                <span class="comment"># transform the input to executable Python</span></span><br><span class="line">                code = self.shell.input_transformer_manager.transform_cell(cell.source)</span><br><span class="line">                <span class="comment"># run the code in themodule</span></span><br><span class="line">                exec(code, mod.__dict__)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            self.shell.user_ns = save_user_ns</span><br><span class="line">        <span class="keyword">return</span> mod</span><br><span class="line">sys.meta_path.append(NotebookFinder())</span><br></pre></td></tr></table></figure>
+<p>上述代码中try后的for在写入文件中的时候，编译器可能会提醒for的缩进有问题，会进行标红，不用管，缩进是没问题的。</p>
+<p>然后我们给这个文件另存为后缀为py的文件，在jupyter notebook中进行如下另存为。</p>
+<p>千万不要直接rename，直接rename是有问题的，所以不要直接rename。另存为py文件后，把这个文件放到和文件A同一个路径下，那么我们就可以如下在文件A中调用B中的函数了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> 文件名 <span class="comment">#刚刚另存为py的那个文件名</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) <span class="comment"># 待引用的py文件B路径加到了搜索列表里</span></span><br><span class="line"><span class="keyword">import</span> B</span><br><span class="line">B.<span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
+<p>如果这时候提醒你另存为的那个文件找不到，那么就需要看看你的另存为py的那个文件名名字是否是<strong>大写字母开头</strong>，如果是小写开头也可能出问题(真的就巨坑)。</p>
+<p>然后在运行就不会提醒说找不到那个py文件了。但是有可能有如下这样报错</p>
+<p>说B文件中没有这个函数，这个一般是新建文件的时候在不同虚拟环境下创建的问题，如果是jupyter lab，如下修改即可</p>
+<p>如果是notebook，在命令行中修改。</p>
+<p>最后运行完全没问题，如果我们继续在B中写其他函数，或者修改原来的max函数，在A中运行却得不到想要的结果，这个就是A中对B进行了缓存导致的，所以需要shut down这个kernel（即文件A），然后再打开运行即可。</p>
+<p>深深体会到jupyter为什么在大工程方面被pycharm锤了，文件调用以及打开文件夹等功能真的需要改进:no way:</p>
 
-          </blockquote>
-<p>由于自己做的主要是分类问题，所以都没有用到解量化，不作详解。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>综上，对于分类问题，可以只用一个scale值进行简单的量化，也无需解量化。更多的量化类介绍可以参考如下链接</p>
-<blockquote class="blockquote-center">
-            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/qq_38798425/article/details/107423892">基于FPGA的卷积神经网络实现（五）数据量化（1）</a></p>
-
-          </blockquote>
-<blockquote class="blockquote-center">
-            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/64744154">神经网络量化简介</a></p>
-
-          </blockquote>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>
     </div>
 
     
@@ -384,7 +360,7 @@ zero=x'_{max}-\frac{x_{max}}{scale}=127.5</script><p>为什么式(1)要有一个
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://gezhilai.com/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/" title="数据量化">http://gezhilai.com/2021/03/16/数据量化/</a>
+    <a href="http://gezhilai.com/2021/04/10/jupyter%20lab%E5%AE%9E%E7%8E%B0%E8%B7%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/" title="jupyter lab实现跨文件的函数调用">http://gezhilai.com/2021/04/10/jupyter lab实现跨文件的函数调用/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -394,11 +370,6 @@ zero=x'_{max}-\frac{x_{max}}{scale}=127.5</script><p>为什么式(1)要有一个
 
 
       <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/FPGA/" rel="tag"><i class="fa fa-ship"></i> FPGA</a>
-              <a href="/tags/CNN/" rel="tag"><i class="fa fa-ship"></i> CNN</a>
-              <a href="/tags/%E5%8A%A0%E9%80%9F%E5%99%A8/" rel="tag"><i class="fa fa-ship"></i> 加速器</a>
-          </div>
 
         
 
@@ -406,13 +377,10 @@ zero=x'_{max}-\frac{x_{max}}{scale}=127.5</script><p>为什么式(1)要有一个
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/01/24/latex%E8%BD%ACword/" rel="prev" title="latex转word">
-      <i class="fa fa-chevron-left"></i> latex转word
+    <a href="/2021/03/27/%E4%B8%80%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="prev" title="一个有意思的面试题">
+      <i class="fa fa-chevron-left"></i> 一个有意思的面试题
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/03/27/%E4%B8%80%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="next" title="一个有意思的面试题">
-      一个有意思的面试题 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -471,7 +439,6 @@ zero=x'_{max}-\frac{x_{max}}{scale}=127.5</script><p>为什么式(1)要有一个
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8F%E5%8C%96%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">量化方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%87%8F%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">解量化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -896,59 +863,6 @@ if(canvas.getContext){
   
 
   
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@2.7.8/unpacked/MathJax.js?config=TeX-MML-AM_CHTML';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
 
   
 
