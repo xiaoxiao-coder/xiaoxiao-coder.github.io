@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://gezhilai.com/2021/07/07/page/</loc>
+    <loc>http://gezhilai.com/good/index.html</loc>
     
     <lastmod>2021-07-06</lastmod>
     
@@ -181,14 +181,14 @@
   </url>
   
   <url>
-    <loc>http://gezhilai.com/categories/Hexo/%E6%90%AD%E5%BB%BA/</loc>
+    <loc>http://gezhilai.com/categories/%E4%BC%98%E5%8C%96/</loc>
     <lastmod>2021-07-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://gezhilai.com/categories/%E4%BC%98%E5%8C%96/</loc>
+    <loc>http://gezhilai.com/categories/Hexo/%E6%90%AD%E5%BB%BA/</loc>
     <lastmod>2021-07-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
