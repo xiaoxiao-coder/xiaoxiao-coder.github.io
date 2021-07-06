@@ -147,7 +147,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">5</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">6</span></a>
 
   </li>
         <li class="menu-item menu-item-schedule">
@@ -231,6 +231,143 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/07/07/page/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
+      <meta itemprop="name" content="Apers">
+      <meta itemprop="description" content="你知道吗?两个人肩并肩看日出真的很美">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Apers' Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/07/07/page/" class="post-title-link" itemprop="url">page</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+	
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-07-06 21:34:15 / 修改时间：13:37:36" itemprop="dateCreated datePublished" datetime="2021-07-06T21:34:15Z">2021-07-06</time>
+            </span>
+
+          
+            <span id="/2021/07/07/page/" class="post-meta-item leancloud_visitors" data-flag-title="page" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/07/07/page/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/07/page/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="20210706周报"><a href="#20210706周报" class="headerlink" title="20210706周报"></a><strong>20210706周报</strong></h2><p>之前师兄让我暑期尝试在FPGA上搭一个目标追踪网络的demo，所以这一周主要在读目标追踪的源码，把每一步的具体流程熟悉了后，然后考虑把网络具体哪些部分用硬件描述语言部署在FPGA端。之前已经学习过目标追踪中two-stage和one-stage的经典网络原理，由于之前没有服务器，所以没运行过这些代码源码。这周读的主要是pytorch框架下two-stage:faster rcnn的源码，本地的GPU很难训练two-stage这种大型网络，不过debug可以勉强运行，所以读的过程同时通过debug来理解源码。two-stage代码量比较大，有近一万行，这周大概读完了4/5。下面大概讲述一下这周读的源码具体理解。源码地址如下：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/WZMIAOMIAO/deep-learning-for-image-processing/tree/master/pytorch_object_detection/faster_rcnn">https://github.com/WZMIAOMIAO/deep-learning-for-image-processing/tree/master/pytorch_object_detection/faster_rcnn</a></p>
+<p>Fster rcnn的框架图如下：</p>
+<p><strong>1、</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td><img src="file:///C:\Users\21311\AppData\Local\Temp\ksohtml6580\wps1.jpg" alt="img"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong><em>\</em>generalizedRCNN Transform**</strong></p>
+<p>该步骤主要是将一个batch内图片进行标准化处理，然后将图像和bounding box进行一个resize处理。标准化处理即是将图像像素值减去其均值，然后除以方差即可；而缩放规则如下：为输入图片指定一个最大值max_value和最小值min_value，将图片的shape resize到这个最大值和最小值之间。首先获取输入图片长宽的最小值min_pic和最大值max_pic（min_pic可能是height也可能是width,max_pic一样），然后通过min_value/min_pic得到一个缩放因子p，然后将max_pic<em>p作为缩放后的最大值，此时min_value作为min_pic缩放后的值;但若是max_pic</em>p超过了max_value,那么就令p=max_value/max_pic。由于缩放后会需要插值操作，所以用到了torch.nn.functional.interpolate函数，由于这个函数中的双线性插值只能对四维tensor操作，所以会通过None方法将图片扩为四维，也可以通过reshape函数变为四维，然后通过切片的方式就可以变回原来的shape，当然也可以通过reshape变为原有尺寸。如果是推理模式，至此可以直接返回，但如果是训练模式，则由于原图被缩放了，而最初的ground truth是对应原图的，所以还需要对ground truth进行缩放，从而使其对应缩放后的图片，其缩放方式就是gtbox的左上角和右下角的x坐标乘width的缩放比例，同理y乘以height的缩放比例，最后通过stack函数将坐标合并即可。通过上述方法后，只是将图片的最大边长和最下边长限制了，并没有将所有图像resize到一个尺寸，而这不方便将图片打包batch；通过把batchsize个缩放后的图片的最大max_width和max_height提取出来，然后生成一个shape是[max_height,max_width]、元素都是0的矩阵，把缩放后的图片左上角对应该矩阵的左上角进行放置，这样就将batch内的图片都变成一样大小(值得注意的是，每个batch之间的图片大小不一)这样做和直接resize相比的好处就是防止图像物体比例变化，信息损失(比如人高宽比例差异过大)。在此步骤后batch内的图片已经变成了统一大小，但是此时图像又加入了一个向上32对齐的操作，比如shape是[45,83],向32对齐就变成了[64,96]，这个向32对齐的原因应该主要是为了硬件加速的问题，以FPGA为例，由于硬件层面实现除法浪费资源太多，所以各类尺寸往往是变成2的n次方，然后通过逻辑移位实现除法等价的功能。最终实现完resize的功能后，会保存resize后的尺寸和原图尺寸，由于resize后的尺寸是输入给Faster rcnn进行目标检测的，所以预测出来的坐标是对应resize后的图片，但模型真正需要预测目标的是原图，所以保存原图尺寸和resize后的尺寸，将最终预测的bounding box从resize后图像映射到原图上。</p>
+<p><strong>2、<em>*</em></strong>*Backbone*<em>*</em></p>
+<p>Backbone部分是有一些经典的CNN分类网络组成，只是去除了全连接部分，用其来作为backbone提取输入图片的深度特征，其可以是restnet50、mobilenet等等，resnet50模型太大，本地跑不起来，所以debug调试分析源码的时候用的是mobilenet，这是一个轻量级易于在配置在低算力平台的网络，其卷积部分不同于传统的CNN卷积，而是采用了deep-wise convolution，即深度可分离卷积，在传统的CNN卷积中，输入的feature map的shape如果是[N,height，width]，则卷积核的shape往往是[N,3,3]或者[N,5,5]，以5<em>5的卷积核为例，如果当前层用了100个卷积核，则就是100</em>shape:[N,5,5];而mobilenet则将卷积分成了两步，第一步:其卷积核个数和输入的feature map通过到shape:[5<em>5],这一百个卷积核分别对应一个通道.第二步：由于第一步中每通道没有联系，所以第二步就是将其N个通道联系起来，即采用100个shape是[N,1,1]的卷积核，这个卷积核传统卷积一样，只是采用1</em>1的卷积核。通过此法可以大幅度减少卷积的运算量，使其可以部署在计算力偏弱、功耗要求低的嵌入式平台。</p>
+<p><strong>3、<em>*</em></strong>*RPN(Region Proposal Network)*<em>*</em></p>
+<p>区域提名网络主要由两个部分组成，一个是anchorgenerator锚框生成器；一个是RPNHead，其通过卷积网络得到分类(前景和背景)概率和回归的四个参数。最终两个部分综合，将anchors回归后再滤除一部分后用于计算RPN的损失。</p>
+<p>3.1 anchorgenerator</p>
+<p>Anchorgenerator需要传入的主要有以下几个信息:1、原始图像resize后组成batch时候的height和width(一个batch内width和height都一样)。2、预测特征层的height和width。3、anchor的面积 4、anchor的长宽比例。其中anchor的面积和比例都是元组方式，元组的中的元素个数代表预测特征层个数，如mobilenet就一个预测特征层，则anchor面积用((10,15,20),)表示，这里面积传入直接是传入的面积开根号的，不同框架提供的源码略有不同。</p>
+<p>预测特征层的每一个点处代表就是一个可以放置一组anchors，如果预测特征层的shape是[10,20],则就有200组anchors，一组多少个有anchor的面积和长宽比例组合决定。Anchor目的希望是可以框住物体，所以需要映射到输入的图像上(即resize后的图像)，映射的原理就是按照比例将预测特征层的点映射到输入图像，令width_ratio=input_width/预测特征层的宽度，height_ratio=input_height/预测特征层的高度；然后即可知道x=arange(0,预测特征层宽度)<em>width_ratio，y=arange(0,预测特征层高度)</em>height_ratio，此(x,y)即是输入图片上一组锚框放置的位置。</p>
+<p>现在知道了锚框放置的位置，还不知道锚框的高height_anchor和宽width_anchor，由于输入信息提供了anchor的面积(应该是面积开根号)和长宽比例，那么就有下述公式:</p>
+<p><img src="file:///C:\Users\21311\AppData\Local\Temp\ksohtml6580\wps2.png" alt="img"></p>
+<p>其中square即是面积，ratio是高和宽比例。那么即可得到:</p>
+<p><img src="file:///C:\Users\21311\AppData\Local\Temp\ksohtml6580\wps3.png" alt="img"></p>
+<p>即可通过输入的面积和比例得到高和宽(由于square和ratio是需要每每组合的，所以python实现时候，需要None扩维然后广播机制实现)。</p>
+<p>现在知道了anchor的大小和每个anchor的中心点位置，所以需要将这两个条件进行组合，得到每个anchor的左上角坐标和右下角坐标，此处对每个anchor的中心点坐标减去heigth_anchor/2、width_anchor/2得到左上角坐标，加上heigth_anchor/2、width_anchor/2得到右下角坐标(由于一个中心点坐标要对很多个anchor这样操作，所以一般也会用None扩维然后广播机制)。此时，有些anchor的坐标会出现负数，所以将anchor的负坐标限制在边界上，至此anchor生成完毕。</p>
+<p>3.2 RPNHead</p>
+<p>这一部分主要由两cls_logits和box_pred组成。cls_logits是用于得到锚框区是前景还是背景的分数(可以理解为概率)，在faster rcnn的原论文中每个锚框的分数有两个[grade_pre,grade_back],第一个参数是前景概率，第二个概率是背景概率，其实比较这两个值就可以判定锚框是属于前景还是背景(CNN中往往是通过softmax归一化了便可以用概率来理解这个值)，由于二分类问题，其实用一个值也可以解决，直接一个锚框一个分数[grad_pre]，即前景概率，背景概率直接认为是1-grad_pre即可，在pytorch中采用的用一个锚框一个分数，与原论文略有不同，个人理解原论文或许更合理，因为softmax后必然归1，然而只用一个值代表锚框属于前景概率，且次值由卷积层产生，未必归1。此处pytorch中是先将backbone得到的预测特征层输入到一个卷积层，卷积层的卷积核个数和输入通道数保持一致，使得输出通道数和原始通道数相同，然后将这个输出作为输入输入到预测分数的卷积层，预测分数的卷积层的卷积核尺寸是1<em>1的，个数是anchor的数量(这里anchor个数不是总个数，而是预测特征层一个特征点对应anchors的总个数，由面积和长宽比决定，比如面积要求是[10,16,20],注意这里10,16,20显示是边长，面积会是100,256,400，看编程时候怎么写。长宽比要求是[0.5,1,2],则一个特征点就是对应9个锚框，也就是1</em>1的卷积核数量是9)，这样就得到了每个锚框的预测分数(背景or前景的分数)。对于回归参数预测，从框架图中可以看出，其与分数预测共用了第一个卷积层，在得到输出后，再输入给卷积核都为1<em>1的卷积层，由于每个anchor的回归参数有四个，分别对应x,y,w,h的回归参数，所以卷积核个数是anchor数量</em>4，便可以得到每个anchor的回归参数。</p>
+<p><strong>4、<em>*</em></strong>*Proposal &amp; filter proposal*<em>*</em></p>
+<p>后面的计划:</p>
+<p>看完fater rcnn源码</p>
+<p>读透yolo的源码</p>
+<p>尝试在FPGA上搭建一个backbone,预计是mobilenet</p>
+<p>熟悉jetson板卡，师兄刚把板子给我。</p>
+<p>和师兄师姐们参加遥感目标识别竞赛</p>
+<p>在FPGA搭建一个语音识别的轻量级CNN网络，实现十个语音单词的分类。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
       
   
   
@@ -881,7 +1018,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1205,13 +1342,13 @@ if(canvas.getContext){
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">7k</span>
+    <span title="站点总字数">12k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">6 分钟</span>
+    <span title="站点阅读时长">11 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
