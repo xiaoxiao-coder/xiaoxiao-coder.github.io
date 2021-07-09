@@ -24,21 +24,34 @@
     var CONFIG = {"hostname":"gezhilai.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="前两天室友面试深信服的时候，遇到了个有意思的题目，要求用c或者c++求解如下题目：用户输入一个可以包含加减乘除的数学表达式，你给这个表达式加上任意多的括号，使得这个表达式结果最大。">
+  <meta name="description" content="​        之前做图像处理的时候，也没有涉及过太多的深度学习，所以都是用传统算法做的，这个是本科期间做的大创（感谢陈老师帮该项目申请成了省级大创），其实不能说做的多好，因为真的发现图像处理领域很多传统算法被深度学习吊锤，而且现在FPGA加速器有崛起的势头，但是我们还是要惊羡于那些数学家的美妙构思（数学真是最美妙的学科），不多扯了，进入正题。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一个有意思的面试题">
-<meta property="og:url" content="http://gezhilai.com/2021/03/27/%E4%B8%80%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/index.html">
+<meta property="og:title" content="基于FPGA的手势识别系统设计">
+<meta property="og:url" content="http://gezhilai.com/2021/07/09/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/index.html">
 <meta property="og:site_name" content="Apers&#39; Blog">
-<meta property="og:description" content="前两天室友面试深信服的时候，遇到了个有意思的题目，要求用c或者c++求解如下题目：用户输入一个可以包含加减乘除的数学表达式，你给这个表达式加上任意多的括号，使得这个表达式结果最大。">
+<meta property="og:description" content="​        之前做图像处理的时候，也没有涉及过太多的深度学习，所以都是用传统算法做的，这个是本科期间做的大创（感谢陈老师帮该项目申请成了省级大创），其实不能说做的多好，因为真的发现图像处理领域很多传统算法被深度学习吊锤，而且现在FPGA加速器有崛起的势头，但是我们还是要惊羡于那些数学家的美妙构思（数学真是最美妙的学科），不多扯了，进入正题。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-03-26T16:29:43.000Z">
-<meta property="article:modified_time" content="2021-03-26T11:42:02.601Z">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/09/RjL0gg.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/09/RjLsDs.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/09/RjLruj.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/09/RjLBvQ.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/09/RjLw8S.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/09/RjLybn.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/09/RjLcEq.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/09/RjLgU0.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/09/RjL25V.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/09/RjLWCT.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/09/RjLh2F.png">
+<meta property="article:published_time" content="2021-07-09T13:01:31.000Z">
+<meta property="article:modified_time" content="2021-07-09T05:06:52.780Z">
 <meta property="article:author" content="Apers">
-<meta property="article:tag" content="博客搭建">
-<meta property="article:tag" content="整型规划">
+<meta property="article:tag" content="FPGA">
+<meta property="article:tag" content="图像处理">
+<meta property="article:tag" content="手势识别">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://z3.ax1x.com/2021/07/09/RjL0gg.png">
 
-<link rel="canonical" href="http://gezhilai.com/2021/03/27/%E4%B8%80%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/">
+<link rel="canonical" href="http://gezhilai.com/2021/07/09/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">
 
 
 <script id="page-configurations">
@@ -51,7 +64,7 @@
   };
 </script>
 
-  <title>一个有意思的面试题 | Apers' Blog</title>
+  <title>基于FPGA的手势识别系统设计 | Apers' Blog</title>
   
 
 
@@ -240,7 +253,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/03/27/%E4%B8%80%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/">
+    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/07/09/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
@@ -253,7 +266,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          一个有意思的面试题
+          基于FPGA的手势识别系统设计
         </h1>
 
         <div class="post-meta">
@@ -265,7 +278,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-03-26 16:29:43 / 修改时间：11:42:02" itemprop="dateCreated datePublished" datetime="2021-03-26T16:29:43Z">2021-03-26</time>
+              <time title="创建时间：2021-07-09 13:01:31 / 修改时间：05:06:52" itemprop="dateCreated datePublished" datetime="2021-07-09T13:01:31Z">2021-07-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -273,16 +286,16 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BC%98%E5%8C%96/" itemprop="url" rel="index"><span itemprop="name">优化</span></a>
+                  <a href="/categories/FPGA/" itemprop="url" rel="index"><span itemprop="name">FPGA</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%BC%98%E5%8C%96/%E8%B6%A3%E5%91%B3%E9%A2%98%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">趣味题目</span></a>
+                  <a href="/categories/FPGA/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">图像处理</span></a>
                 </span>
             </span>
 
           
-            <span id="/2021/03/27/%E4%B8%80%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/" class="post-meta-item leancloud_visitors" data-flag-title="一个有意思的面试题" title="阅读次数">
+            <span id="/2021/07/09/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" class="post-meta-item leancloud_visitors" data-flag-title="基于FPGA的手势识别系统设计" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -304,8 +317,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/03/27/%E4%B8%80%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/03/27/%E4%B8%80%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/07/09/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/09/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -315,7 +328,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>605</span>
+              <span>1.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -334,31 +347,240 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>前两天室友面试深信服的时候，遇到了个有意思的题目，要求用c或者c++求解如下题目：用户输入一个可以包含加减乘除的数学表达式，你给这个表达式加上任意多的括号，使得这个表达式结果最大。</p>
+        <p>​        之前做图像处理的时候，也没有涉及过太多的深度学习，所以都是用传统算法做的，这个是本科期间做的大创（感谢陈老师帮该项目申请成了省级大创），其实不能说做的多好，因为真的发现图像处理领域很多传统算法被深度学习吊锤，而且现在FPGA加速器有崛起的势头，但是我们还是要惊羡于那些数学家的美妙构思（数学真是最美妙的学科），不多扯了，进入正题。</p>
 <a id="more"></a>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>来看一下这个题目，比如用户输入了如下表达式</p>
+<p>注:这里没有提到待卷积窗口的生成(3 <em> 3 or 5 </em> 5的)，大家可以参考这篇文章</p>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/ninghechuan/p/6789399.html">深刻认识shift_ram IP core</a></p>
+
+          </blockquote>
+<p>以后有时间会在加速器设计里讲如何生成待卷积窗口，最近有点忙。。。</p>
+<p>2.1 系统介绍<br>该项目通过FPGA驱动摄像头ov7725,通过配置寄存器使得ov7725采集到RGB565格式的数据，由于摄像头工作频率和FPGA工作频率不匹配，所以先存入ram中然后再由FPGA读出摄像头数据，为了进行图像分割，去掉除了手势以外的其他部分，我们对其进行了色域转换，将RGB565格式转为YCBCR格式，通过控制CBCR域值进行提取肤色。然后，滤除图像中的杂波,我们进行分别进行了两次腐蚀操作和两次膨胀操作，为了提高后续识别算法的鲁棒性，我们对其进行了sobel算子边缘化提取，最后，我们通过hu不变矩算法进行识别手势。其系统框图如下<a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/RjL0gg"><img src="https://z3.ax1x.com/2021/07/09/RjL0gg.png" alt="RjL0gg.png"></a></p>
+<p>2.3图像处理算法模块</p>
+<p>此块详细描述</p>
+<p>（1）肤色提取</p>
+<p>为了进行肤色提取，我们需要先将RGB565格式转为YCbCr域进行识别。</p>
+<p>YCbCr是通过有序的三元组来表示的，三元由Y(Luminance)、Cb(Chrominance-Blue)、和Cr(Chrominance-Red)组成，其中Y表示颜色的明亮度和浓度，而Cb和Cr则分别表示颜色的蓝色浓度偏移量和红色浓度偏移量。人的肉眼对由YCbCr色彩空间编码的视频中的Y分量更敏感，而Cb和Cr的微小变化不会引起视觉上的不同，根据该原理，通过对Cb和Cr进行子采样来减小图像的数据量，使得图像对存储需求和传输带宽的要求大大降低，从而达到在完成图像压缩的同时也保证了视觉上几乎没有损失的效果，进而使得图像的输出速度更快，存储更加方便。值得一提的是，如果需要得到灰度图像的话，要将采集到的彩色图像转化为YCbCr后，将Y分量分别送给VGA的R、G、B，即此时R、G、B数值上是一致的(其实由于位数原因会不一致，比如RGB565，G是6位而此时RB只有5位)，这样便得到了灰度图，此处我们没有用到灰度图，所以不需要Y分量，但下述算法依旧会一并提及。</p>
+<p>我们配置摄像头采集到的数据是RGB565的格式，官方给出的转化公式是严格的RGB888转为YCbCr888，所以先需要将RGB565转化为RGB888，这个时候我们又遇到了一个有意思的问题，平时像素数据一般RGB565，但很多FPGA开发板支持的VGA不是RGB565的，EGO1就是RGB444的，那么如何将RGB565变为RGB444呢？又如何将RGB565变为RGB888？此处便提到了压缩和量化补偿思想。</p>
+<p>对于压缩，主要是一个思维：取高位。如果是RGB565格式想变成RGB444，那么再FPGA中always块只要如下三句即可：</p>
 <script type="math/tex; mode=display">
-1+2*3+5\tag{1.1}</script><p>那么我们随便加些括号</p>
+R1<=R[4:1];
+            G1<=G[5:2];                                                                            B1<=B[4:1];</script><p>即分别取了原像素点RGB的高四位作为RGB444。</p>
+<p>  对于量化补偿，是用在扩充位数的时候用的，比如此处需要的RGB888。以RGB565转RGB888为例。   </p>
+<p>16bit RGB565 -&gt; 24bit RGB888的转换（高位补低位）</p>
+<p>16bit RGB565：</p>
 <script type="math/tex; mode=display">
-(1+2)*(3+5)\tag{1.2}</script><p>显然加上括号后比初始的结果要大，我们需要做的就是加些括号使得原始表达式最大。</p>
-<p>如果需要比较结果，第一想到的就是枚举出所有的可能性，由于括号个数和位置都是不定的，我们如何编程来找出加上括号的所有可能情况呢？</p>
-<p>我们知道一个左括号必然对应一个右括号，且用括号括住一个数是无意义的，比如((3))*2这种的括号就是无意义的，所以就是说一个括号括住至少两个数才是有意义的。看一下式(1.1)，那么我们就可以知道，1的左侧最多有三个有意义的左括号，因为1的右边只有三个数，三个左括号对应三个右括号，1的右侧最多有0个有意义的右括号，因为1左边没有其他数了，同理2的左侧有意义的括号数为2,2的右侧为1,3的左侧为1，右侧为2,5的左侧为0，右侧为3。</p>
-<p>我们定义1、2、3、5的左右侧有意义括号数为a0、a1、b0、b1、c0、c1、d0、d1(这里为了方便大家看，定义的很多变量，真正写代码的时候当然是用数组啦)，那么这些量符合如下约束：</p>
+\\{R4 R3 R2 R1 R0} 
+
+\\{G5 G4 G3 G2 G1 G0}
+
+\\{B4 B3 B2 B1 B0}</script><p>24bit RGB888:</p>
 <script type="math/tex; mode=display">
-a0+b0+c0+d0=a1+b1+c1+d1
-\\a0+b0+c0+d0    <=    3
-\\a0<=3\ \ \ \ \ a1<=0
-\\b0<=2\ \ \ \ \ b1<=1
-\\c0<=1\ \ \ \ \ c1<=2
-\\d0<=0\ \ \ \ \ d1<=3\tag{1.3}
-\\其都属于自然数</script><p>那么我们通过求解出符合条件的值即可知道如何添加括号。</p>
-<h2 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h2><p>显然式(1.3)应该是属于一个整型规划问题，那么lingo、matlab、R、python等等甚至可以通过函数或者可视化工具求解，C则需要自己实现整型规划问题的算法，如何求解整型规划问题网上教程很多，在此不做详解。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上述提出的解法只是自己个人的一点分析，里面得到的括号添加方式是可能有重复的，如((1+2*3+5))最外面的两个括号和一个括号、无括号的情况下是一样的，所以此法并非最优解法，欢迎大家可以提出更好的解法。</p>
+\\{ R4 R3 R2 R1 R0 R2 R1 R0}
+
+\\{ G5 G4 G3 G2 G1 G0 G1 G0}
+
+\\{ B4 B3 B2 B1 B0 B2 B1 B0}</script><p>官方给出的RGB888-&gt;YCbCr888转化公式如下：</p>
+<script type="math/tex; mode=display">
+Y=0.229R+0.587G+0.114B
+\\Cb=0.568(B-Y)+128
+\\Cr=0.713(R-Y)+128</script><p>由于FPGA无法实现浮点数运算，所以需要把系数变为整数，我们不妨将Y、Cb和Cr都扩大1024倍，然后所有系数取整，那么变成如下公式：</p>
+<p>Y=306R+601G+116B</p>
+<p>Cb=-176R-347G+523B+131072</p>
+<p>Cr=523R-438G-85B+131072</p>
+<p>这样便可以得到整型的运算，最后得到的结果右移10位即可，但为了时序的科学严谨性，我们不应该一次在always块中算出Y、Cb、Cr，因为一个关系式中涉及到三次乘法和两次加法，越多的运算量就越可能导致时序延时错乱，此处或许不会有问题，但不在一个块中用太复杂的运算式是一种好的习惯，我们应该选择业界普遍使用的流水线做法，将乘法在一个always块里实现，在另一个always块中实现加法。</p>
+<p>在转换为YCBCR后，通过限制CBCR阈值，可以提取出肤色，在FPGA中设定的初始值肤色范围为：</p>
+<script type="math/tex; mode=display">
+77<Cb<127
+\\133<Cr<173</script><p>这是一个经典的人的肤色阈值，但是为了个别人肤色差别需要调节，FPGA上给出了调节按键。最终在该范围内的像素使其为黑色，否则为白色，那么VGA上只显示出一只手。</p>
+<p>(2)腐蚀</p>
+<p>腐蚀是一种消除边界点，使边界向内部收缩的过程，可以用来消除小且无意义的物体。由于在第一步手势提取的可能出现杂波，那么为了消除这些小黑点杂波，我们进行两次腐蚀算法便可以将其消除。</p>
+<p>简单来说，腐蚀操作需要用3×3的结构元素，扫描图像的每一个像素点，用结构元素与其覆盖的二值图像做“与”操作，如果全为1，结果图像的该像素是1，否则为0。结果会使二值图像小一圈，消除像素杂波。算法原理如下：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+   P1 &= & P11 & \& & P12 & \& & P13 \\
+   P2 &= & P21 & \& & P22 & \& & P23 \\
+   P3 &= & P31 & \& & P32 & \& & P33 \\
+   P &= & P1 & \& & P2 & \& & P3 \\
+  \end{matrix}\tag{2.4}</script><p>从原理上来说，其是比较简单的，但是FPGA实现时，我们需要考虑如何得到这个3<em>3的矩阵，因为FPGA扫描像素点是一个一个进行的，一行有640个数据，如何得到三行中的三个数据呢？这个时候我们需要用到FPGA中shift ram IP核，可以说这个IP核是为了构建矩阵量身定制，其是一个只有一行的循环移位的IP核，那么我们需要两个这样的IP核，进行循环移位得到3</em>3的矩阵，然后进行腐蚀滤波。</p>
+<p>（3）膨胀</p>
+<p>膨胀与腐蚀效果相反，是将与物体接触的所有背景点合并到该物体中，使边界向外部扩张的过程，由于在腐蚀的时候，是为了消除杂波，但不可避免的减小了有效的手势区域，那么我们如何来恢复被消除的手势区域，那么此时便用到了膨胀算法。</p>
+<p>膨胀算法思维核腐蚀思维类似，都需要构建3*3的矩阵，用3×3的结构元素，扫描图像的每一个像素点，用结构元素与其覆盖的二值图像做“或”操作，如果全为0，结果图像的该像素是0，否则为1。结果会使二值图像扩大一圈。算法原理如下：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+   P1 &= & P11 & | & P12 & | & P13 \\
+   P2 &= & P21 & | & P22 & | & P23 \\
+   P3 &= & P31 & | & P32 & | & P33 \\
+   P &= & P1 & | & P2 & | & P3 \\
+  \end{matrix}\tag{2.4}</script><p>在其实现过程中，依旧需要shift ram IP核，然后得到3*3矩阵，然后用流水线法实现膨胀操作，恢复手势区域。</p>
+<p><strong>（4）Sobel边缘化</strong></p>
+<p> 此步我们进行Sobel算子边缘化提取，为什么进行Sobel化呢？Sobel化边缘提取可以提取出手势的边缘而不是整只手，这样是为了提高后续的hu不变矩识别算法的稳定性。</p>
+<p>Sobel边缘检测的核心在于像素矩阵的卷积，卷积对于数字图像处理非常重要，很多图像处理算法都是做卷积来实现的。卷积运算的本质就是对制定的图像区域的像素值进行加权求和的过程，其计算过程为图像区域中的每个像素值分别与卷积模板的每个元素对应相乘，将卷积的结果作求和运算，运算到的和就是卷积运算的结果。</p>
+<p>3×3的窗口M与卷积模板C 的卷积运算如下：</p>
+<script type="math/tex; mode=display">
+M= \left[
+ \begin{matrix}
+   M1 & M2 & M3 \\
+   M4 & M5 & M6 \\
+   M7 & M8 & M9
+  \end{matrix}
+  \right] \tag{2.4}\ \ \ \ \ \ \ \
+  C= \left[
+ \begin{matrix}
+   C1 & C2 & C3 \\
+   C4 & C5 & C6 \\
+   C7 & C8 & C9
+  \end{matrix}
+  \right]
+  \\M5'=M1*C1+M2*C2+M3*C3+M4*C4+M5*C5+\\M6*C6+M7*C7+M8*C8+M9*C9</script><p>G_x和G_y是Sobel的卷积因子，将这两个因子和原始图像做如下卷积，其中A表示原视图像。</p>
+<script type="math/tex; mode=display">
+G_x=\left[
+ \begin{matrix}
+   M1 & M2 & M3 \\
+   M4 & M5 & M6 \\
+   M7 & M8 & M9
+  \end{matrix}
+  \right] *A\tag{2.4}\ \ \ \ \ \ \
+  G_y=\left[
+ \begin{matrix}
+   M1 & M2 & M3 \\
+   M4 & M5 & M6 \\
+   M7 & M8 & M9
+  \end{matrix}
+  \right] *A</script><p>得到图像中的每一个点的横向纵向梯度G_x、G_y。最后通过如下公式来计算该点总体梯度的大小。</p>
+<script type="math/tex; mode=display">
+G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该如果算出的G大于设定的阈值，那么认为此处是边缘处，使其为黑色，否则认为不是边缘，使其为白色。</p>
+<p>上述是算法原理，很显然，这里也用到了3*3矩阵，那么又需要shift ram IP核，所以如果需要学习图像滤波等处理，shift ram需要熟练掌握。</p>
+<p><strong>（5）手势识别算法：Hu不变矩</strong></p>
+<p>对于一个提取出来的手势，我们需要有固定且唯一的特征来对其进行记录，且该特征不会受到手势的大小，旋转，平移而变化，且鲁棒性较好，所以此处引入hu不变矩算法，下面进行原理介绍:</p>
+<p>1、普通矩（也叫p+q阶不变矩），和p+q中心矩的定义</p>
+<p>对于像素分布为f(x,y)的图像，其(p+q)阶矩定义为：</p>
+<script type="math/tex; mode=display">
+m_{pq}=\int\int{x^py^qf(x,y)dxdy}\tag{5.1}</script><p>(p+q)阶中心矩定义为：</p>
+<script type="math/tex; mode=display">
+\mu_{pq}=\int\int{(x-x_0)^p(y-y_0)^qf(x,y)dxdy}\tag{5.2}</script><p>其中矩心(x_0,y_0)为：</p>
+<script type="math/tex; mode=display">
+x_0=\frac{m_{10}}{m_{00}}\ \ \ \ \ \ y_0=\frac{m_{01}}{m_{00}}</script><p>上述都是在连续量上引出的，但是FPGA只能存储离散量，得到的是离散的320<em> 240或者640 </em> 480的离散图像，那么下面引入适用于离散图像的hu不变矩：</p>
+<p>对于数字图像，离散化得到，公式如下：</p>
+<script type="math/tex; mode=display">
+m_{pq}=\sum^M_{x=1}\sum^N_{y=1}x^py^qf(x,y)</script><p>式中p、q=0，1，2….</p>
+<p>直接用普通矩或中心矩进行特征表示，不能使特征同时具有平移、旋转和比例不变性，所以我们下面进行归一化使得手势平移、旋转核比例不变性。</p>
+<p>2.归一化中心矩定义</p>
+<p>当图像发生变化时，m_pq也发生变化，而\mu_pq则具有平移不变性但对旋转依然敏感。</p>
+<p>归一化中心矩：</p>
+<script type="math/tex; mode=display">
+y_{pq}=\frac{\mu_{pq}}{\mu^r_{00}}\\
+其中r=\frac{p+q+2}{2},p+q=2,3...</script><p>如果利用归一化中心矩,则特征不仅具有平移不变性，而且还具有比例不变性。</p>
+<p>至此我们得到了最终可以应用的不变矩，为了说明其又平移、寻转、放缩不变性，下面我们进行对各个性质进行证明：</p>
+<p>（1）中心矩对于f(x,y)的平移具有不变性：</p>
+<p>假如新的坐标(x’,y’)</p>
+<script type="math/tex; mode=display">
+x'=x+\alpha\\
+y'=y+\beta</script><p>其中alpha和beta是常数，通过简单的变量代换，可以发现最终的常数会消去，得到f(x,y)和f(x’,y’)的中心矩是相同的。</p>
+<p>（2）中心矩对于缩放具有不变性：</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+   x' \\
+   y'
+  \end{matrix}
+  \right]
+  = 
+  \left[
+ \begin{matrix}
+   \alpha & 0\\
+   0 & \alpha  
+  \end{matrix}
+  \right] *
+  \left[
+ \begin{matrix}
+   x \\
+   y
+  \end{matrix}
+  \right] \tag{2.4}</script><p>alpha是个常数，(x’,y’)可以看作是(x,y)分别乘以系数alpha得到，对于每一个alpha系数有公式</p>
+<script type="math/tex; mode=display">
+a'_{pq}=\alpha^{p+q}a_{pq}</script><p>因为alpha是个常数，那么变换前后的中心矩有这样的关系：</p>
+<script type="math/tex; mode=display">
+\mu'_{pq}=\alpha^{p+q+2}\mu_{pq}</script><p>最后可以得到：</p>
+<script type="math/tex; mode=display">
+\frac{\mu'_{pq}}{(\mu')^{\frac{p+q}{2}}+1}=\frac{\mu_{pq}}{\mu^{\frac{p+q}{2}}+1}</script><p>式中p+q=2,3…</p>
+<p>这也可以称为相似不变矩性。</p>
+<p>（3）中心矩对于旋转具有不变性：</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+   x' \\
+   y'
+  \end{matrix}
+  \right]
+  = 
+  \left[
+ \begin{matrix}
+   cos\theta & sin\theta \\
+   -sin\theta & -cos\theta  
+  \end{matrix}
+  \right] *
+  \left[
+ \begin{matrix}
+   x \\
+   y
+  \end{matrix}
+  \right] \tag{2.5}</script><p>旋转矩阵的模是1。</p>
+<script type="math/tex; mode=display">
+J  = 
+  \left[
+ \begin{matrix}
+   cos\theta & sin\theta \\
+   -sin\theta & cos\theta  
+  \end{matrix}
+  \right] =
+    \pm1\tag{2.5}</script><p>将(8)和(9)式与公式(2)结合，也可以得到mu’_pq与mu_pq的关系，称为正交不变性。</p>
+<p>HU矩利用二阶和三阶归一化中心矩构造了7个不变矩，他们在连续图像条件下可保持平移、缩放和旋转不变，具体定义如下：</p>
+<script type="math/tex; mode=display">
+I_1=y_{20}+y_{02}\\
+I_2=(y_{20}-y_{02})^2+4y^2_{11}\\
+I_3=(y_{30}-3y_{12})^2+(3y_{21}-y_{03})^2\\
+I_4=(y_{30}+y_{12})^2+(y_{21}+y_{03})^2\\
+I_5=(y_{30}-3y_{12})(y_{30}+y_{12})[(y_{30}+y_{12})^2-3(y_{21}+y_{03})^2]\\
++(3y_{21}-y_{03})(y_{21}+y_{03})[3(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\
+I_6=(y_{20}-y_{02})[(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\
++4y_{11}(y_{30}+y_{12})(y_{21}+y_{03})\\
+I_7=(3y_{21}-y_{03})(y_{30}+y_{12})[(y_{30}+y_{12})^2-3(y_{21}+y_{03})^2]\\
++(3y_{12}-y_{03})(y_{21}+y_{03})[3(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\</script><p>上述共有七个不变矩，如果只需要识别数十个手势的话，只需要实现前两个不变矩即可，在FPGA实现时，需要注意的是，由于算法中有除法运算，需要调用FPAG的除法器IP核，此外，但不得不说，FPGA在处理复杂的算法方面有劣势，一个几十位的除法器延时了二十几个时钟。此外，在上述的特征值中，其特征值数值较小，是比较小的小数，所以过程中最好放大2的20次方左右这样得到整数。</p>
+<p><strong>（6）识别实现</strong></p>
+<p>在识别之前，先用是个reg寄存器存储十个hu不变矩特征值，这十个值可以是自己做的十个不同手势得到的hu不变矩结果，识别的时候，将识别的手势hu结果和存储的十个hu特征值对比，最靠近谁即认为识别的结果就是该手势，当然，也得设置一个阈值，同时还有误差小于这个阈值，防止图片中没有手势的时候都误识别出结果。</p>
+<p><strong>（7）展示</strong></p>
+<p>最终采集的图片格式是320<em>240的(EGO1中没有DDR，存不下640 </em> 480的图片)，结果如下：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/RjLsDs"><img src="https://z3.ax1x.com/2021/07/09/RjLsDs.png" alt="RjLsDs.png"></a></p>
+<p>下面展示四个手势被处理后的效果：</p>
+<p>手势一：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/RjLruj"><img src="https://z3.ax1x.com/2021/07/09/RjLruj.png" alt="RjLruj.png"></a></p>
+<p>手势二：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/RjLBvQ"><img src="https://z3.ax1x.com/2021/07/09/RjLBvQ.png" alt="RjLBvQ.png"></a></p>
+<p>手势三：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/RjLw8S"><img src="https://z3.ax1x.com/2021/07/09/RjLw8S.png" alt="RjLw8S.png"></a></p>
+<p>手势四：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/RjLybn"><img src="https://z3.ax1x.com/2021/07/09/RjLybn.png" alt="RjLybn.png"></a></p>
+<p>经过灰度化二值化膨胀腐蚀边缘化后提取的效果如下(由于摄像头插上板卡的时候斜了90度，所以VGA显示的时候也斜了90度)：</p>
+<p>手势一：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/RjLcEq"><img src="https://z3.ax1x.com/2021/07/09/RjLcEq.png" alt="RjLcEq.png"></a></p>
+<p>手势二：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/RjLgU0"><img src="https://z3.ax1x.com/2021/07/09/RjLgU0.png" alt="RjLgU0.png"></a></p>
+<p>手势三：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/RjL25V"><img src="https://z3.ax1x.com/2021/07/09/RjL25V.png" alt="RjL25V.png"></a></p>
+<p>手势四:</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/RjLWCT"><img src="https://z3.ax1x.com/2021/07/09/RjLWCT.png" alt="RjLWCT.png"></a></p>
+<p>经过Hu不变矩后便可以得到不同的特征值，结果如下：</p>
+<p>手势一:</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/RjLh2F"><img src="https://z3.ax1x.com/2021/07/09/RjLh2F.png" alt="RjLh2F.png"></a></p>
+<p>更多的就不放了，会拖慢博客速度，哈哈哈。</p>
 <div>
     
         <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
     
 </div>
+
+
     </div>
 
     
@@ -368,7 +590,7 @@ a0+b0+c0+d0=a1+b1+c1+d1
   <div class="popular-posts-header">相关文章</div>
   <ul class="popular-posts">
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2021\01\19\hello-world\" rel="bookmark">博客搭建和规划</a></div>
+      <div class="popular-posts-title"><a href="\2021\03\16\数据量化\" rel="bookmark">数据量化</a></div>
     </li>
   </ul>
 
@@ -381,7 +603,7 @@ a0+b0+c0+d0=a1+b1+c1+d1
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://gezhilai.com/2021/03/27/%E4%B8%80%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/" title="一个有意思的面试题">http://gezhilai.com/2021/03/27/一个有意思的面试题/</a>
+    <a href="http://gezhilai.com/2021/07/09/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" title="基于FPGA的手势识别系统设计">http://gezhilai.com/2021/07/09/基于FPGA的手势识别系统设计/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -392,8 +614,9 @@ a0+b0+c0+d0=a1+b1+c1+d1
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" rel="tag"><i class="fa fa-ship"></i> 博客搭建</a>
-              <a href="/tags/%E6%95%B4%E5%9E%8B%E8%A7%84%E5%88%92/" rel="tag"><i class="fa fa-ship"></i> 整型规划</a>
+              <a href="/tags/FPGA/" rel="tag"><i class="fa fa-ship"></i> FPGA</a>
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" rel="tag"><i class="fa fa-ship"></i> 图像处理</a>
+              <a href="/tags/%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB/" rel="tag"><i class="fa fa-ship"></i> 手势识别</a>
           </div>
 
         
@@ -402,13 +625,10 @@ a0+b0+c0+d0=a1+b1+c1+d1
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/" rel="prev" title="数据量化">
-      <i class="fa fa-chevron-left"></i> 数据量化
+    <a href="/2021/04/10/jupyter%20lab%E5%AE%9E%E7%8E%B0%E8%B7%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/" rel="prev" title="jupyter lab实现跨文件的函数调用">
+      <i class="fa fa-chevron-left"></i> jupyter lab实现跨文件的函数调用
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/04/10/jupyter%20lab%E5%AE%9E%E7%8E%B0%E8%B7%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/" rel="next" title="jupyter lab实现跨文件的函数调用">
-      jupyter lab实现跨文件的函数调用 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -467,7 +687,6 @@ a0+b0+c0+d0=a1+b1+c1+d1
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%82%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">求解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
