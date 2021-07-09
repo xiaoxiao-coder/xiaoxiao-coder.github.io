@@ -144,6 +144,20 @@
   </url>
   
   <url>
+    <loc>http://gezhilai.com/tags/latex/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://gezhilai.com/tags/word/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://gezhilai.com/tags/jupyter/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
@@ -165,20 +179,6 @@
   </url>
   
   <url>
-    <loc>http://gezhilai.com/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://gezhilai.com/tags/%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://gezhilai.com/tags/CNN/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
@@ -193,14 +193,14 @@
   </url>
   
   <url>
-    <loc>http://gezhilai.com/tags/latex/</loc>
+    <loc>http://gezhilai.com/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://gezhilai.com/tags/word/</loc>
+    <loc>http://gezhilai.com/tags/%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -210,6 +210,13 @@
   
   <url>
     <loc>http://gezhilai.com/categories/Hexo/</loc>
+    <lastmod>2021-07-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://gezhilai.com/categories/latex/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -230,13 +237,6 @@
   </url>
   
   <url>
-    <loc>http://gezhilai.com/categories/FPGA/</loc>
-    <lastmod>2021-07-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://gezhilai.com/categories/Hexo/%E6%90%AD%E5%BB%BA/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
@@ -244,7 +244,7 @@
   </url>
   
   <url>
-    <loc>http://gezhilai.com/categories/latex/</loc>
+    <loc>http://gezhilai.com/categories/FPGA/</loc>
     <lastmod>2021-07-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
