@@ -1,6 +1,282 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>深度学习常用词汇及常用编程语法--不断更新中</title>
+    <url>/2021/07/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E8%AF%8D%E6%B1%87%E5%8F%8A%E5%B8%B8%E7%94%A8%E7%BC%96%E7%A8%8B%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[<p>之前说要更新一下本科期间做的一些东西，然后再讲解一下加速器如何在FPGA上搭建，结果太忙了。。。。木得时间，后面有时间慢慢补上。</p>
+<p>最近读了faster rcnn和yolo的源码，里面用到的一些函数自己不常用或者用法新奇或者有时候自己忘掉的，而且最先读faster rcnn，two-stage的源码的确比较复杂，原理很快看懂，读源码花了几天才搞明白，写篇博客不断更新记录一下遇到的一些函数和用法，防止遗忘，后续手机端查看也方便。跑faster rcnn深有感触，这玩意不是给普通人玩的，backbone用mobilenet v2情况下debug一下用10s多，内存耗掉四个g，要是restnet50就更夸张了，还是老老实实等服务器吧。。。(更新：拿到了，4块3090)</p>
+<a id="more"></a>
+<h2 id="常用名词"><a href="#常用名词" class="headerlink" title="常用名词"></a>常用名词</h2><p>backbone:主干，object detection中提取特征的cnn网络简称backbone</p>
+<p>bounding box ：边界框，object detection中框住物体的边界框</p>
+<p>ground truth:目标的真实位置</p>
+<p>logits:意思是输入时候不需要sigmoid概率化</p>
+<h2 id="简称"><a href="#简称" class="headerlink" title="简称"></a>简称</h2><p>fpn:feature pyramid network 图像金字塔网络，多个遍历的窗口</p>
+<p>rpn：region proposal network 区域提名网络</p>
+<h2 id="Pytorch-amp-Numpy"><a href="#Pytorch-amp-Numpy" class="headerlink" title="Pytorch &amp; Numpy"></a>Pytorch &amp; Numpy</h2><p>以下函数都在Python3中得到验证</p>
+<p><strong>1、zip函数</strong></p>
+<p>python自带函数 作用：将np/tensor/dict/list等可迭代对象元素组合，这个元素是指第0维的元素。在目标追踪网络中常出现，用于拼接x、y、w、h等等。其格式：zip<code> </code>(iterable1,iterable2, …)，即输入的是可迭代对象。</p>
+<p>例子</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">b=[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</span><br><span class="line">c=<span class="built_in">zip</span>(a,b)</span><br><span class="line">print(c,<span class="built_in">type</span>(c))</span><br><span class="line">print(<span class="built_in">list</span>(c))</span><br><span class="line">print(c)</span><br></pre></td></tr></table></figure>
+<p>结果如下，直接print其实调用的是魔法函数__str__，由于未重写该方法，所以其和__repr__方法输出是一致，就是类名 + object at + 地址。而通过list函数，可以zip类的结果变成可视化的list列表，列表中每个元素都是拼接的值，<strong>值得注意的是，在list(c)后，不知道list函数中调用了c自身的某种方法，但这种方法改变了c的某些元素值，使得list(c)再list(c)时候，得到的是一个空列表，所以这个c传递更类似于引用传递，改变了c自身。</strong></p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;<span class="built_in">zip</span> <span class="built_in">object</span> at <span class="number">0x000001B48B796200</span>&gt; &lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">zip</span>&#x27;&gt;</span></span><br><span class="line">[(1, 4), (2, 5), (3, 6)]</span><br></pre></td></tr></table></figure>
+<p>上述是可迭代对象list，下面测试一下可迭代对象dict：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#v1,v2,v3可是是任何可迭代对象，如：字符串、列表、元祖、字典</span></span><br><span class="line">v1 = &#123; <span class="number">1</span> : <span class="number">11</span> , <span class="number">2</span> : <span class="number">22</span> &#125; <span class="comment">#此处可迭代对象为字典</span></span><br><span class="line">v2 = &#123; <span class="number">3</span> : <span class="number">33</span> , <span class="number">4</span> : <span class="number">44</span> &#125;</span><br><span class="line">v3 = &#123; <span class="number">5</span> : <span class="number">55</span> , <span class="number">6</span> : <span class="number">66</span> &#125;</span><br><span class="line"> </span><br><span class="line">v = <span class="built_in">zip</span> (v1,v2,v3)   <span class="comment">#压缩</span></span><br><span class="line"><span class="built_in">print</span> ( <span class="built_in">list</span> (v))</span><br></pre></td></tr></table></figure>
+<p>结果如下，可以看出，对于字典，压缩组合是对于索引号的。(通过索引号索引值，用法和np类似)</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[(<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>), (<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>)]</span><br></pre></td></tr></table></figure>
+<p>通过zip(*压缩组合元素)可以进行解压会原来样式（未必是完全一样，因为压缩的时候可能就不完整）。例：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(<span class="built_in">list</span>(<span class="built_in">zip</span>(*<span class="built_in">zip</span> (v1,v2,v3))))</span><br></pre></td></tr></table></figure>
+<p>结果如下，<strong>为什么不直接list(zip(*v))呢？上面说过了，经过list后就会改变原值，会变成空元素，压缩得到的也是空的。</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[(<span class="number">1</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">5</span>, <span class="number">6</span>)]</span><br></pre></td></tr></table></figure>
+<p>zip由于是组合，list后可以看出，其是可以变成list列表的，而list是Iterable的，即可迭代对象，自然可以用for，而list中元素都是一个个元组，元组单个元素赋值给单个变量，可以通过逗号进行(要么一个变量直接接受的赋值是一个元组，要么变量个数就是元组内元素个数，否则报错)，如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line">b=[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>]</span><br><span class="line">c=[<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">zip</span>(a,b):</span><br><span class="line">    print(i)</span><br><span class="line"><span class="keyword">for</span> i,j <span class="keyword">in</span> <span class="built_in">zip</span>(a,b):</span><br><span class="line">    print(i,j)</span><br><span class="line"><span class="keyword">for</span> i,j,k <span class="keyword">in</span> <span class="built_in">zip</span>(a,b,c):</span><br><span class="line">    print(i,j,k)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(<span class="number">1</span>, <span class="number">4</span>)</span><br><span class="line">(<span class="number">2</span>, <span class="number">5</span>)</span><br><span class="line">(<span class="number">3</span>, <span class="number">6</span>)</span><br><span class="line">(<span class="number">4</span>, <span class="number">7</span>)</span><br><span class="line"><span class="number">1</span> <span class="number">4</span></span><br><span class="line"><span class="number">2</span> <span class="number">5</span></span><br><span class="line"><span class="number">3</span> <span class="number">6</span></span><br><span class="line"><span class="number">4</span> <span class="number">7</span></span><br><span class="line"><span class="number">1</span> <span class="number">4</span> <span class="number">1</span></span><br><span class="line"><span class="number">2</span> <span class="number">5</span> <span class="number">3</span></span><br><span class="line"><span class="number">3</span> <span class="number">6</span> <span class="number">5</span></span><br><span class="line"><span class="number">4</span> <span class="number">7</span> <span class="number">7</span></span><br></pre></td></tr></table></figure>
+<p><strong>1.1、元组赋值方式</strong></p>
+<p>元组赋值方式，要么直接赋值给一个变量，那个变量就是接收到一个元组，即那个变量也是元组方式，要么接收值的变量个数和元组内元素数量一样（否则报错），变量之间用逗号隔开。</p>
+<p><strong>2、for循环使用方法</strong></p>
+<p>for常用功能两个：循环遍历和列表生成式 (其实列表生成式本质也是循环遍历，都用到了__iter__和__next__方法，即迭代器生成和不断获取下一个元素方法)。</p>
+<p>2.1、循环遍历</p>
+<p>循环遍历常用的 for i in range(start,end,stride)：不用细讲(需要注意的是，python语法中需要起始终止位置的，似乎从来不包括end的，比如切片，和verilog区别度显然)。此处主要想讲的是循环遍历的原理，for循环中，起始本质是使用了__iter__制造迭代器，然后用__next__方法不断顺序的读取下一个数据，不可回退，直至最后无元素可读，此刻抛出StopIteration 异常(这个异常估计就是try except处理了)，然后退出。下面介绍一下迭代器等。</p>
+<p>2.1.1、Iterable</p>
+<p>Iterable即可迭代对象，循环遍历的对象必须是可迭代对象，其是一个元素个数明确且可迭代的对象(可迭代即可遍历)，常用的有list、np、tensor、str、tuple、st、dict等</p>
+<p>可迭代对象自带__iter__方法，通过__iter__即可得到迭代器Iterator(迭代器)，比如a是个list，则可以通过a.__lter__调用迭代器方法，不过其实这个方法不需要我们调用，for的时候会自行调用。这里可以调用一下试试，例：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=np.zeros((<span class="number">1</span>,<span class="number">2</span>))</span><br><span class="line">print(a.__iter__)</span><br></pre></td></tr></table></figure>
+<p>得到的结果如下：其中method-wrapper的意思是”包装的方法”，后面就是数据类型 + object(物体，对象)+at+地址。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&lt;method-wrapper <span class="string">&#x27;__iter__&#x27;</span> of numpy.ndarray <span class="built_in">object</span> at <span class="number">0x000001B48BF1D0D0</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>2.1.2、Iterator</p>
+<p>Iterator即迭代器，Iterable对象通过__iter__方法可以得到Iterator(注意得到Iterator并不是返回，需要得到返回Iterator类型的，用iter()强制转换)，Iterable即可迭代对象是一个元素个数已知且可遍历的对象，通过__iter__方法就得到了个数未知但依旧可遍历的对象Iterator，然后通过__next__进行遍历Iterator，__next__方法不断往下取数据，无数据取出时抛出StopIteration 异常停止迭代。</p>
+<p>其实可以看出Iterator和Iterable很像，其实Iterable调用__iter__方法得到的Iterator，是一个继承Iterable的子类</p>
+<p>2.1.3、判别Iterable和Iterator</p>
+<p>判断一个变量的类型，可以通过isinstance()或者type()函数，但两者有所区别，type不认为子类是和父类是同一个类型，但isinstance则认为子类属于父类的类型，父类不属于子类的类型。推荐使用isinstance，因为平时往往认为子类和父类是一个类别的。</p>
+<p>isinstance例子如下</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=<span class="number">1</span></span><br><span class="line">print(<span class="built_in">isinstance</span>(a,<span class="built_in">int</span>),<span class="built_in">isinstance</span>(a,<span class="built_in">str</span>),<span class="built_in">isinstance</span>(a,<span class="built_in">dict</span>),<span class="built_in">isinstance</span>(a,(<span class="built_in">int</span>,<span class="built_in">str</span>,<span class="built_in">dict</span>,<span class="built_in">list</span>)))</span><br></pre></td></tr></table></figure>
+<p>结果如下，判别属于某个类别，isinstance第二个元素可以是元组。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="literal">True</span> <span class="literal">False</span> <span class="literal">False</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p>在看一下isinstance和type区别，如下</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>():</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span>(<span class="params">A</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line">print(<span class="built_in">isinstance</span>(A(),A),<span class="built_in">isinstance</span>(B(),A),<span class="built_in">type</span>(B())==A)</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="literal">True</span> <span class="literal">True</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<p>下面看一下迭代器的类别：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Iterator,Iterable</span><br><span class="line">a=np.zeros((<span class="number">1</span>,<span class="number">2</span>))</span><br><span class="line">print(<span class="built_in">isinstance</span>(a,Iterable))</span><br><span class="line">print(<span class="built_in">isinstance</span>(a,Iterator))</span><br><span class="line">print(<span class="built_in">len</span>(a),a.__len__())</span><br></pre></td></tr></table></figure>
+<p>结果如下，np数组是可迭代对象，可以看出父类不属于子类；同时前面也提过，可迭代对象可以有长度属性，其实len()的本质就是调用了Iterable中的__len__方法，不过不加括号的话只会显示方法+类+object+at+地址（具体原因不知）。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="number">1</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>下面可以看出子类输入父类，<strong>通过iter函数即可强制将变量转成迭代器</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">a1&#x3D;iter(a)#iter转换成迭代器</span><br><span class="line">print(isinstance(a1,Iterable))</span><br><span class="line">print(isinstance(a1,Iterator))</span><br><span class="line">print(len(a1))</span><br></pre></td></tr></table></figure>
+<p>结果如下，可以看出a1既属于可迭代对象，也属于迭代器，即子类既是属于子类也属于父类，用len的时候，报错了，因为迭代器长度是未知的，无法用len方法，只能用__next__方法。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="literal">True</span></span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">TypeError                                 Traceback (most recent call last)</span><br><span class="line">&lt;ipython-<span class="built_in">input</span>-<span class="number">163</span>-dff46c0da30e&gt; <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">      <span class="number">2</span> print(<span class="built_in">isinstance</span>(a1,Iterable))</span><br><span class="line">      <span class="number">3</span> print(<span class="built_in">isinstance</span>(a1,Iterator))</span><br><span class="line">----&gt; 4 print(len(a1))</span><br><span class="line"></span><br><span class="line">TypeError: <span class="built_in">object</span> of <span class="built_in">type</span> <span class="string">&#x27;iterator&#x27;</span> has no <span class="built_in">len</span>()</span><br></pre></td></tr></table></figure>
+<p><strong>记住需要返回迭代器得用iter(),需要返回取迭代器值的，用next,直接调用__iter__和__next__没有想要的返回值。</strong></p>
+<p>下面看一下迭代器利用next取值：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a2=np.arange(<span class="number">0</span>,<span class="number">10</span>,<span class="number">1</span>).reshape(<span class="number">2</span>,-<span class="number">1</span>)</span><br><span class="line">print(a2)</span><br><span class="line">a2=<span class="built_in">iter</span>(a2)</span><br><span class="line">print(<span class="built_in">next</span>(a2))</span><br><span class="line">print(<span class="built_in">next</span>(a2))</span><br><span class="line">print(<span class="built_in">next</span>(a2))</span><br></pre></td></tr></table></figure>
+<p>结果如下，可以看出，通过next方法不断往下取值，当没有值可取时，抛出StopIteration</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[[<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span>]</span><br><span class="line"> [<span class="number">5</span> <span class="number">6</span> <span class="number">7</span> <span class="number">8</span> <span class="number">9</span>]]</span><br><span class="line">[<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span>]</span><br><span class="line">[<span class="number">5</span> <span class="number">6</span> <span class="number">7</span> <span class="number">8</span> <span class="number">9</span>]</span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">StopIteration                             Traceback (most recent call last)</span><br><span class="line">&lt;ipython-<span class="built_in">input</span>-<span class="number">182</span>-473194238b9f&gt; <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">      <span class="number">4</span> print(<span class="built_in">next</span>(a2))</span><br><span class="line">      <span class="number">5</span> print(<span class="built_in">next</span>(a2))</span><br><span class="line">----&gt; 6 print(next(a2))</span><br><span class="line"></span><br><span class="line">StopIteration: </span><br></pre></td></tr></table></figure>
+<p>2.1.4 for本质</p>
+<p>for的本质就是Iterator通过不断调用next()实现的。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=np.arange(<span class="number">0</span>,<span class="number">5</span>,<span class="number">1</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>这个for循环等价于如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a1=<span class="built_in">iter</span>(a)</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        i=<span class="built_in">next</span>(a1)</span><br><span class="line">    <span class="keyword">except</span> StopIteration:</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<p>之前说过了，next是不可以回退的，所以一个Iterator只能遍历一次即用不了了，但Iterable是可以多次遍历的，所以每次for时都用到__iter__，每次__iter__都会得到一个新的Iterator，再next就好了。</p>
+<p>2.2、列表生成式、集合生成式、字典生成式</p>
+<p>列表生成式如下:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=np.arange(<span class="number">4</span>)</span><br><span class="line">b=[i <span class="keyword">for</span> i <span class="keyword">in</span> a]</span><br><span class="line">print(b)</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<p>字典生成式如下，其中items()方法是输入字典类型，返回list形式的可迭代对象。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#d = &#123;key: value for (key, value) in iterable&#125;</span></span><br><span class="line">d1 = &#123;<span class="string">&#x27;x&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;y&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;z&#x27;</span>: <span class="number">3</span>&#125;</span><br><span class="line">d2 = &#123;k: v <span class="keyword">for</span> (k, v) <span class="keyword">in</span> d1.items()&#125;</span><br><span class="line">print(d2)</span><br><span class="line">print(d1.items())</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;<span class="string">&#x27;x&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;y&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;z&#x27;</span>: <span class="number">3</span>&#125;</span><br><span class="line">dict_items([(<span class="string">&#x27;x&#x27;</span>, <span class="number">1</span>), (<span class="string">&#x27;y&#x27;</span>, <span class="number">2</span>), (<span class="string">&#x27;z&#x27;</span>, <span class="number">3</span>)])</span><br></pre></td></tr></table></figure>
+<p>集合生成式：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#集合生成式</span></span><br><span class="line">s1=&#123;x <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>)&#125;</span><br><span class="line">print(s1)<span class="comment">#集合无序性？所以没法切片</span></span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>谈到了各类生成式，却没说元组生成式，貌似按照上述的做法，在括号内进行for得到的就是元组生成式，然而其实不是这样的，其实得到的是Generator。下面讲一下生成器</p>
+<p>2.2.1、Generator生成器</p>
+<p>先来看一下用法：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#生成器</span></span><br><span class="line">a=(i**<span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>])</span><br><span class="line">print(a)</span><br></pre></td></tr></table></figure>
+<p>输出如下，可以看出显然得到的不是一个元组，而是一个generator</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&lt;generator <span class="built_in">object</span> &lt;genexpr&gt; at <span class="number">0x000001B48B769970</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>生成器和迭代器很像，我们用next试试：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">print(next(a))</span><br><span class="line">print(next(a))</span><br><span class="line">print(next(a))</span><br><span class="line">print(next(a))</span><br><span class="line">print(next(a))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">9</span></span><br><span class="line"><span class="number">16</span></span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">StopIteration                             Traceback (most recent call last)</span><br><span class="line">&lt;ipython-<span class="built_in">input</span>-<span class="number">194</span>-2251f521890f&gt; <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">      <span class="number">3</span> print(<span class="built_in">next</span>(a))</span><br><span class="line">      <span class="number">4</span> print(<span class="built_in">next</span>(a))</span><br><span class="line">----&gt; 5 print(next(a))</span><br><span class="line"></span><br><span class="line">StopIteration: </span><br></pre></td></tr></table></figure>
+<p>似乎这个和迭代器没有区别呀，似乎就是含有1,4,9,16的迭代器。</p>
+<p>其实可以理解为生成器Generator就是特殊的迭代器，只不过其生成器一种迭代遍历过程中才计算的迭代器，就是说它存储的是1,2,3,4，在迭代过程中，才进行了平方操作，即next取值的时候进行了计算，可以理解为：生成器的元素在访问前不会生成，只有当访问时才会生成；如果继续向后访问，那么当前的元素会销毁，这个也可以理解，毕竟next是不可以回头的，之前的数据没有意义，所以销毁节约内存。<strong>而生成器的一种生成方式是将列表生成式改为小括号包裹。</strong></p>
+<p>下面谈一下生成器的本质(引用了)：</p>
+<ul>
+<li>生成器本质上是一个函数</li>
+<li><strong>当一个生成器被调用时，它返回一个生成器对象，而不用执行该函数。 当第一次调用 <code>next()</code>方法时，函数向下执行，如果遇到yield则返回 <code>yield 后面的</code>值。 再次调用<code>next()</code>方法时，函数从上次结束的位置继续向下执行，如果遇到yield则返回 <code>yield 后面的</code>值。</strong></li>
+<li>可以使用yield来定义一个生成器。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(<span class="string">&quot;\n----使用yield生成generator-------&quot;</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ge</span>():</span></span><br><span class="line">    print(<span class="string">&quot;第一次yield&quot;</span>)</span><br><span class="line">    <span class="keyword">yield</span> <span class="number">1</span></span><br><span class="line">    print(<span class="string">&quot;第二次yield&quot;</span>)</span><br><span class="line">    <span class="keyword">yield</span> <span class="number">2</span></span><br><span class="line">    print(<span class="string">&quot;第三次yield&quot;</span>)</span><br><span class="line">    <span class="keyword">yield</span> <span class="number">3</span></span><br><span class="line">print(<span class="built_in">type</span>(o))</span><br><span class="line">o = ge()</span><br><span class="line">print(<span class="built_in">next</span>(o))</span><br><span class="line">print(<span class="built_in">next</span>(o))</span><br><span class="line">print(<span class="built_in">next</span>(o))</span><br></pre></td></tr></table></figure>
+<p>结果如下，可以看出o是一个生成器。即生成器其实是可以通过yield关键字来得到。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">----使用<span class="keyword">yield</span>生成generator-------</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">generator</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">第一次<span class="title">yield</span></span></span><br><span class="line"><span class="class">1</span></span><br><span class="line"><span class="class">第二次<span class="title">yield</span></span></span><br><span class="line"><span class="class">2</span></span><br><span class="line"><span class="class">第三次<span class="title">yield</span></span></span><br><span class="line"><span class="class">3</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>生成器本质上是一个函数，如果想要获取这个函数的返回值，我们需要使用异常捕获来获取这个返回值：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span>(<span class="params"><span class="built_in">max</span></span>):</span></span><br><span class="line">    n,a,b = <span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> n &lt;<span class="built_in">max</span>:</span><br><span class="line">        <span class="keyword">yield</span> b</span><br><span class="line">        a,b =b,a+b</span><br><span class="line">        n = n+<span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;done&#x27;</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">&quot;\n-----尝试获得函数返回值------&quot;</span>)</span><br><span class="line">gg=fib(<span class="number">6</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        x=<span class="built_in">next</span>(gg)</span><br><span class="line">        print(<span class="string">&quot;g:&quot;</span>,x)</span><br><span class="line">    <span class="keyword">except</span> StopIteration <span class="keyword">as</span> e:</span><br><span class="line">        print(<span class="string">&#x27;返回值等于:&#x27;</span>,e.value)</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">-----尝试获得函数返回值------</span><br><span class="line">g: <span class="number">1</span></span><br><span class="line">g: <span class="number">1</span></span><br><span class="line">g: <span class="number">2</span></span><br><span class="line">g: <span class="number">3</span></span><br><span class="line">g: <span class="number">5</span></span><br><span class="line">g: <span class="number">8</span></span><br><span class="line">返回值等于: done</span><br></pre></td></tr></table></figure>
+<ul>
+<li>既可以使用next()来迭代生成器，也可以使用for来迭代：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ge</span>():</span></span><br><span class="line">    print(<span class="string">&quot;第一次yield&quot;</span>)</span><br><span class="line">    <span class="keyword">yield</span> <span class="number">1</span></span><br><span class="line">    print(<span class="string">&quot;第二次yield&quot;</span>)</span><br><span class="line">    <span class="keyword">yield</span> <span class="number">2</span></span><br><span class="line">    print(<span class="string">&quot;第三次yield&quot;</span>)</span><br><span class="line">    <span class="keyword">yield</span> <span class="number">3</span></span><br><span class="line">o = ge()</span><br><span class="line"></span><br><span class="line">print(<span class="string">&quot;\n---迭代generator的方法--------&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> o:</span><br><span class="line">    print(x)<span class="comment">#相当于进入到generator函数中，执行下去并得到返回值</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">---迭代generator的方法--------</span><br><span class="line">第一次<span class="keyword">yield</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line">第二次<span class="keyword">yield</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line">第三次<span class="keyword">yield</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+<p>至此for结束，参考链接如下:</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://zhuanlan.zhihu.com/p/53664886">Python笔记整理 迭代器和生成器</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.cnblogs.com/progor/p/8414550.html">字典生成式、集合生成式、生成器</a></p>
+
+          </blockquote>
+<p><strong>3、拼接函数和分割函数、增加元素等等</strong>。</p>
+<p>3.1、torch.stack会增加维度，传入时候需要 是列表或者元组，扩充的维度如果是n，那么就是对n-1维度下的对应位置的元素拼接起来。(np里也有stack)</p>
+<p>如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=torch.tensor([[[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]]])</span><br><span class="line">b=torch.stack((a,a),dim=<span class="number">3</span>)</span><br><span class="line">print(b)</span><br></pre></td></tr></table></figure>
+<p>结果如下，dim=3即是在第二维度后面进行扩充，将第二维度下面的元素对应位置组起来加个维度。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tensor([[[[<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">          [<span class="number">2</span>, <span class="number">2</span>],</span><br><span class="line">          [<span class="number">3</span>, <span class="number">3</span>]],</span><br><span class="line"></span><br><span class="line">         [[<span class="number">4</span>, <span class="number">4</span>],</span><br><span class="line">          [<span class="number">5</span>, <span class="number">5</span>],</span><br><span class="line">          [<span class="number">6</span>, <span class="number">6</span>]]]])</span><br></pre></td></tr></table></figure>
+<p>如果dim=2，结果如下，即是在第一维度后面加一个维度，则是将第一维度下的元素对应位置拼接起来组成一个维度。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tensor([[[[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">          [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]],</span><br><span class="line"></span><br><span class="line">         [[<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>],</span><br><span class="line">          [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]]]])</span><br></pre></td></tr></table></figure>
+<p>append</p>
+<p>其实对于想将[[1,2,3],[4,5,6]]这样的torch.cat(a,dim=0),得到[1,2,3,4,5,6],其实本质也是维度变换，可以考虑reshape，如果a=[1,2,3],b=[4,5,6]，这样得torch([a,b],dim=0),reshape就不方便了。</p>
+<p>3.2、torch.cat</p>
+<p>cat,和stack主要区别就是不增加维度，例子:cat([a,b,c],dim=1)。(还有stack好像是维度内对应位置拉到一起加个维度，cat只是对该维度内元素顺序拼接)</p>
+<p>3.3、split函数</p>
+<p>第二个参数是表明其在第几个维度上分割，第一个元素代表分割的步长。比如faster rcnn中，a的shape代表[batch_size,所有预测特征层anchors总数]，为了把每个预测特征层分开，就可以如下操作，假设第一个预测特征层anchor总数为3，第二个预测特征层anchors是2.</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">a=torch.tensor([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],[<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]])</span><br><span class="line">b=[<span class="number">3</span>,<span class="number">2</span>]</span><br><span class="line">c=a.split(b,<span class="number">1</span>)</span><br><span class="line">print(a,<span class="string">&quot;\n&quot;</span>,c)</span><br></pre></td></tr></table></figure>
+<p>输出如下，说明分割是形参传递，并非引用，不改变原始a。返回的结果是元组形式。元组和list，tensor，np都是可迭代格式。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tensor([[ <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>,  <span class="number">4</span>,  <span class="number">5</span>],</span><br><span class="line">        [ <span class="number">6</span>,  <span class="number">7</span>,  <span class="number">8</span>,  <span class="number">9</span>, <span class="number">10</span>]]) </span><br><span class="line"> (tensor([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">        [<span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]]), tensor([[ <span class="number">4</span>,  <span class="number">5</span>],</span><br><span class="line">        [ <span class="number">9</span>, <span class="number">10</span>]]))</span><br></pre></td></tr></table></figure>
+<p>4、分割</p>
+<p>a=torch.tensor([[1,2,3],[4,5,6],[7,8,9],[10,11,12]])</p>
+<p>a.split([1,2],0)就是在维度0上进行分割，分割的个数是1个然后两个。返回的是元组类型，元组中元素是tensor类型，此法适合之前拼接时候记住个数的，然后在分割开。</p>
+<p>torch变量.unbind比如[[1,2,3],[4,5,6]],则a.unbind(1)即在维度1上分割，得到[1,4],[2,5],[3,6]</p>
+<p><strong>4.维度变化</strong></p>
+<p>变化维度**1、fltten</p>
+<p>flatten(0,-2)即代表从第0维度一直到倒数第二维度都拉平了，即只有最后一个维度作为总体，拉平应该是这样格式[[1,2,3],[4,5,6],[7,8,9]]，也就是说把剩下的维度当做总体元素，把这些元素拉平拼起来.</p>
+<p>flatten(1)代表从1维度一直拉平到最后</p>
+<p>4.2、reshape</p>
+<p>4.3、view</p>
+<p>a.view(-1)</p>
+<p>a.view(2,3)</p>
+<p>和reshape的区别是view要内存连续存储，reshape可以不连续。</p>
+<p>4.3、expand 和 expanda_as</p>
+<p>4.4 None</p>
+<p>a[:,None]就是在第0维度后加上一个维度，a[None]就是在最外面加上一个维度。</p>
+<p>torch变量.permute（1,0）就是把原来维度1的数量放到维度0上，把原来维度0的数量放到维度1上。比如a.permute(3,0,2,1)就是把原本shape：[a,b,c,d]变成[d,a,c,b]。</p>
+<p>4  unsqueeze</p>
+<p>可以增加一个维度，和stack比较类似，只是stack有一个拼接的过程。其增加维度方式和stack类似。在a=[[1,2,3],[4,5,6]]的时候，a[:,0]显然会造成降维，可以a[:,0].unsqueeze(1)这样就可以保持也是二维的，增加的维度是维度1，即在维度0后面增加。</p>
+<p>squeeze</p>
+<p><strong>5.排序函数</strong></p>
+<p>torch.topk()</p>
+<p>6、四舍五入，小数取舍，上下限设置等等</p>
+<p>torch变量的方法clamp，设置下限为0，小于0的自动设置为0，可以用于切片时，但由非法(负数)的情况。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">matched_idxs.clamp(<span class="built_in">min</span>=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>round函数，使用:a.round()，a是torch变量，该函数是对a进行四舍五入。</p>
+<p>7、返回坐标信息torch.where和nonzero</p>
+<p>其返回的是元组，例子如下</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=torch.tensor([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>])</span><br><span class="line">print(torch.where(torch.eq(a,<span class="number">0</span>)))</span><br></pre></td></tr></table></figure>
+<p>得到如下结果,即元组内才是torch变量，torch.where(torch.eq(a,0))[0]才能得到torch.tensor([5,7])</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(tensor([<span class="number">5</span>, <span class="number">7</span>]),)</span><br></pre></td></tr></table></figure>
+<p>之所以这样是因为where返回的元组结果是这样的([第0维度坐标]，[第一维度坐标],[第二维度坐标]，)。所以只有一个维度的时候元组也是([第0维度坐标]，)。所以需要片选0才能得到结果。</p>
+<p>再例如这样</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=torch.tensor([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>]])</span><br><span class="line">print(torch.where(torch.eq(a,<span class="number">0</span>)))</span><br></pre></td></tr></table></figure>
+<p>结果就是这样了</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(tensor([<span class="number">0</span>, <span class="number">0</span>]), tensor([<span class="number">5</span>, <span class="number">7</span>]))</span><br></pre></td></tr></table></figure>
+<p>这时候坐标每个维度是分开的，如果想组合到一起，可以通过torch.stack函数来进行。</p>
+<p>8、相等np.equal(对应元素相同)和np.array_equal(完全相同)。torch.equal和np.equal一致。</p>
+<p>9、打乱顺序，随机采样，torch.randperm()函数，通过打乱顺序，切片取前n个就可以当做是随机采样了。</p>
+<p>10、tensor.max(dim=1)</p>
+<p>比如a=torch.tensor([[1,8,3],[4,5,6]]),则a.max(dim=0)就是[4,8,6],dim=1则就是为[8,6]</p>
+<p>11、meshgrid函数，可以简单理解为网格划线</p>
+<p>20、isinstance(a,(list,tuple))这个就是判断是否是list或者tuple类型。非的时候，这样表示：not isinstance()</p>
+<p>21、torch.full((100,),0)即是得到100个元素的矩阵，都填充为0</p>
+<p>100、不要改动框架中# tpye的语句，因为#代表注释符，但如果# type就是代表类型说明符，随便改动就会导致模型错误。</p>
+<p>101、arange，np.arange(100)，生成0-99，np.arange(95,100),生成95-99</p>
+<p>102、转置arrya.T。</p>
+<p>103、语音处理相关库，图像处理相关库，文件读取相关库os</p>
+<p>105、array[0,…]的三个省略号代表所有维度</p>
+<p>106、range(start,end,stride)</p>
+<p>只写一个数，默认start为0，stride为1</p>
+<p>107、None的用法—增加维度（可以用于np和tensor中，list不可以，list可以先转换在转回来）</p>
+<p>None在i维度之后出现，其实就是给第i维度的元素增加一个维度，就是加个[]。在0维度上是None，就是给np数组总体多加个括号作为维度。</p>
+<p>如：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=np.zeros((<span class="number">4</span>))</span><br><span class="line">b=np.ones((<span class="number">3</span>))</span><br><span class="line">c=np.ones((<span class="number">4</span>,<span class="number">5</span>))</span><br><span class="line">a=a[:,<span class="literal">None</span>]</span><br><span class="line">print(a)</span><br><span class="line">b=b[<span class="literal">None</span>,:]</span><br><span class="line">print(b)</span><br><span class="line">c=c[:,<span class="literal">None</span>]</span><br><span class="line">print(c)</span><br></pre></td></tr></table></figure>
+<p>得到的结果如下，在0维度后加None，其实就是给原来0维度的元素加个维度，在0维度之前加None，就总给np数组总体加个维度。注意：变量c有两个维度，所以中间加个None，应该是c[:,None,:]，如果None后还有维度，但是我们没写，默认是：，如果写了，则服从切片原理。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[[<span class="number">0.</span>]</span><br><span class="line"> [<span class="number">0.</span>]</span><br><span class="line"> [<span class="number">0.</span>]</span><br><span class="line"> [<span class="number">0.</span>]]</span><br><span class="line">[[<span class="number">1.</span> <span class="number">1.</span> <span class="number">1.</span>]]</span><br><span class="line">[[[<span class="number">1.</span> <span class="number">1.</span> <span class="number">1.</span> <span class="number">1.</span> <span class="number">1.</span>]]</span><br><span class="line"></span><br><span class="line"> [[<span class="number">1.</span> <span class="number">1.</span> <span class="number">1.</span> <span class="number">1.</span> <span class="number">1.</span>]]</span><br><span class="line"></span><br><span class="line"> [[<span class="number">1.</span> <span class="number">1.</span> <span class="number">1.</span> <span class="number">1.</span> <span class="number">1.</span>]]</span><br><span class="line"></span><br><span class="line"> [[<span class="number">1.</span> <span class="number">1.</span> <span class="number">1.</span> <span class="number">1.</span> <span class="number">1.</span>]]]</span><br></pre></td></tr></table></figure>
+<p>None除了增加维度外，还可以用于测试一个变量是否被定义，比如我们需要一个length变量来存储输入数据的长度，如果length没有定义，那么就丢出错误或者定义一个。例子如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> a <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    print(<span class="string">&quot;a 不存在&quot;</span>)</span><br><span class="line">    <span class="keyword">raise</span> ValueError(<span class="string">&quot;a should not be None when box_predictor &quot;</span></span><br><span class="line">                                 <span class="string">&quot;is not specified&quot;</span>)<span class="comment">#圆括号隐式转换，加一个括号中，可以应对一行语句太长，分为多行。</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">&quot;a 是存在的&quot;</span>)</span><br><span class="line"><span class="keyword">if</span> length <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    <span class="keyword">raise</span> ValueError(<span class="string">&quot;length should not be None when box_predictor &quot;</span></span><br><span class="line">                                 <span class="string">&quot;is not specified&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">&quot;length 是存在的&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>结果如下，a是存在的，所以执行的是else语句，而length是不存在的，所以我们认为抛出一个错误。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a 是存在的</span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">NameError                                 Traceback (most recent call last)</span><br><span class="line">&lt;ipython-<span class="built_in">input</span>-<span class="number">21</span>-e7b9afa88565&gt; <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">      <span class="number">5</span> <span class="keyword">else</span>:</span><br><span class="line">      <span class="number">6</span>     print(<span class="string">&quot;a 是存在的&quot;</span>)</span><br><span class="line">----&gt; 7 if length is None:</span><br><span class="line">      <span class="number">8</span>     <span class="keyword">raise</span> ValueError(<span class="string">&quot;length should not be None when box_predictor &quot;</span></span><br><span class="line">      <span class="number">9</span>                                  <span class="string">&quot;is not specified&quot;</span>)<span class="comment">#圆括号隐式转换，加一个括号中，可以应对一行语句太长，分为多行。   </span></span><br><span class="line"></span><br><span class="line">NameError: name <span class="string">&#x27;length&#x27;</span> <span class="keyword">is</span> <span class="keyword">not</span> defined</span><br></pre></td></tr></table></figure>
+<p>108、not</p>
+<p>由于上面None说到了可以判别一个量是否被定义，而not可以用于判断一个变量是否为空。首先看一下not的本质，其本质就是对布尔值进行取反，而空变量的布尔属性是False的(python中False和True首字母都大写)，如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=[]</span><br><span class="line">print(<span class="built_in">bool</span>(a))</span><br><span class="line">b=[<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">print(<span class="built_in">bool</span>(b))</span><br></pre></td></tr></table></figure>
+<p>结果如下，可以看出空变量的布尔属性是False，而非空变量的布尔属性是True。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<p>所以可以通过如下语句判断一个量是否空的:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> a:</span><br><span class="line">    print(<span class="string">&quot;a 是空的&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>其中not的功能可以理解为将布尔值取反。</p>
+<p>注：array都代表np变量，即np.array();tensor都代表tensor变量，即torch.Tensor</p>
+<p>np里面习惯用axis，比如array.max函数，split（array,下标的list or 等分，dim）函数。split没有array.split格式。np中有很多都没有array.函数的格式，比如array.append(array)就不可以，得np.append(array1,array2)，而list却是可以的。</p>
+<p>而torch中喜欢用dim</p>
+<p>verilog中负数不能比较大小，坑爹呀</p>
+<p>json</p>
+<h2 id="库安装"><a href="#库安装" class="headerlink" title="库安装"></a>库安装</h2><p>指定镜像地址的命令如下</p>
+<p>pip install -i 镜像地址 包名</p>
+<p>例如： pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> numpy</p>
+<p>国内镜像地址：</p>
+<p>清华：<a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a></p>
+<p>阿里云：<a href="http://mirrors.aliyun.com/pypi/simple/">http://mirrors.aliyun.com/pypi/simple/</a></p>
+<p>中国科技大学 <a href="https://pypi.mirrors.ustc.edu.cn/simple/">https://pypi.mirrors.ustc.edu.cn/simple/</a></p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>]]></content>
+      <categories>
+        <category>深度学习</category>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>CNN</tag>
+        <tag>深度学习</tag>
+        <tag>目标追踪</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python之魔法函数</title>
+    <url>/2021/07/20/Python%E4%B9%8B%E9%AD%94%E6%B3%95%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p>Python是一个很类似于matlab的语言，都是一种高层解释型语言，区别于C、C++，C、C++则是编译通过后才执行(说明语法都没有错误)，Python执行之前不需要编译链接，直接是一行行执行，将除了缩进的语言都执行一遍，为了防止在读入包/模块时候出现代码执行，出现了__name__的魔法函数，也是Python的一种内置属性，除了__name__，在读faster rcnn的torch源码时候，也会频繁遇到__call__()、 __ len__()、__ init__() 、__ getitem__()等一类魔法函数，特地去搜了搜，网上讲的很好，链接如下:</p>
+<a id="more"></a>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.zhihu.com/question/49136398">if <strong>name</strong> == ‘<strong>main</strong>‘ 如何正确理解? - 知乎 (zhihu.com)</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://zhuanlan.zhihu.com/p/344951719">Python：实例讲解Python中的魔法函数（高级语法） - 知乎 (zhihu.com)</a></p>
+
+          </blockquote>
+<p>由于上述链接讲的都很完备，下面只进行简单的总结一下。</p>
+<h3 id="name"><a href="#name" class="headerlink" title="__name__"></a>__name__</h3><p>大概说一下__name__吧，其本质就是Python的一个内置属性，当自己作为主文件执行时，__name__是”__main__“,而当作为模块时，则__name__就是模块名，自己也特地测试了一个，图如下，其中Write_coe是我将Python参数存储为FPGA的RAM文件格式写的自定义模块函数。</p>
+<p><a href="https://imgtu.com/i/WYpEdg"><img src="https://z3.ax1x.com/2021/07/19/WYpEdg.png" alt="WYpEdg.png"></a></p>
+<h2 id="魔法函数"><a href="#魔法函数" class="headerlink" title="魔法函数"></a>魔法函数</h2><p>魔法函数是类中的可重写的方法，有助于更灵活方便的使用类。</p>
+<h3 id="1、字符串表示：-str-和-repr-的区别"><a href="#1、字符串表示：-str-和-repr-的区别" class="headerlink" title="1、字符串表示：__str__和__repr__的区别"></a>1、<strong>字符串表示：</strong>__str__和__repr__的区别</h3><p>在Python类中，这两个方法的区别主要如下：</p>
+<p>print类的时候，首先找__str__方法，若__str__方法未进行重写，则调用__repr__(或者可以说__str__未重写的时候，初始定义和__repr__一样的)</p>
+<p>而在交互式窗口直接打实例化类的时候，则调用__repr__方法，其本质就是打印一个str字符串：类名+object at+内存地址。当然__repr__也可以重写。</p>
+<h3 id="2、集合、序列相关："><a href="#2、集合、序列相关：" class="headerlink" title="2、集合、序列相关："></a>2、集合、序列相关：</h3><h4 id="2-1、-len"><a href="#2-1、-len" class="headerlink" title="2.1、__len__"></a>2.1、__len__</h4><p>在使用len(某个class)  ，而len的函数本质是将该class作为参数传入，然后调用的是类自身的__len__方法。</p>
+<h4 id="2-2、-getitem"><a href="#2-2、-getitem" class="headerlink" title="2.2、__getitem__"></a>2.2、__getitem__</h4><h4 id=""><a href="#" class="headerlink" title=" "></a> </h4><p>​                            </p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>]]></content>
+      <categories>
+        <category>Python</category>
+        <category>魔法函数</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>魔法函数</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基于FPGA的手势识别系统设计</title>
     <url>/2021/07/09/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/</url>
     <content><![CDATA[<p>​        之前做图像处理的时候，也没有涉及过太多的深度学习，所以都是用传统算法做的，这个是本科期间做的大创（感谢陈老师帮该项目申请成了省级大创），其实不能说做的多好，因为真的发现图像处理领域很多传统算法被深度学习吊锤，而且现在FPGA加速器有崛起的势头，但是我们还是要惊羡于那些数学家的美妙构思（数学真是最美妙的学科），不多扯了，进入正题。</p>
