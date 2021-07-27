@@ -478,6 +478,7 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
 
           </blockquote>
 <p>由于上述链接讲的都很完备，下面只进行简单的总结一下。                            </p>
+<h3 id="name"><a href="#name" class="headerlink" title="__name__"></a>__name__</h3><p>大概说一下__name__吧，其本质就是Python的一个内置属性，当自己作为主文件执行时，__name__是”__main__“,而当作为模块时，则__name__就是模块名，自己也特地测试了一个，图如下，其中Write_coe是我将Python参数存储为FPGA的RAM文件格式写的自定义模块函数。</p>
 ]]></content>
       <categories>
         <category>Python</category>
