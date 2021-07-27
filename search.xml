@@ -458,10 +458,46 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
         <category>Python</category>
       </categories>
       <tags>
+        <tag>Python</tag>
         <tag>CNN</tag>
         <tag>深度学习</tag>
         <tag>目标追踪</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python之魔法函数</title>
+    <url>/2021/07/20/Python%E4%B9%8B%E9%AD%94%E6%B3%95%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p>Python是一个很类似于matlab的语言，都是一种高层解释型语言，区别于C、C++，C、C++则是编译通过后才执行(说明语法都没有错误)，Python执行之前不需要编译链接，直接是一行行执行，将除了缩进的语言都执行一遍，为了防止在读入包/模块时候出现代码执行，出现了__name__的魔法函数，也是Python的一种内置属性，除了__name__，在读faster rcnn的torch源码时候，也会频繁遇到__call__()、 __ len__()、__ init__() 、__ getitem__()等一类魔法函数，特地去搜了搜，网上讲的很好，链接如下:</p>
+<a id="more"></a>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.zhihu.com/question/49136398">if <strong>name</strong> == ‘<strong>main</strong>‘ 如何正确理解? - 知乎 (zhihu.com)</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://zhuanlan.zhihu.com/p/344951719">Python：实例讲解Python中的魔法函数（高级语法） - 知乎 (zhihu.com)</a></p>
+
+          </blockquote>
+<p>由于上述链接讲的都很完备，下面只进行简单的总结一下。</p>
+<h3 id="name"><a href="#name" class="headerlink" title="__name__"></a>__name__</h3><p>大概说一下__name__吧，其本质就是Python的一个内置属性，当自己作为主文件执行时，__name__是”__main__“,而当作为模块时，则__name__就是模块名，自己也特地测试了一个，图如下，其中Write_coe是我将Python参数存储为FPGA的RAM文件格式写的自定义模块函数。</p>
+<p><a href="https://imgtu.com/i/WYpEdg"><img src="https://z3.ax1x.com/2021/07/19/WYpEdg.png" alt="WYpEdg.png"></a></p>
+<h2 id="魔法函数"><a href="#魔法函数" class="headerlink" title="魔法函数"></a>魔法函数</h2><p>魔法函数是类中的可重写的方法，有助于更灵活方便的使用类。</p>
+<h3 id="1、字符串表示：-str-和-repr-的区别"><a href="#1、字符串表示：-str-和-repr-的区别" class="headerlink" title="1、字符串表示：__str__和__repr__的区别"></a>1、<strong>字符串表示：</strong>__str__和__repr__的区别</h3><p>在Python类中，这两个方法的区别主要如下：</p>
+<p>print类的时候，首先找__str__方法，若__str__方法未进行重写，则调用__repr__(或者可以说__str__未重写的时候，初始定义和__repr__一样的)</p>
+<p>而在交互式窗口直接打实例化类的时候，则调用__repr__方法，其本质就是打印一个str字符串：类名+object at+内存地址。当然__repr__也可以重写。</p>
+<h3 id="2、集合、序列相关："><a href="#2、集合、序列相关：" class="headerlink" title="2、集合、序列相关："></a>2、集合、序列相关：</h3><h4 id="2-1、-len"><a href="#2-1、-len" class="headerlink" title="2.1、__len__"></a>2.1、__len__</h4><p>在使用len(某个class)  ，而len的函数本质是将该class作为参数传入，然后调用的是类自身的__len__方法。</p>
+<h4 id="2-2、-getitem"><a href="#2-2、-getitem" class="headerlink" title="2.2、__getitem__"></a>2.2、__getitem__</h4><h4 id=""><a href="#" class="headerlink" title=" "></a> </h4><p>​                            </p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>]]></content>
+      <categories>
+        <category>Python</category>
+        <category>魔法函数</category>
+      </categories>
+      <tags>
         <tag>Python</tag>
+        <tag>魔法函数</tag>
       </tags>
   </entry>
   <entry>
