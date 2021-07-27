@@ -469,7 +469,15 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
     <url>/2021/07/20/Python%E4%B9%8B%E9%AD%94%E6%B3%95%E5%87%BD%E6%95%B0/</url>
     <content><![CDATA[<p>Python是一个很类似于matlab的语言，都是一种高层解释型语言，区别于C、C++，C、C++则是编译通过后才执行(说明语法都没有错误)，Python执行之前不需要编译链接，直接是一行行执行，将除了缩进的语言都执行一遍，为了防止在读入包/模块时候出现代码执行，出现了__name__的魔法函数，也是Python的一种内置属性，除了__name__，在读faster rcnn的torch源码时候，也会频繁遇到__call__()、 __ len__()、__ init__() 、__ getitem__()等一类魔法函数，特地去搜了搜，网上讲的很好，链接如下:</p>
 <a id="more"></a>
-<p>​                            </p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.zhihu.com/question/49136398">if <strong>name</strong> == ‘<strong>main</strong>‘ 如何正确理解? - 知乎 (zhihu.com)</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://zhuanlan.zhihu.com/p/344951719">Python：实例讲解Python中的魔法函数（高级语法） - 知乎 (zhihu.com)</a></p>
+
+          </blockquote>
+<p>由于上述链接讲的都很完备，下面只进行简单的总结一下。                            </p>
 ]]></content>
       <categories>
         <category>Python</category>
