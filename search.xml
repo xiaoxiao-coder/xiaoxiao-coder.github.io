@@ -479,6 +479,11 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
           </blockquote>
 <p>由于上述链接讲的都很完备，下面只进行简单的总结一下。                            </p>
 <h3 id="name"><a href="#name" class="headerlink" title="__name__"></a>__name__</h3><p>大概说一下__name__吧，其本质就是Python的一个内置属性，当自己作为主文件执行时，__name__是”__main__“,而当作为模块时，则__name__就是模块名，自己也特地测试了一个，图如下，其中Write_coe是我将Python参数存储为FPGA的RAM文件格式写的自定义模块函数。</p>
+<p><a href="https://imgtu.com/i/WYpEdg"><img src="https://z3.ax1x.com/2021/07/19/WYpEdg.png" alt="WYpEdg.png"></a></p>
+<h2 id="魔法函数"><a href="#魔法函数" class="headerlink" title="魔法函数"></a>魔法函数</h2><p>魔法函数是类中的可重写的方法，有助于更灵活方便的使用类。</p>
+<h3 id="1、字符串表示：-str-和-repr-的区别"><a href="#1、字符串表示：-str-和-repr-的区别" class="headerlink" title="1、字符串表示：__str__和__repr__的区别"></a>1、<strong>字符串表示：</strong>__str__和__repr__的区别</h3><p>在Python类中，这两个方法的区别主要如下：</p>
+<p>print类的时候，首先找__str__方法，若__str__方法未进行重写，则调用__repr__(或者可以说__str__未重写的时候，初始定义和__repr__一样的)</p>
+<p>而在交互式窗口直接打实例化类的时候，则调用__repr__方法，其本质就是打印一个str字符串：类名+object at+内存地址。当然__repr__也可以重写。</p>
 ]]></content>
       <categories>
         <category>Python</category>
