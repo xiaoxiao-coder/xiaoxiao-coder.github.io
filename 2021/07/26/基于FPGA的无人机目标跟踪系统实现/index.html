@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="Dc-vXTJ_Z0o0sirD51XHawJ1YZQdyEgKKbOXaI7Mo7E">
+  <meta name="baidu-site-verification" content="k7ID4DXsv2">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"gezhilai.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="这是第三届全国大学生集成电路创新创业大赛中科芯杯的赛题，当时没有找到合适的队友，就选择了一个人参赛，所以队名还起了名字叫一个人的风景，当时准确率是华东赛区本科生组第一名，可惜华东赛区只有三个队伍能够晋级总决赛，那三个队伍是研究生队伍，我是第四，赛区赛就比较倒霉呀，他们三个队伍总决赛的时候分别是杯赛第一名、第二和第四名，这就很坑了。。。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于FPGA的无人机目标跟踪系统实现">
+<meta property="og:url" content="http://gezhilai.com/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="Apers&#39; Blog">
+<meta property="og:description" content="这是第三届全国大学生集成电路创新创业大赛中科芯杯的赛题，当时没有找到合适的队友，就选择了一个人参赛，所以队名还起了名字叫一个人的风景，当时准确率是华东赛区本科生组第一名，可惜华东赛区只有三个队伍能够晋级总决赛，那三个队伍是研究生队伍，我是第四，赛区赛就比较倒霉呀，他们三个队伍总决赛的时候分别是杯赛第一名、第二和第四名，这就很坑了。。。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5kaVg.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5Z40K.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5Zhm6.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5eBjI.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5m5Je.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5nkwV.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5Qlge.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5Q0gg.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W56U3D.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W56sEt.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W56bCT.md.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W56xbR.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5cuIP.md.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5c2Ix.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5g1Fx.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5gW0s.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5Rdit.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5Rssg.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5RIQU.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5ROF1.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5W4AA.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/W5WIht.png">
+<meta property="article:published_time" content="2021-07-26T15:04:04.000Z">
+<meta property="article:modified_time" content="2021-07-27T10:46:39.034Z">
+<meta property="article:author" content="Apers">
+<meta property="article:tag" content="FPGA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://z3.ax1x.com/2021/07/27/W5kaVg.png">
+
+<link rel="canonical" href="http://gezhilai.com/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>基于FPGA的无人机目标跟踪系统实现 | Apers' Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e7dd5726174410a42696b9a0189c1ed0# <app_id>";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Apers' Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">茶亦醉人何必酒,书能香我不须花</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">15</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">12</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">9</span></a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links" rel="section"><i class="fa fa-fw fa-link"></i>友链</a>
+
+  </li>
+        <li class="menu-item menu-item-movies">
+
+    <a href="/movies/" rel="section"><i class="fa fa-fw fa-film"></i>观影</a>
+
+  </li>
+        <li class="menu-item menu-item-books">
+
+    <a href="/books/" rel="section"><i class="fa fa-fw fa-book"></i>阅读</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
+      <meta itemprop="name" content="Apers">
+      <meta itemprop="description" content="你知道吗?两个人肩并肩看日出真的很美">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Apers' Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          基于FPGA的无人机目标跟踪系统实现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+	
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-07-26 15:04:04" itemprop="dateCreated datePublished" datetime="2021-07-26T15:04:04Z">2021-07-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-27 10:46:39" itemprop="dateModified" datetime="2021-07-27T10:46:39Z">2021-07-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/FPGA/" itemprop="url" rel="index"><span itemprop="name">FPGA</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/" class="post-meta-item leancloud_visitors" data-flag-title="基于FPGA的无人机目标跟踪系统实现" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这是第三届全国大学生集成电路创新创业大赛中科芯杯的赛题，当时没有找到合适的队友，就选择了一个人参赛，所以队名还起了名字叫一个人的风景，当时准确率是华东赛区本科生组第一名，可惜华东赛区只有三个队伍能够晋级总决赛，那三个队伍是研究生队伍，我是第四，赛区赛就比较倒霉呀，他们三个队伍总决赛的时候分别是杯赛第一名、第二和第四名，这就很坑了。。。</p>
+<a id="more"></a>
+<p>大概说一下赛题流程，中科芯提供了一个上位机，该上位机的功能是将PC端视频路径加载到上位机中，上位机将该视频流以HDMI格式从PC端的HDMI发送出去，FPGA端进行HDMI数据接收，然后进行处理，上位机在发送HDMI视频流的时候，同时会通过串口发送视频第一帧的无人机坐标，包含左上角坐标、w和h，而FPGA则通过第一帧的无人机信息进行追踪后续所有帧的无人机位置，将追踪得到的左上角坐标进行发送返回。由于串口是无握手通信协议，所以还需要设计链路层的通信协议。下面进行详细说明</p>
+<h2 id="一、设计概述"><a href="#一、设计概述" class="headerlink" title="一、设计概述"></a>一、设计概述</h2><h3 id="1-1、硬件选取"><a href="#1-1、硬件选取" class="headerlink" title="1.1、硬件选取"></a>1.1、硬件选取</h3><p>项目设计是基于XLINX ARTIX-7 系列的 FPGA 开发平台（型号：XC7A35T-2FGG484I），用到USB转TTL模块、HDMI接口、USB接口线.</p>
+<h3 id="1-2、项目说明"><a href="#1-2、项目说明" class="headerlink" title="1.2、项目说明"></a>1.2、项目说明</h3><h4 id="1-项目内容"><a href="#1-项目内容" class="headerlink" title="1.项目内容"></a>1.项目内容</h4><p>（一）、针对中科芯提供的旋翼无人机机动测试视频设计基于FPGA的目标跟踪器，实现对视频中无人机目标的稳定连续跟踪，目标跟踪算法必须完全使用FPGA实现。</p>
+<p>（二）、各阶段中科芯均提供若干段比测视频，每段视频均给出目标尺寸w*h和第一帧初始位置坐标x1,y1，用于提供跟踪算法初始化信息。跟踪器测试系统如下图所示，测试设备将受试视频经HDMI接口发送至FPGA开发板，并通过串口接收其跟踪坐标结果。选择将个人计算机作为测试设备，通过下载主办方提供的上位机软件实现上述功能。基于FPGA设计的跟踪器须对每段视频分别进行测试，结果以跟踪结果输出坐标精确度为准。FPGA应选择带HDMI接口芯片的Virtex5、6、7或 Artix-7 系列开发平台进行实现。</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5kaVg"><img src="https://z3.ax1x.com/2021/07/27/W5kaVg.png" alt="W5kaVg.png"></a></p>
+<p>​                                                            图1 输入输出接口配置</p>
+<p>（三）、考虑到程移植便利性，建议采用以下输入输出接口配置：参赛队跟踪器图像输入采用标准HDMI接口，目标初始位置坐标采用RS422异步串口输入，跟踪位置坐标采用同一串口输出。在此介绍一下串口的设置和链路层通信协议：</p>
+<p>串口通信物理层协议：波特率：9600；数据位位数：8位；校验位：无；停止位：有</p>
+<p>链路层通信协议：帧内字节数：8字节；校验码：LRC累加和校验码；位置坐标数据高位在前、高字节在前</p>
+<p>例： 目标初始位置坐标（255，511），长宽均为20 ，则PC发送帧为 AA 00 FF 01     FF 14 14 2F，发送帧的意义如下图：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5Z40K"><img src="https://z3.ax1x.com/2021/07/27/W5Z40K.png" alt="W5Z40K.png"></a></p>
+<p>跟踪结果位置坐标(255,511)，则FPGA发送帧为 55 00 FF 01 FF 00 00 AC，返回帧的意义如下：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5Zhm6"><img src="https://z3.ax1x.com/2021/07/27/W5Zhm6.png" alt="W5Zhm6.png"></a></p>
+<h4 id="2-项目指标"><a href="#2-项目指标" class="headerlink" title="2.项目指标"></a>2.项目指标</h4><p>（一）、提供的测试和比赛用视频均为彩色，8bit位深，分辨率为720P@25FPS，视频格式为AVI，视频中无人机目标大小&gt;20*20pixel，时长约30秒。赛题跟踪难度见官网发布的受测视频。</p>
+<p>​                                                                    视频中目标左上角初始位置坐标(x,y)，目标尺寸(w,h)</p>
+<p>​                                                                    视频1为564,305,132,48；视频2为720,312,66,30  </p>
+<p>​                                                                    视频3为820,241,110,44；视频4为592,325,40,20</p>
+<p>（二）、 跟踪器在受试过程中禁止人工干预，但允许跟踪器具备自动参数调整和跟踪丢失后的目标自动重捕功能。</p>
+<p>（三）、 比赛结果按各跟踪精度性能指标进行排名。精度指标衡量方法基于VOT挑战赛的无监督（unsupervised）模式，以全部受测的N帧图像内，算法跟踪结果波门与实际波门平均重合率AO（Average Overlap）描述。</p>
+<script type="math/tex; mode=display">
+AO=\frac{1}{N}\sum^N_{i=1}\frac{S_i}{S}</script><p>其中，S_i表示跟踪结果波门与真实波门重叠面积，S=w*h即目标面积由组织方给,其实就是ground truth的面积。若目标跟踪丢失，则跟踪器在当前帧得分为0。因此，应谨慎设计算法，确保连续跟踪，并视需求加入丢失后重捕机制（在本次设计的算法中，是可以通过阈值来推断是否追踪丢失的）。最终性能将以多段比赛视频测试AO指标累加结果为准，排名则依据AO指标从高到低排列。</p>
+<p><strong>3.总结</strong></p>
+<p>项目设计中，通过上位机发送视频流数据给FPGA，FPGA通过HDMI端口接收数据，进行定位追踪视频中的无人机，通过串口发送给上位机，同时为了显示更加明了，将定位结果通过输出的HDMI接口发送给显示屏，显示屏也同时显示追踪结果.</p>
+<h2 id="二、系统组成及算法讲解"><a href="#二、系统组成及算法讲解" class="headerlink" title="二、系统组成及算法讲解"></a>二、系统组成及算法讲解</h2><h3 id="2-1-系统介绍"><a href="#2-1-系统介绍" class="headerlink" title="2.1 系统介绍"></a>2.1 系统介绍</h3><p>上位机将视频流发送给FPGA，FPGA对视频进行解码转为VGA时序信号和像素信息RGB888，得到RGB888后，将其转到YCBCR色域，然后对其进行灰度化处理，灰度化处理后将灰度像素传送给二值化模块，通过阈值设定对其进行二值化，二值化输出信息传送给sobel边缘提取模块，进行边缘提取，至此图像预处理结束，将预处理输出结果送给追踪模块，追踪模块将生成多个待检测目标窗口，然后与初始帧的无人机目标对比，选出最优窗口作为当前帧的无人机位置。系统框图如图2。<a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5eBjI"><img src="https://z3.ax1x.com/2021/07/27/W5eBjI.png" alt="W5eBjI.png"></a></p>
+<h3 id="2-2、HDMI-VGA"><a href="#2-2、HDMI-VGA" class="headerlink" title="2.2、HDMI-VGA"></a>2.2、HDMI-VGA</h3><p>待追踪视频由PC端上位机发送，通过扩展显示屏，把电脑布局与缩放调为100%，扩展屏设置为60hz，HDMI与FPGA连接后，FPGA被PC端识别为扩展屏，并向其发送视频流，FPGA接收到HDMI类型的视频流，由于使用的黑金的alinx7035系列FGPA没有硬核解码器解码HDMI视频，所以通过软核进行解码并将其转换成VGA信号，此软核为github开源IP。</p>
+<h3 id="2-3、算法讲解及其仿真结果展示"><a href="#2-3、算法讲解及其仿真结果展示" class="headerlink" title="2.3、算法讲解及其仿真结果展示"></a>2.3、算法讲解及其仿真结果展示</h3><h4 id="2-3-1、图像处理算法模块"><a href="#2-3-1、图像处理算法模块" class="headerlink" title="2.3.1、图像处理算法模块"></a>2.3.1、图像处理算法模块</h4><p>（1）灰度化</p>
+<p>将彩色图像转化为灰度的方法有两种，一个是令 RGB 三个分量的数值相等，输出后便可以得到灰度图像，另一种是转化为 YCbCr 格式，将 Y 分量提取出来，YCbCr 格式中的 Y 分量表示的是图像的亮度和浓度所以只输出 Y 分量，得到的图像就是灰度图像了。我们在这里选择第二种方法实现。</p>
+<p>YCbCr是通过有序的三元组来表示的，三元由Y(Luminance)、Cb(Chrominance-Blue)、和Cr(Chrominance-Red)组成，其中Y表示颜色的明亮度和浓度，而Cb和Cr则分别表示颜色的蓝色浓度偏移量和红色浓度偏移量。人的肉眼对由YCbCr色彩空间编码的视频中的Y分量更敏感，而Cb和Cr的微小变化不会引起视觉上的不同。为了得到灰度图像，要将采集到的彩色图像转化为YCbCr后，将Y分量分别送给R、G、B，即此时R、G、B数值上是一致的，这样便得到了灰度图。灰度化效果如图3和图4。</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5m5Je"><img src="https://z3.ax1x.com/2021/07/27/W5m5Je.png" alt="W5m5Je.png"></a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5nkwV"><img src="https://z3.ax1x.com/2021/07/27/W5nkwV.png" alt="W5nkwV.png"></a></p>
+<p>FPGA开发板通过HDMI采集到的数据是RGB888的格式，官方给出的转化公式是严格的RGB888转为YCbCr888。</p>
+<p>官方给出的RGB888-&gt;YCbCr888转化公式如下：</p>
+<script type="math/tex; mode=display">
+Y=0.229R+0.587G+0.114B
+\\Cb=0.568(B-Y)+128
+\\Cr=0.713(R-Y)+128</script><p>由于FPGA无法实现浮点数运算，所以需要把系数变为整数，我们不妨将Y、Cb和Cr都扩大1024倍，然后所有系数取整，那么变成如下公式：</p>
+<script type="math/tex; mode=display">
+Y=306R+601G+116B
+\\Cb=-176R-347G+523B+131072
+\\Cr=523R-438G-85B+131072</script><p>这样便可以得到整型的运算，最后得到的结果右移10位即可，但为了时序的科学严谨性，我们不应该一次在always块中算出Y、Cb、Cr，因为一个关系式中涉及到三次乘法和两次加法，越多的运算量就越可能导致时序延时错乱，此处或许不会有问题，但不在一个块中用太复杂的运算式是一种好的习惯，我们应该选择业界普遍使用的流水线做法，将乘法在一个always块里实现，在另一个always块中实现加法。</p>
+<p>（2）二值化</p>
+<p> 在灰度化后，进行二值化操作，二值化操作即是设定一个阈值，当灰度值大于该阈值是赋值为1，小于该值是赋值为0，二值化效果如图5和图6。阈值确定较为经典的算法是大津算法（OTSU），大津算法可以使得前景与背景图像的类间方差最大，它被认为是图像分割中阈值选取的最佳算法，计算简单，不受图像亮度和对比度的影响，但其需要一帧数据得到阈值确定，即追踪会造成一帧延迟，所以此处未使用大津算法而是使用的是测试的相对较好的固定阈值，在后续完善中可以考虑运用一帧的部分数据求大津阈值，使其不造成一帧的延迟。</p>
+<p>原图和二值化图片如下：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5Qlge"><img src="https://z3.ax1x.com/2021/07/27/W5Qlge.png" alt="W5Qlge.png"></a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5Q0gg"><img src="https://z3.ax1x.com/2021/07/27/W5Q0gg.png" alt="W5Q0gg.png"></a></p>
+<p>（4）、Sobel边缘化</p>
+<p>二值化会使得前景和背景相区分，但是目标所处地位可能和背景相交换，为了在这种结果发生时依旧可以进行正常追踪，此步我们进行Sobel算子边缘化提取，从而提高后续的追踪算法的稳定性。</p>
+<p>Sobel边缘检测的核心在于像素矩阵的卷积，卷积对于数字图像处理非常重要，很多图像处理算法都是做卷积来实现的。卷积运算的本质就是对制定的图像区域的像素值进行加权求和的过程，其计算过程为图像区域中的每个像素值分别与卷积模板的每个元素对应相乘，将卷积的结果作求和运算，运算到的和就是卷积运算的结果。</p>
+<p>3×3的窗口M与卷积模板C 的卷积运算如下：</p>
+<script type="math/tex; mode=display">
+M= \left[
+ \begin{matrix}
+   M1 & M2 & M3 \\
+   M4 & M5 & M6 \\
+   M7 & M8 & M9
+  \end{matrix}
+  \right] \ \ \ \ \ \ \ \
+  C= \left[
+ \begin{matrix}
+   C1 & C2 & C3 \\
+   C4 & C5 & C6 \\
+   C7 & C8 & C9
+  \end{matrix}
+  \right]
+  \\M5'=M1*C1+M2*C2+M3*C3+M4*C4+M5*C5+\\M6*C6+M7*C7+M8*C8+M9*C9</script><p>G_x和G_y是图像边缘梯度，将两个因子和原始图像做如下卷积得到边缘梯度，其中A表示原视图像。</p>
+<script type="math/tex; mode=display">
+G_x=\left[
+ \begin{matrix}
+   -1 & 0 & +1 \\
+   -2 & 0 & +2 \\
+   -1 & 0 & +1
+  \end{matrix}
+  \right] *A\ \ \ \ \ \ \
+  G_y=\left[
+ \begin{matrix}
+   -1 & -2 & -1 \\
+   0  & 0  & 0 \\
+   +1 & +2 & +1
+  \end{matrix}
+  \right] *A</script><p>得到图像中的每一个点的横向纵向梯度G_x、G_y。最后通过如下公式来计算该点总体梯度的大小。</p>
+<script type="math/tex; mode=display">
+G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该如果算出的G大于设定的阈值，那么认为此处是边缘处，使其为黑色，否则认为不是边缘，使其为白色。</p>
+<p>上述是算法原理，很显然，这里用到了3<em>3矩阵，对于matlab来说，获取是比较简单的，但是FPGA实现时，我们需要考虑如何得到这个3</em>3的矩阵，因为FPGA扫描像素点是一个一个进行的。在 FPGA 中生成 3x3 矩阵有以下三种方法：</p>
+<p>（1） 通过 2 个或者 3 个 RAM 的存储来实现 3X3 像素窗口；</p>
+<p>（2） 通过 2 个或者 3 个 FIFO 的存储来实现 3X3 像素窗口；</p>
+<p>（3） 通过 2 行或者 3 行 Shift_RAM 的存储来实现 3X3 像素窗口；</p>
+<p>在此我们选用shift ram进行获取矩阵,shift ram是一个移位存储ram,这个 IP 支持一个时钟周期移位一个或多个 bit 的数据，位宽是可以设置的。下面图7和图8是 shift_ram 的移位示意图及仿真图:</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W56U3D"><img src="https://z3.ax1x.com/2021/07/27/W56U3D.png" alt="W56U3D.png"></a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W56sEt"><img src="https://z3.ax1x.com/2021/07/27/W56sEt.png" alt="W56sEt.png"></a></p>
+<p>如上图顺序可以容易看出，shift_ram 的工作方式是移位存储，后一个数据将前一个数据往前推，当填满一行的时候，跳到下一行再继续移位存储，相应的第一行的数据填满之后，会填上矩阵的第一行的数据，操作是同时的，如果进行均值滤波的话显然这样目标像素会是 0，以此类推，第二行移位存储完成，刚开始第一行的每一个像素点是目标像素，但是第三行还没有数据，所以第一行的目标像素滤波后显然是不准确的，等到把第三行数据填满后，进行原本第二行的滤波，这时目标像素周围均有数据，所以均值滤波会使图像的边缘不清楚。这是将每一行的宽度设置成 3，如果将宽度设置为 640,800 等分辨率的宽度，那么生成 3x3 矩阵就十分方便。同样的还可以生成 5x5、7x7 等矩阵用于图像处理的算法研究。</p>
+<p>Xilinx Vivado 有自己的 Shift_RAM IP Core，不过这里只能缓存出来一行数据，我们这里需要多个 Shift_RAM IP Core。此外720p视频流一行有像素1280个数据，考虑到shift ram深度不能大于1024，所以我们用两个640深度的shift ram组成一个1280深度的shift ram，那么我们需要四个这样的IP核，进行循环移位得到3*3的矩阵，然后进行sobel边缘提取。边缘提取结果如图9和图10</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W56bCT"><img src="https://z3.ax1x.com/2021/07/27/W56bCT.md.png" alt="W56bCT.md.png"></a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W56xbR"><img src="https://z3.ax1x.com/2021/07/27/W56xbR.png" alt="W56xbR.png"></a></p>
+<p>（4）追踪算法</p>
+<p>  在得到边缘化的数据后，将第一帧的目标数据进行保存，在后续的帧数据传来时，我们选择开窗操作，根据上一帧的定位结果，我们在此帧附近进行开窗，窗口不能太小，否则会丢失目标，在此处，我们选用的是上一帧结果往四周扩展40个像素点进行开窗，在此窗口内，从窗口左上角进行平移获取与目标大小一致的待检测矩阵，获得待检测矩阵后，为了防止周围背景的影响导致误判，需要将待检测矩阵与目标矩阵进行相与操作，相与操作后，对该二值矩阵进行简单求和，得到的结果与目标矩阵和进行对比，当结果最相近时，该待检测矩阵即是该帧的目标位置。下述描述FPGA对该算法的实现的主要模块</p>
+<p>1、矩阵生成模块：</p>
+<p>在1280*720的图片中，我们由上一帧定位结果判断下一帧的范围，即进行开窗，在此窗口内进行进行追踪定位，我们选取的窗口是212<em>128的窗口，在此窗口内，不断生成132\</em>48的待检测矩阵(无人机大小小于132*48时，进行w和h扩充为132*48).如下图</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5cuIP"><img src="https://z3.ax1x.com/2021/07/27/W5cuIP.md.png" alt="W5cuIP.md.png"></a></p>
+<p>黄色边框代表一帧大小，红色框是选取的开窗大小，黑色框是需生成的待检测矩阵，待检测矩阵就是一个待检测的无人机目标.</p>
+<p>由于1280*720图片过大，仿真长度过大，所以验证的时候是使用的一帧6*4，开窗大小是4*4，位于一帧中间位置，生成待检测矩阵是3*3.仿真图如图</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5c2Ix"><img src="https://z3.ax1x.com/2021/07/27/W5c2Ix.png" alt="W5c2Ix.png"></a></p>
+<p>如上图仿真图所示，post_martix_clken代表矩阵有效信号，martix_p1共三bit，代表矩阵第一行的3个数据，martix_p2和martix_p3分别代表第二行和第三行，x和y代表此时矩阵左上角在窗口中的坐标(窗口左上角坐标记为(1,1))，sobel_data代表窗内信号，per_martix_clken代表sobel_data有效。仿真输入的窗口信号第一行的四个数据是：1010；第二行是：0101；第三行是：1010；第四行是0101。在进行仿真时，在4*4的窗口内，可以生成4个完整的矩阵，从仿真中可见共四个clk内有效。在四个使能有效时，对应的3*3矩阵是完全正确的，对应的(x,y)坐标是(1,1)，(1,2)，(2,1)，(2,2)与矩阵符合.</p>
+<p>2、sum_h的仿真：如下图</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5g1Fx"><img src="https://z3.ax1x.com/2021/07/27/W5g1Fx.png" alt="W5g1Fx.png"></a></p>
+<p>per_martix1_clken是输入数据的有效信号,如上图,在天蓝色处有两个clk的有效时钟,对应的输入是132’habc3d2e1f0和132’h167cccee55ff,对应的二进制分别是：1010101111000011110100101110000111110000和101100111110011001100 1110111001010101111111 11,含有1的个数分别是21和30.post_martix1_clken是输出结果的有效信号,如上图,在post_martix1_clken为1的时候，说明输出有效,此时输出是0x15和0x1e,十进制就是21和30.可以看出,求1个数的流水线处理模块结果正确.</p>
+<p>3、上述模块是对待检测窗口行求和,下述sum模块是对返回的48行值进行累和sum模块的仿真：如下图</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5gW0s"><img src="https://z3.ax1x.com/2021/07/27/W5gW0s.png" alt="W5gW0s.png"></a></p>
+<p>如图上图,per_martix1_clken是输入数据有效信号,sum代表待检测窗的累和,post_sum_clken代表输出累和数据的有效信号，如上图，仿真是给予的48行数据分别都是132’d1和132’d3,可以知道一行数据经过sum_h模块输出后分别是1和2，则48行累和分别是48和96，如上图仿真所示，在输出有效信号为1时，对应的结果分别是0x30和0x60即48和96，可以看出sum模块的流水线处理是没有问题的。</p>
+<p>4、比较输出模块：如图</p>
+<p>在比较模块中，sum是sum模块流水线输出的待检测窗口值，sum0是初始帧目标值，将两者对比，x和y是与sum对应的此时在大窗口中的坐标，x_current_frame和y_current_frame是此时帧定位的窗口坐标，若sum越接近sum0，则更新当前帧的坐标x_current_frame和y_current_frame为x和y，仿真图如上，设定的sum0是100，流水线输入sum值是0x2c，0x96,0x46,0x2h和0x5c，最终x_current_frame和y_current_frame更新为1和5，正常输出。</p>
+<p>上述即是追踪算法的大致思想，适合FPGA的逻辑实现，其追踪性能很好，下面我们看一下追踪效果.</p>
+<h2 id="三、追踪情况及性能参数"><a href="#三、追踪情况及性能参数" class="headerlink" title="三、追踪情况及性能参数"></a>三、追踪情况及性能参数</h2><h3 id="3-1、matlab追踪视频展示"><a href="#3-1、matlab追踪视频展示" class="headerlink" title="3.1、matlab追踪视频展示"></a>3.1、matlab追踪视频展示</h3><p>视频一追踪演示：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.bilibili.com/video/BV1mz4y197h1">视频一追踪演示</a></p>
+<p>视频二追踪演示：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.bilibili.com/video/BV15i4y1x74k">视频二追踪演示</a></p>
+<p>视频三追踪演示：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.bilibili.com/video/BV1yV411r7tn">视频三追踪演示</a></p>
+<p>视频四追踪演示：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.bilibili.com/video/BV1pa4y1v7h5">视频四追踪演示</a></p>
+<h3 id="3-2、matlab追踪AO值展示-四个AO值图展示如下图"><a href="#3-2、matlab追踪AO值展示-四个AO值图展示如下图" class="headerlink" title="3.2、matlab追踪AO值展示:四个AO值图展示如下图"></a>3.2、matlab追踪AO值展示:四个AO值图展示如下图</h3><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5Rdit"><img src="https://z3.ax1x.com/2021/07/27/W5Rdit.png" alt="W5Rdit.png"></a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5Rssg"><img src="https://z3.ax1x.com/2021/07/27/W5Rssg.png" alt="W5Rssg.png"></a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5RIQU"><img src="https://z3.ax1x.com/2021/07/27/W5RIQU.png" alt="W5RIQU.png"></a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5ROF1"><img src="https://z3.ax1x.com/2021/07/27/W5ROF1.png" alt="W5ROF1.png"></a></p>
+<p>四个视频追踪的平均AO值如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>视频一</th>
+<th>视频二</th>
+<th>视频三</th>
+<th>视频四</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>平均AO值</td>
+<td>99.45%</td>
+<td>98.18%</td>
+<td>99.20%</td>
+<td>99.04%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>从结果上看，全程没有追丢的情况发生，平均AO值全部达到98%以上。</p>
+<p>3.3、FPGA板级验证：板级验证图如下图</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5W4AA"><img src="https://z3.ax1x.com/2021/07/27/W5W4AA.png" alt="W5W4AA.png"></a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/W5WIht"><img src="https://z3.ax1x.com/2021/07/27/W5WIht.png" alt="W5WIht.png"></a></p>
+<p>至此差不多结束了，具体上位机软件等可以从集创赛官网找，往届题目应该会有保存。</p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\07\09\基于FPGA的手势识别系统设计\" rel="bookmark">基于FPGA的手势识别系统设计</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\03\16\数据量化\" rel="bookmark">数据量化</a></div>
+    </li>
+  </ul>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Apers
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://gezhilai.com/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/" title="基于FPGA的无人机目标跟踪系统实现">http://gezhilai.com/2021/07/26/基于FPGA的无人机目标跟踪系统实现/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/FPGA/" rel="tag"><i class="fa fa-ship"></i> FPGA</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/07/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%B8%B8%E7%94%A8%E8%AF%8D%E6%B1%87%E5%8F%8A%E5%B8%B8%E7%94%A8%E7%BC%96%E7%A8%8B%E8%AF%AD%E6%B3%95/" rel="prev" title="深度学习常用词汇及常用编程语法--不断更新中">
+      <i class="fa fa-chevron-left"></i> 深度学习常用词汇及常用编程语法--不断更新中
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%AE%BE%E8%AE%A1%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">一、设计概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1%E3%80%81%E7%A1%AC%E4%BB%B6%E9%80%89%E5%8F%96"><span class="nav-number">1.1.</span> <span class="nav-text">1.1、硬件选取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2%E3%80%81%E9%A1%B9%E7%9B%AE%E8%AF%B4%E6%98%8E"><span class="nav-number">1.2.</span> <span class="nav-text">1.2、项目说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E9%A1%B9%E7%9B%AE%E5%86%85%E5%AE%B9"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.项目内容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E9%A1%B9%E7%9B%AE%E6%8C%87%E6%A0%87"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.项目指标</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%B3%BB%E7%BB%9F%E7%BB%84%E6%88%90%E5%8F%8A%E7%AE%97%E6%B3%95%E8%AE%B2%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">二、系统组成及算法讲解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E7%B3%BB%E7%BB%9F%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 系统介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2%E3%80%81HDMI-VGA"><span class="nav-number">2.2.</span> <span class="nav-text">2.2、HDMI-VGA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3%E3%80%81%E7%AE%97%E6%B3%95%E8%AE%B2%E8%A7%A3%E5%8F%8A%E5%85%B6%E4%BB%BF%E7%9C%9F%E7%BB%93%E6%9E%9C%E5%B1%95%E7%A4%BA"><span class="nav-number">2.3.</span> <span class="nav-text">2.3、算法讲解及其仿真结果展示</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-1%E3%80%81%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E7%AE%97%E6%B3%95%E6%A8%A1%E5%9D%97"><span class="nav-number">2.3.1.</span> <span class="nav-text">2.3.1、图像处理算法模块</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%BF%BD%E8%B8%AA%E6%83%85%E5%86%B5%E5%8F%8A%E6%80%A7%E8%83%BD%E5%8F%82%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">三、追踪情况及性能参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1%E3%80%81matlab%E8%BF%BD%E8%B8%AA%E8%A7%86%E9%A2%91%E5%B1%95%E7%A4%BA"><span class="nav-number">3.1.</span> <span class="nav-text">3.1、matlab追踪视频展示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2%E3%80%81matlab%E8%BF%BD%E8%B8%AAAO%E5%80%BC%E5%B1%95%E7%A4%BA-%E5%9B%9B%E4%B8%AAAO%E5%80%BC%E5%9B%BE%E5%B1%95%E7%A4%BA%E5%A6%82%E4%B8%8B%E5%9B%BE"><span class="nav-number">3.2.</span> <span class="nav-text">3.2、matlab追踪AO值展示:四个AO值图展示如下图</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Apers"
+      src="/images/avatar.jpg#QQ1.jpg">
+  <p class="site-author-name" itemprop="name">Apers</p>
+  <div class="site-description" itemprop="description">你知道吗?两个人肩并肩看日出真的很美</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiaoxiao-coder" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoxiao-coder" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxiaocoder1@gmail.com" title="E-Mail → mailto:xiaoxiaocoder1@gmail.com" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-google"></i>Google</a>
+      </span>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Apers</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">35k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">32 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@2.7.8/unpacked/MathJax.js?config=TeX-MML-AM_CHTML';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'mLlhk74loQanT3wsKkyBMxve-gzGzoHsz',
+      appKey     : 'gie2FNStD4ro7YKzTQYJag4u',
+      placeholder: "留下你的痕迹吧!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+
+<div class="moon-menu">
+  <div class="moon-menu-items">
+    
+    <div class="moon-menu-item" onclick="back2bottom()">
+      <i class='fa fa-chevron-down'></i>    </div>
+    
+    <div class="moon-menu-item" onclick="back2top()">
+      <i class='fa fa-chevron-up'></i>    </div>
+    
+  </div>
+  <div class="moon-menu-button">
+    <svg class="moon-menu-bg">
+      <circle class="moon-menu-cricle" cx="50%" cy="50%" r="44%"></circle>
+      <circle class="moon-menu-border" cx="50%" cy="50%" r="48%"></circle>
+    </svg>
+    <div class="moon-menu-content">
+      <div class="moon-menu-icon"><i class='fas fa-ellipsis-v'></i></div>
+      <div class="moon-menu-text"></div>
+    </div>
+  </div>
+</div><script src="/js/injector.js"></script>
+</body>
+</html>
