@@ -484,7 +484,8 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
 <h3 id="1、字符串表示：-str-和-repr-的区别"><a href="#1、字符串表示：-str-和-repr-的区别" class="headerlink" title="1、字符串表示：__str__和__repr__的区别"></a>1、<strong>字符串表示：</strong>__str__和__repr__的区别</h3><p>在Python类中，这两个方法的区别主要如下：</p>
 <p>print类的时候，首先找__str__方法，若__str__方法未进行重写，则调用__repr__(或者可以说__str__未重写的时候，初始定义和__repr__一样的)</p>
 <p>而在交互式窗口直接打实例化类的时候，则调用__repr__方法，其本质就是打印一个str字符串：类名+object at+内存地址。当然__repr__也可以重写。</p>
-]]></content>
+<h3 id="2、集合、序列相关："><a href="#2、集合、序列相关：" class="headerlink" title="2、集合、序列相关："></a>2、集合、序列相关：</h3><h4 id="2-1、-len"><a href="#2-1、-len" class="headerlink" title="2.1、__len__"></a>2.1、__len__</h4><p>在使用len(某个class)  ，而len的函数本质是将该class作为参数传入，然后调用的是类自身的__len__方法。</p>
+<h4 id="2-2、-getitem"><a href="#2-2、-getitem" class="headerlink" title="2.2、__getitem__"></a>2.2、__getitem__</h4>]]></content>
       <categories>
         <category>Python</category>
         <category>魔法函数</category>
