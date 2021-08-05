@@ -1,6 +1,550 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Python之魔法函数</title>
+    <url>/2021/07/20/Python%E4%B9%8B%E9%AD%94%E6%B3%95%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p>Python是一个很类似于matlab的语言，都是一种高层解释型语言，区别于C、C++，C、C++则是编译通过后才执行(说明语法都没有错误)，Python执行之前不需要编译链接，直接是一行行执行，将除了缩进的语言都执行一遍，为了防止在读入包/模块时候出现代码执行，出现了__name__的魔法函数，也是Python的一种内置属性，除了__name__，在读faster rcnn的torch源码时候，也会频繁遇到__call__()、 __ len__()、__ init__() 、__ getitem__()等一类魔法函数，特地去搜了搜，网上讲的很好，链接如下:</p>
+<a id="more"></a>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.zhihu.com/question/49136398">if <strong>name</strong> == ‘<strong>main</strong>‘ 如何正确理解? - 知乎 (zhihu.com)</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://zhuanlan.zhihu.com/p/344951719">Python：实例讲解Python中的魔法函数（高级语法） - 知乎 (zhihu.com)</a></p>
+
+          </blockquote>
+<p>由于上述链接讲的都很完备，下面只进行简单的总结一下。                            </p>
+<h3 id="name"><a href="#name" class="headerlink" title="__name__"></a>__name__</h3><p>大概说一下__name__吧，其本质就是Python的一个内置属性，当自己作为主文件执行时，__name__是”__main__“,而当作为模块时，则__name__就是模块名，自己也特地测试了一个，图如下，其中Write_coe是我将Python参数存储为FPGA的RAM文件格式写的自定义模块函数。</p>
+<p><a href="https://imgtu.com/i/WYpEdg"><img src="https://z3.ax1x.com/2021/07/19/WYpEdg.png" alt="WYpEdg.png"></a></p>
+<h2 id="魔法函数"><a href="#魔法函数" class="headerlink" title="魔法函数"></a>魔法函数</h2><p>魔法函数是类中的可重写的方法，有助于更灵活方便的使用类。</p>
+<h3 id="1、字符串表示：-str-和-repr-的区别"><a href="#1、字符串表示：-str-和-repr-的区别" class="headerlink" title="1、字符串表示：__str__和__repr__的区别"></a>1、<strong>字符串表示：</strong>__str__和__repr__的区别</h3><p>在Python类中，这两个方法的区别主要如下：</p>
+<p>print类的时候，首先找__str__方法，若__str__方法未进行重写，则调用__repr__(或者可以说__str__未重写的时候，初始定义和__repr__一样的)</p>
+<p>而在交互式窗口直接打实例化类的时候，则调用__repr__方法，其本质就是打印一个str字符串：类名+object at+内存地址。当然__repr__也可以重写。</p>
+<h3 id="2、集合、序列相关："><a href="#2、集合、序列相关：" class="headerlink" title="2、集合、序列相关："></a>2、集合、序列相关：</h3><h4 id="2-1、-len"><a href="#2-1、-len" class="headerlink" title="2.1、__len__"></a>2.1、__len__</h4><p>在使用len(某个class)  ，而len的函数本质是将该class作为参数传入，然后调用的是类自身的__len__方法。</p>
+<h4 id="2-2、-getitem"><a href="#2-2、-getitem" class="headerlink" title="2.2、__getitem__"></a>2.2、__getitem__</h4><div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>]]></content>
+      <categories>
+        <category>Python</category>
+        <category>魔法函数</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>魔法函数</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客搭建和规划</title>
+    <url>/2021/01/19/hello-world/</url>
+    <content><![CDATA[<p>欢迎来到<a href="http://gezhilai.com/">我的博客</a>! 这是我的第一篇博客. 受到疫情影响，今年都无法留校，但早早的回家也不能荒废了时间，就参考了一些文章搭建了这个博客，一是为了记下自己学习的过程，二也是可以和大家分享知识。下面主要说一说博客搭建参考的文章和未来博客准备发的东西。</p>
+<a id="more"></a>
+<h2 id="博客搭建"><a href="#博客搭建" class="headerlink" title="博客搭建"></a>博客搭建</h2><h3 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h3><p>搭建过程中，参考了如下几篇文章</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.jianshu.com/p/39562a0d8eb6">可能是最详细的 Hexo + GitHub Pages 搭建博客的教程</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://zhuanlan.zhihu.com/p/26625249">GitHub+Hexo 搭建个人网站详细教程</a></p>
+
+          </blockquote>
+<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>在后续优化中，强烈推荐下面这个博主</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://tding.top/">小丁的个人博客</a></p>
+
+          </blockquote>
+<p>如果具体操作还有些问题，可以顺带看一下下面的视频，</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.bilibili.com/video/BV16W411t7mq?p=21">使用Hexo博客搭建的个人博客，使用Next主题来进行优化改造</a></p>
+
+          </blockquote>
+<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><p>1、公式无法显示问题参考如下博客，</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/weixin_44489823/article/details/105028860">hexo next主题解决无法显示数学公式</a></p>
+
+          </blockquote>
+<p>其中mathjax开启可以在markdown顶部写如下命令进行开启显示数学公式</p>
+<blockquote class="blockquote-center">
+            <p>mathjax: true #显示数学公式</p>
+
+          </blockquote>
+<p>2、更新博客后，登录网站后发现没有新内容，是由于浏览器缓存功能导致，在浏览器设置—隐私中清除一下缓存或者等待几分钟即可</p>
+<h2 id="博客规划"><a href="#博客规划" class="headerlink" title="博客规划"></a>博客规划</h2><p>在后续中，主要会写一写以前做过和学过的东西，包括FPGA、FPGA图像处理、深度学习、机器学习以及西瓜书、花书和凸优化等书的学习分享。当然必然不会仅限于此，但自己也不知道以后还会学些什么，所以暂且写这些吧，假期期间会把上述几本书仔细读一读。</p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>搭建</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>博客搭建</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>jupyter lab实现跨文件的函数调用</title>
+    <url>/2021/04/10/jupyter%20lab%E5%AE%9E%E7%8E%B0%E8%B7%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/</url>
+    <content><![CDATA[<p>在python各类编译器中，jupyter notebook真的是非常非常棒的调试工具，但是jupyter notebook在大工程方面却是逊于pycharm的，其虽然调试很方便，但是却不是像pycharm一样打开一整个文件夹，所以其团队又开发了jupyter lab来弥补缺陷，而jupyter lab的代码补齐真的又一言难尽，由于jupyter lab本身并不是完善，用了kite工具辅助代码补齐，即使操作完全没问题，kite也可能不工作，工作了也发现kite速度真的超慢又浪费CPU</p>
+<a id="more"></a>
+<p>算了，毕竟jupyter lab已经是一大进步了，平时我们写代码，模块化是非常重要的，所以经常会分文件进行写函数，然后跨文件调用，python中跨文件调用很简单，如果想在文件A中调用文件B中的max函数，如下即可：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment"># 待引用的py文件B路径加到了搜索列表里</span></span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) </span><br><span class="line"><span class="keyword">import</span> B</span><br><span class="line">B.<span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
+<p>或者如下</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment"># 待引用的py文件路径加到了搜索列表里</span></span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) </span><br><span class="line">form B <span class="keyword">import</span> <span class="built_in">max</span></span><br><span class="line"><span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
+<p>A和B若是在同一路径下，可以无需添加路径。</p>
+<p>但上述的方法是用来py文件跨文件调用的，而jupyter中的文件不是py而是ipynb文件，那么上述这个方法就没法在jupyter中用了，官方给出了一个解决方法，先在jupyter中建立一个文件，写入如下代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># In[ ]:</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io, os,sys,types</span><br><span class="line"><span class="keyword">from</span> IPython <span class="keyword">import</span> get_ipython</span><br><span class="line"><span class="keyword">from</span> nbformat <span class="keyword">import</span> read</span><br><span class="line"><span class="keyword">from</span> IPython.core.interactiveshell <span class="keyword">import</span> InteractiveShell</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotebookFinder</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Module finder that locates Jupyter Notebooks&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.loaders = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">find_module</span>(<span class="params">self, fullname, path=<span class="literal">None</span></span>):</span></span><br><span class="line">        nb_path = find_notebook(fullname, path)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> nb_path:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        key = path</span><br><span class="line">        <span class="keyword">if</span> path:</span><br><span class="line">            <span class="comment"># lists aren&#x27;t hashable</span></span><br><span class="line">            key = os.path.sep.join(path)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> self.loaders:</span><br><span class="line">            self.loaders[key] = NotebookLoader(path)</span><br><span class="line">        <span class="keyword">return</span> self.loaders[key]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_notebook</span>(<span class="params">fullname, path=<span class="literal">None</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;find a notebook, given its fully qualified name and an optional path</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    This turns &quot;foo.bar&quot; into &quot;foo/bar.ipynb&quot;</span></span><br><span class="line"><span class="string">    and tries turning &quot;Foo_Bar&quot; into &quot;Foo Bar&quot; if Foo_Bar</span></span><br><span class="line"><span class="string">    does not exist.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    name = fullname.rsplit(<span class="string">&#x27;.&#x27;</span>, <span class="number">1</span>)[-<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> path:</span><br><span class="line">        path = [<span class="string">&#x27;&#x27;</span>]</span><br><span class="line">    <span class="keyword">for</span> d <span class="keyword">in</span> path:</span><br><span class="line">        nb_path = os.path.join(d, name + <span class="string">&quot;.ipynb&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(nb_path):</span><br><span class="line">            <span class="keyword">return</span> nb_path</span><br><span class="line">        <span class="comment"># let import Notebook_Name find &quot;Notebook Name.ipynb&quot;</span></span><br><span class="line">        nb_path = nb_path.replace(<span class="string">&quot;_&quot;</span>, <span class="string">&quot; &quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(nb_path):</span><br><span class="line">            <span class="keyword">return</span> nb_path</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotebookLoader</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Module Loader for Jupyter Notebooks&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, path=<span class="literal">None</span></span>):</span></span><br><span class="line">        self.shell = InteractiveShell.instance()</span><br><span class="line">        self.path = path</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">load_module</span>(<span class="params">self, fullname</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;import a notebook as a module&quot;&quot;&quot;</span></span><br><span class="line">        path = find_notebook(fullname, self.path)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&quot;importing Jupyter notebook from %s&quot;</span> % path)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># load the notebook object</span></span><br><span class="line">        <span class="keyword">with</span> io.<span class="built_in">open</span>(path, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            nb = read(f, <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment"># create the module and add it to sys.modules</span></span><br><span class="line">        <span class="comment"># if name in sys.modules:</span></span><br><span class="line">        <span class="comment">#    return sys.modules[name]</span></span><br><span class="line">        mod = types.ModuleType(fullname)</span><br><span class="line">        mod.__file__ = path</span><br><span class="line">        mod.__loader__ = self</span><br><span class="line">        mod.__dict__[<span class="string">&#x27;get_ipython&#x27;</span>] = get_ipython</span><br><span class="line">        sys.modules[fullname] = mod</span><br><span class="line"></span><br><span class="line">        <span class="comment"># extra work to ensure that magics that would affect the user_ns</span></span><br><span class="line">        <span class="comment"># actually affect the notebook module&#x27;s ns</span></span><br><span class="line">        save_user_ns = self.shell.user_ns</span><br><span class="line">        self.shell.user_ns = mod.__dict__</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">          <span class="keyword">for</span> cell <span class="keyword">in</span> nb.cells:</span><br><span class="line">            <span class="keyword">if</span> cell.cell_type == <span class="string">&#x27;code&#x27;</span>:</span><br><span class="line">                <span class="comment"># transform the input to executable Python</span></span><br><span class="line">                code = self.shell.input_transformer_manager.transform_cell(cell.source)</span><br><span class="line">                <span class="comment"># run the code in themodule</span></span><br><span class="line">                exec(code, mod.__dict__)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            self.shell.user_ns = save_user_ns</span><br><span class="line">        <span class="keyword">return</span> mod</span><br><span class="line">sys.meta_path.append(NotebookFinder())</span><br></pre></td></tr></table></figure>
+<p>上述代码中try后的for在写入文件中的时候，编译器可能会提醒for的缩进有问题，会进行标红，不用管，缩进是没问题的。</p>
+<p>然后我们给这个文件另存为后缀为py的文件，在jupyter notebook中进行如下另存为。</p>
+<p>千万不要直接rename，直接rename是有问题的，所以不要直接rename。另存为py文件后，把这个文件放到和文件A同一个路径下，那么我们就可以如下在文件A中调用B中的函数了：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> 文件名 <span class="comment">#刚刚另存为py的那个文件名</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) <span class="comment"># 待引用的py文件B路径加到了搜索列表里</span></span><br><span class="line"><span class="keyword">import</span> B</span><br><span class="line">B.<span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
+<p>如果这时候提醒你另存为的那个文件找不到，那么就需要看看你的另存为py的那个文件名名字是否是<strong>大写字母开头</strong>，如果是小写开头也可能出问题(真的就巨坑)。</p>
+<p>然后在运行就不会提醒说找不到那个py文件了。但是有可能有如下这样报错</p>
+<p>说B文件中没有这个函数，这个一般是新建文件的时候在不同虚拟环境下创建的问题，如果是jupyter lab，如下修改即可</p>
+<p>如果是notebook，在命令行中修改。</p>
+<p>最后运行完全没问题，如果我们继续在B中写其他函数，或者修改原来的max函数，在A中运行却得不到想要的结果，这个就是A中对B进行了缓存导致的，所以需要shut down这个kernel（即文件A），然后再打开运行即可。</p>
+<p>深深体会到jupyter为什么在大工程方面被pycharm锤了，文件调用以及打开文件夹等功能真的需要改进，但不得不说jupyter 调试超棒</p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>]]></content>
+      <categories>
+        <category>jupyter</category>
+      </categories>
+      <tags>
+        <tag>jupyter</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>latex转word</title>
+    <url>/2021/01/24/latex%E8%BD%ACword/</url>
+    <content><![CDATA[<p>现在写论文几乎都是在用latex，但是在latex中，只能生成pdf，无法生成word会给我们造成不便，网上有Tex2word等方法，但那些方法是很多年前的，用过发现也不太好用甚至不能用。所以就找到了pandoc这个很棒的工具，它可以将文档在 Markdown、LaTeX、reStructuredText、HTML、Word docx 等多种标记格式之间相互转换，并支持输出 PDF、EPUB、HTML 幻灯片等多种格式。</p>
+<a id="more"></a>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>对于已经安装了anaconda的，pandoc已经被集成到anaconda中了，可以直接使用，如果没有anaconda的，可以在<a href="https://pandoc.org/installing.html">pandoc</a>官网下载。首先在cmd命令窗口中，将路径转到latex目录下，使用方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd D:\latex\latex_example1</span><br></pre></td></tr></table></figure>
+<p>将上述路径改为自己文件所在路径即可。</p>
+<p>然后输入如下命令，其中example.tex改为你需要转换的tex文件，example.doc是输出的doc文件名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex -o example.doc</span><br></pre></td></tr></table></figure>
+<p>除了可以进行tex到word的转换，还可以在Markdown、latex、HTML、Word等之间转换，后缀名变成相应的格式即可。更多可以参考下述：</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.jianshu.com/p/6ba04f669d0b">Pandoc 安装与使用</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://segmentfault.com/a/1190000021698926">Pandoc——Pandoc安装、使用、快速上手</a></p>
+
+          </blockquote>
+<h2 id="更新1"><a href="#更新1" class="headerlink" title="更新1"></a>更新1</h2><p>论文里面一般有很多张图片，但是上述命令无法转换图片，看了网上的用resource命令然后出现一堆错误，其实pandoc —help就发现他们的命令用的是错误的，不明白为什么那么多人在说什么版本问题。。。</p>
+<p>命令如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex --resource-path&#x3D;图片文件夹路径 -o example.doc</span><br></pre></td></tr></table></figure>
+<p>如相对路径如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex --resource-path&#x3D;Img -o example.doc</span><br></pre></td></tr></table></figure>
+<p>也可以用绝对路径</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex --resource-path&#x3D;D:\tex\Img -o example.doc</span><br></pre></td></tr></table></figure>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>latex</category>
+      </categories>
+      <tags>
+        <tag>latex</tag>
+        <tag>word</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>tensorflow中的参数更新机制详解</title>
+    <url>/2021/08/05/tensorflow%E4%B8%AD%E7%9A%84%E5%8F%82%E6%95%B0%E6%9B%B4%E6%96%B0%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<p>之前用的都是torch，tf倒是没怎么用过，最近由于种种原因，需要学一学tensorflow，不过tf中的大多数函数类方法都无法自动进行int—&gt;float类型强制转换，还得自行cast转换，着实麻烦。深度学习的核心所在就是梯度下降，各种优化器都是基于导数的梯度下降来的，所以自动求导更新就是至关重要的，这一节就来讲一讲tensorflow中的参数更新机制。</p>
+<a id="more"></a>
+<p>tf和torch中一样，各类参数都是以tensor即张量类型进行存储，由于模型中并不是所有的量都需要计算梯度，所以tf中会用tf.Variable(x)将tensor标记为可训练即可求导的变量。其实如果直接从少量参数和少量代码来看，似乎引入Variable意义不大，我们可以直接对需要求导的参数进行求导，得到梯度后，进行w=w-r*grad进行更新即可(w代表需要训练的参数，r为学习率，grad代表参数)，但是神经网络模型中参数巨量，这样操作会导致参数混乱，而且需要我们自己更新参数，远没有模块化的便利，所以我们希望的模块化，以函数或者方法的形式，可以反复的复用，极大的提高便捷性，所以才会出现一系列函数和方法来辅助简便化参数自动更新。</p>
+<p>值得注意的是，如果搜过以前的很多博客，应该知道图变量Variable没法自动数据流更新，也就是说你赋值过后，对图变量进行一些运算后，其数据流并没有运转起来(可以理解为没有进行运算)，需要如下才能使得数据流运转起来进行计算：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = tf.Variable(<span class="number">3</span>, name=<span class="string">&#x27;x&#x27;</span>)</span><br><span class="line">y = x * <span class="number">5</span></span><br><span class="line">sess = tf.InteractiveSession()</span><br><span class="line">sess.run(tf.global_variables_initializer())</span><br><span class="line">sess.run(y)</span><br></pre></td></tr></table></figure>
+<p>也就是使用了交互接口，然后运行初始化，在运行y在能得到x*5后操作，显得特别臃肿，但在现在的tensorflow2.3版本中，终于取消了这种颇为愚昧的操作，直接简单的像np一样运算操作就好了。(网上大多数以前的博客都没更新，其实已经不需要使用run来操作了)</p>
+<p>在通过tf.Variable对tensor标记后，我们可以通过tf.GradientTape()对这些可训练参数进行导数计算，然后将这些计算得到的梯度信息都存在磁盘里(“Tape”),磁盘名可以自取。用法如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.GradientTape(persistent=<span class="literal">True</span>,watch_accessed_variables=<span class="literal">True</span>) <span class="keyword">as</span> www:</span><br><span class="line">    a2=tf.<span class="built_in">pow</span>(a,<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p>其中tf.GradientTape有两个参数，含义入下：</p>
+<script type="math/tex; mode=display">
+persistent: 布尔值，用来指定新创建的gradient tape是否是可持续性的。默认是False，意味着只能够调用一次gradient（）函数。
+\\watch\_accessed\_variables: 布尔值，表明这个gradien tap是不是会自动追踪任何能被训练（trainable）的变量。默认是True。要是为False的话，意味着你需要手动去指定你想追踪的那些变量,手动追踪用watch。</script><p>上述的代码中，如果a是可训练参数，那么tf.GrandientTape就会自动计算a的所有操作步骤的梯度，(通过这些所有操作步骤的梯度，链式法则就可以知道各个操作之间的导数关系)。</p>
+<p>而 with A as B是什么意思呢?其实样式和for很类似，是控制流语句，for是不断遍历可迭代对象，将数据取出来(通过__next__ 操作的)，而with是把 A中的返回送给B，不过B可以接收A的任何返回（可以是方法类等等，取决自己如何用），在with下的语句执行完毕后，还会执行魔法函数__exit__（应该是在该退出函数时候将所有结果保存在了Tape中）,具体功能其实和try except是很像的，具体分析链接如下：</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/qiqicos/article/details/79200089">python中with…as的用法</a></p>
+
+          </blockquote>
+<p>下面贴一个具体例子：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=tf.constant([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],shape=(<span class="number">2</span>,<span class="number">3</span>),dtype=tf.float32)</span><br><span class="line">b=tf.Variable(a)</span><br><span class="line"><span class="keyword">with</span> tf.GradientTape(persistent=<span class="literal">True</span>,watch_accessed_variables=<span class="literal">True</span>) <span class="keyword">as</span> www:</span><br><span class="line">    www.watch(a)</span><br><span class="line">    a2=tf.<span class="built_in">pow</span>(a,<span class="number">3</span>)</span><br><span class="line">    b2=tf.exp(b)</span><br><span class="line">grad_a=www.gradient(a2,a)</span><br><span class="line">grad_b=www.gradient(b2,b)</span><br><span class="line">print(grad_a,grad_b)</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tf.Tensor(</span><br><span class="line">[[  <span class="number">3.</span>  <span class="number">12.</span>  <span class="number">27.</span>]</span><br><span class="line"> [ <span class="number">48.</span>  <span class="number">75.</span> <span class="number">108.</span>]], shape=(<span class="number">2</span>, <span class="number">3</span>), dtype=float32) tf.Tensor(</span><br><span class="line">[[  <span class="number">2.7182817</span>   <span class="number">7.389056</span>   <span class="number">20.085537</span> ]</span><br><span class="line"> [ <span class="number">54.59815</span>   <span class="number">148.41316</span>   <span class="number">403.4288</span>   ]], shape=(<span class="number">2</span>, <span class="number">3</span>), dtype=float32)</span><br></pre></td></tr></table></figure>
+<p>上述将tf.GradientTape的两个属性设为True,是可以连续使用gradient和自动纪录可训练参数的导数，而由于tensor类型不是可训练参数，所以需要手动指定watch来纪录其操作是的导数计算，如果tf.GradientTape的第二个参数设定为False，即使是可训练参数也需要手动进行指定。而www.gradient(A,B)就是从磁盘中提取出A关于B的导数。</p>
+<p>本文参考链接如下：</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/Forrest97/article/details/105913952">with tf.GradientTape() as tape 梯度带 Tensorflow自动求导API</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/xierhacker/article/details/53174558?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-3.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-3.control">TensorFlow学习（四）：梯度带(GradientTape)，优化器(Optimizer)和损失函数(losses)</a></p>
+
+          </blockquote>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>]]></content>
+      <tags>
+        <tag>-深度学习 -tensorflow</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一个有意思的面试题</title>
+    <url>/2021/03/27/%E4%B8%80%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/</url>
+    <content><![CDATA[<p>前两天室友面试深信服的时候，遇到了个有意思的题目，要求用c或者c++求解如下题目：用户输入一个可以包含加减乘除的数学表达式，你给这个表达式加上任意多的括号，使得这个表达式结果最大。</p>
+<a id="more"></a>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>来看一下这个题目，比如用户输入了如下表达式</p>
+<script type="math/tex; mode=display">
+1+2*3+5\tag{1.1}</script><p>那么我们随便加些括号</p>
+<script type="math/tex; mode=display">
+(1+2)*(3+5)\tag{1.2}</script><p>显然加上括号后比初始的结果要大，我们需要做的就是加些括号使得原始表达式最大。</p>
+<p>如果需要比较结果，第一想到的就是枚举出所有的可能性，由于括号个数和位置都是不定的，我们如何编程来找出加上括号的所有可能情况呢？</p>
+<p>我们知道一个左括号必然对应一个右括号，且用括号括住一个数是无意义的，比如((3))*2这种的括号就是无意义的，所以就是说一个括号括住至少两个数才是有意义的。看一下式(1.1)，那么我们就可以知道，1的左侧最多有三个有意义的左括号，因为1的右边只有三个数，三个左括号对应三个右括号，1的右侧最多有0个有意义的右括号，因为1左边没有其他数了，同理2的左侧有意义的括号数为2,2的右侧为1,3的左侧为1，右侧为2,5的左侧为0，右侧为3。</p>
+<p>我们定义1、2、3、5的左右侧有意义括号数为a0、a1、b0、b1、c0、c1、d0、d1(这里为了方便大家看，定义的很多变量，真正写代码的时候当然是用数组啦)，那么这些量符合如下约束：</p>
+<script type="math/tex; mode=display">
+a0+b0+c0+d0=a1+b1+c1+d1
+\\a0+b0+c0+d0    <=    3
+\\a0<=3\ \ \ \ \ a1<=0
+\\b0<=2\ \ \ \ \ b1<=1
+\\c0<=1\ \ \ \ \ c1<=2
+\\d0<=0\ \ \ \ \ d1<=3\tag{1.3}
+\\其都属于自然数</script><p>那么我们通过求解出符合条件的值即可知道如何添加括号。</p>
+<h2 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h2><p>显然式(1.3)应该是属于一个整型规划问题，那么lingo、matlab、R、python等等甚至可以通过函数或者可视化工具求解，C则需要自己实现整型规划问题的算法，如何求解整型规划问题网上教程很多，在此不做详解。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上述提出的解法只是自己个人的一点分析，里面得到的括号添加方式是可能有重复的，如((1+2*3+5))最外面的两个括号和一个括号、无括号的情况下是一样的，所以此法并非最优解法，欢迎大家可以提出更好的解法。</p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>]]></content>
+      <categories>
+        <category>优化</category>
+        <category>趣味题目</category>
+      </categories>
+      <tags>
+        <tag>博客搭建</tag>
+        <tag>整型规划</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于FPGA的手势识别系统设计</title>
+    <url>/2021/07/09/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/</url>
+    <content><![CDATA[<p>​        之前做图像处理的时候，也没有涉及过太多的深度学习，所以都是用传统算法做的，这个是本科期间做的大创（感谢陈老师帮该项目申请成了省级大创），其实不能说做的多好，因为真的发现图像处理领域很多传统算法被深度学习吊锤，而且现在FPGA加速器有崛起的势头，但是我们还是要惊羡于那些数学家的美妙构思（数学真是最美妙的学科），不多扯了，进入正题。</p>
+<a id="more"></a>
+<p>注:这里没有提到待卷积窗口的生成(3*3 or 5*5的)，大家可以参考这篇文章</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.cnblogs.com/ninghechuan/p/6789399.html">深刻认识shift_ram IP core</a></p>
+
+          </blockquote>
+<p>以后有时间会在加速器设计里讲如何生成待卷积窗口，最近有点忙。。。</p>
+<p>2.1 系统介绍<br>该项目通过FPGA驱动摄像头ov7725,通过配置寄存器使得ov7725采集到RGB565格式的数据，由于摄像头工作频率和FPGA工作频率不匹配，所以先存入ram中然后再由FPGA读出摄像头数据，为了进行图像分割，去掉除了手势以外的其他部分，我们对其进行了色域转换，将RGB565格式转为YCBCR格式，通过控制CBCR域值进行提取肤色。然后，滤除图像中的杂波,我们进行分别进行了两次腐蚀操作和两次膨胀操作，为了提高后续识别算法的鲁棒性，我们对其进行了sobel算子边缘化提取，最后，我们通过hu不变矩算法进行识别手势。其系统框图如下<a href="https://imgtu.com/i/RjL0gg"><img src="https://z3.ax1x.com/2021/07/09/RjL0gg.png" alt="RjL0gg.png"></a></p>
+<p>2.3图像处理算法模块</p>
+<p>此块详细描述</p>
+<p>（1）肤色提取</p>
+<p>为了进行肤色提取，我们需要先将RGB565格式转为YCbCr域进行识别。</p>
+<p>YCbCr是通过有序的三元组来表示的，三元由Y(Luminance)、Cb(Chrominance-Blue)、和Cr(Chrominance-Red)组成，其中Y表示颜色的明亮度和浓度，而Cb和Cr则分别表示颜色的蓝色浓度偏移量和红色浓度偏移量。人的肉眼对由YCbCr色彩空间编码的视频中的Y分量更敏感，而Cb和Cr的微小变化不会引起视觉上的不同，根据该原理，通过对Cb和Cr进行子采样来减小图像的数据量，使得图像对存储需求和传输带宽的要求大大降低，从而达到在完成图像压缩的同时也保证了视觉上几乎没有损失的效果，进而使得图像的输出速度更快，存储更加方便。值得一提的是，如果需要得到灰度图像的话，要将采集到的彩色图像转化为YCbCr后，将Y分量分别送给VGA的R、G、B，即此时R、G、B数值上是一致的(其实由于位数原因会不一致，比如RGB565，G是6位而此时RB只有5位)，这样便得到了灰度图，此处我们没有用到灰度图，所以不需要Y分量，但下述算法依旧会一并提及。</p>
+<p>我们配置摄像头采集到的数据是RGB565的格式，官方给出的转化公式是严格的RGB888转为YCbCr888，所以先需要将RGB565转化为RGB888，这个时候我们又遇到了一个有意思的问题，平时像素数据一般RGB565，但很多FPGA开发板支持的VGA不是RGB565的，EGO1就是RGB444的，那么如何将RGB565变为RGB444呢？又如何将RGB565变为RGB888？此处便提到了压缩和量化补偿思想。</p>
+<p>对于压缩，主要是一个思维：取高位。如果是RGB565格式想变成RGB444，那么再FPGA中always块只要如下三句即可：</p>
+<script type="math/tex; mode=display">
+R1<=R[4:1];
+            G1<=G[5:2];                                                                            B1<=B[4:1];</script><p>即分别取了原像素点RGB的高四位作为RGB444。</p>
+<p>  对于量化补偿，是用在扩充位数的时候用的，比如此处需要的RGB888。以RGB565转RGB888为例。   </p>
+<p>16bit RGB565 -&gt; 24bit RGB888的转换（高位补低位）</p>
+<p>16bit RGB565：</p>
+<script type="math/tex; mode=display">
+\\{R4 R3 R2 R1 R0} 
+
+\\{G5 G4 G3 G2 G1 G0}
+
+\\{B4 B3 B2 B1 B0}</script><p>24bit RGB888:</p>
+<script type="math/tex; mode=display">
+\\{ R4 R3 R2 R1 R0 R2 R1 R0}
+
+\\{ G5 G4 G3 G2 G1 G0 G1 G0}
+
+\\{ B4 B3 B2 B1 B0 B2 B1 B0}</script><p>官方给出的RGB888-&gt;YCbCr888转化公式如下：</p>
+<script type="math/tex; mode=display">
+Y=0.229R+0.587G+0.114B
+\\Cb=0.568(B-Y)+128
+\\Cr=0.713(R-Y)+128</script><p>由于FPGA无法实现浮点数运算，所以需要把系数变为整数，我们不妨将Y、Cb和Cr都扩大1024倍，然后所有系数取整，那么变成如下公式：</p>
+<p>Y=306R+601G+116B</p>
+<p>Cb=-176R-347G+523B+131072</p>
+<p>Cr=523R-438G-85B+131072</p>
+<p>这样便可以得到整型的运算，最后得到的结果右移10位即可，但为了时序的科学严谨性，我们不应该一次在always块中算出Y、Cb、Cr，因为一个关系式中涉及到三次乘法和两次加法，越多的运算量就越可能导致时序延时错乱，此处或许不会有问题，但不在一个块中用太复杂的运算式是一种好的习惯，我们应该选择业界普遍使用的流水线做法，将乘法在一个always块里实现，在另一个always块中实现加法。</p>
+<p>在转换为YCBCR后，通过限制CBCR阈值，可以提取出肤色，在FPGA中设定的初始值肤色范围为：</p>
+<script type="math/tex; mode=display">
+77<Cb<127
+\\133<Cr<173</script><p>这是一个经典的人的肤色阈值，但是为了个别人肤色差别需要调节，FPGA上给出了调节按键。最终在该范围内的像素使其为黑色，否则为白色，那么VGA上只显示出一只手。</p>
+<p>(2)腐蚀</p>
+<p>腐蚀是一种消除边界点，使边界向内部收缩的过程，可以用来消除小且无意义的物体。由于在第一步手势提取的可能出现杂波，那么为了消除这些小黑点杂波，我们进行两次腐蚀算法便可以将其消除。</p>
+<p>简单来说，腐蚀操作需要用3×3的结构元素，扫描图像的每一个像素点，用结构元素与其覆盖的二值图像做“与”操作，如果全为1，结果图像的该像素是1，否则为0。结果会使二值图像小一圈，消除像素杂波。算法原理如下：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+   P1 &= & P11 & \& & P12 & \& & P13 \\
+   P2 &= & P21 & \& & P22 & \& & P23 \\
+   P3 &= & P31 & \& & P32 & \& & P33 \\
+   P &= & P1 & \& & P2 & \& & P3 \\
+  \end{matrix}\tag{2.4}</script><p>从原理上来说，其是比较简单的，但是FPGA实现时，我们需要考虑如何得到这个3<em>3的矩阵，因为FPGA扫描像素点是一个一个进行的，一行有640个数据，如何得到三行中的三个数据呢？这个时候我们需要用到FPGA中shift ram IP核，可以说这个IP核是为了构建矩阵量身定制，其是一个只有一行的循环移位的IP核，那么我们需要两个这样的IP核，进行循环移位得到3</em>3的矩阵，然后进行腐蚀滤波。</p>
+<p>（3）膨胀</p>
+<p>膨胀与腐蚀效果相反，是将与物体接触的所有背景点合并到该物体中，使边界向外部扩张的过程，由于在腐蚀的时候，是为了消除杂波，但不可避免的减小了有效的手势区域，那么我们如何来恢复被消除的手势区域，那么此时便用到了膨胀算法。</p>
+<p>膨胀算法思维核腐蚀思维类似，都需要构建3*3的矩阵，用3×3的结构元素，扫描图像的每一个像素点，用结构元素与其覆盖的二值图像做“或”操作，如果全为0，结果图像的该像素是0，否则为1。结果会使二值图像扩大一圈。算法原理如下：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+   P1 &= & P11 & | & P12 & | & P13 \\
+   P2 &= & P21 & | & P22 & | & P23 \\
+   P3 &= & P31 & | & P32 & | & P33 \\
+   P &= & P1 & | & P2 & | & P3 \\
+  \end{matrix}\tag{2.4}</script><p>在其实现过程中，依旧需要shift ram IP核，然后得到3*3矩阵，然后用流水线法实现膨胀操作，恢复手势区域。</p>
+<p><strong>（4）Sobel边缘化</strong></p>
+<p> 此步我们进行Sobel算子边缘化提取，为什么进行Sobel化呢？Sobel化边缘提取可以提取出手势的边缘而不是整只手，这样是为了提高后续的hu不变矩识别算法的稳定性。</p>
+<p>Sobel边缘检测的核心在于像素矩阵的卷积，卷积对于数字图像处理非常重要，很多图像处理算法都是做卷积来实现的。卷积运算的本质就是对制定的图像区域的像素值进行加权求和的过程，其计算过程为图像区域中的每个像素值分别与卷积模板的每个元素对应相乘，将卷积的结果作求和运算，运算到的和就是卷积运算的结果。</p>
+<p>3×3的窗口M与卷积模板C 的卷积运算如下：</p>
+<script type="math/tex; mode=display">
+M= \left[
+ \begin{matrix}
+   M1 & M2 & M3 \\
+   M4 & M5 & M6 \\
+   M7 & M8 & M9
+  \end{matrix}
+  \right] \tag{2.4}\ \ \ \ \ \ \ \
+  C= \left[
+ \begin{matrix}
+   C1 & C2 & C3 \\
+   C4 & C5 & C6 \\
+   C7 & C8 & C9
+  \end{matrix}
+  \right]
+  \\M5'=M1*C1+M2*C2+M3*C3+M4*C4+M5*C5+\\M6*C6+M7*C7+M8*C8+M9*C9</script><p>G_x和G_y是Sobel的卷积因子，将这两个因子和原始图像做如下卷积，其中A表示原视图像。</p>
+<script type="math/tex; mode=display">
+G_x=\left[
+ \begin{matrix}
+   M1 & M2 & M3 \\
+   M4 & M5 & M6 \\
+   M7 & M8 & M9
+  \end{matrix}
+  \right] *A\tag{2.4}\ \ \ \ \ \ \
+  G_y=\left[
+ \begin{matrix}
+   M1 & M2 & M3 \\
+   M4 & M5 & M6 \\
+   M7 & M8 & M9
+  \end{matrix}
+  \right] *A</script><p>得到图像中的每一个点的横向纵向梯度G_x、G_y。最后通过如下公式来计算该点总体梯度的大小。</p>
+<script type="math/tex; mode=display">
+G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该如果算出的G大于设定的阈值，那么认为此处是边缘处，使其为黑色，否则认为不是边缘，使其为白色。</p>
+<p>上述是算法原理，很显然，这里也用到了3*3矩阵，那么又需要shift ram IP核，所以如果需要学习图像滤波等处理，shift ram需要熟练掌握。</p>
+<p><strong>（5）手势识别算法：Hu不变矩</strong></p>
+<p>对于一个提取出来的手势，我们需要有固定且唯一的特征来对其进行记录，且该特征不会受到手势的大小，旋转，平移而变化，且鲁棒性较好，所以此处引入hu不变矩算法，下面进行原理介绍:</p>
+<p>1、普通矩（也叫p+q阶不变矩），和p+q中心矩的定义</p>
+<p>对于像素分布为f(x,y)的图像，其(p+q)阶矩定义为：</p>
+<script type="math/tex; mode=display">
+m_{pq}=\int\int{x^py^qf(x,y)dxdy}\tag{5.1}</script><p>(p+q)阶中心矩定义为：</p>
+<script type="math/tex; mode=display">
+\mu_{pq}=\int\int{(x-x_0)^p(y-y_0)^qf(x,y)dxdy}\tag{5.2}</script><p>其中矩心(x_0,y_0)为：</p>
+<script type="math/tex; mode=display">
+x_0=\frac{m_{10}}{m_{00}}\ \ \ \ \ \ y_0=\frac{m_{01}}{m_{00}}</script><p>上述都是在连续量上引出的，但是FPGA只能存储离散量，得到的是离散的320<em> 240或者640 </em> 480的离散图像，那么下面引入适用于离散图像的hu不变矩：</p>
+<p>对于数字图像，离散化得到，公式如下：</p>
+<script type="math/tex; mode=display">
+m_{pq}=\sum^M_{x=1}\sum^N_{y=1}x^py^qf(x,y)</script><p>式中p、q=0，1，2….</p>
+<p>直接用普通矩或中心矩进行特征表示，不能使特征同时具有平移、旋转和比例不变性，所以我们下面进行归一化使得手势平移、旋转核比例不变性。</p>
+<p>2.归一化中心矩定义</p>
+<p>当图像发生变化时，m_pq也发生变化，而\mu_pq则具有平移不变性但对旋转依然敏感。</p>
+<p>归一化中心矩：</p>
+<script type="math/tex; mode=display">
+y_{pq}=\frac{\mu_{pq}}{\mu^r_{00}}\\
+其中r=\frac{p+q+2}{2},p+q=2,3...</script><p>如果利用归一化中心矩,则特征不仅具有平移不变性，而且还具有比例不变性。</p>
+<p>至此我们得到了最终可以应用的不变矩，为了说明其又平移、寻转、放缩不变性，下面我们进行对各个性质进行证明：</p>
+<p>（1）中心矩对于f(x,y)的平移具有不变性：</p>
+<p>假如新的坐标(x’,y’)</p>
+<script type="math/tex; mode=display">
+x'=x+\alpha\\
+y'=y+\beta</script><p>其中alpha和beta是常数，通过简单的变量代换，可以发现最终的常数会消去，得到f(x,y)和f(x’,y’)的中心矩是相同的。</p>
+<p>（2）中心矩对于缩放具有不变性：</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+   x' \\
+   y'
+  \end{matrix}
+  \right]
+  = 
+  \left[
+ \begin{matrix}
+   \alpha & 0\\
+   0 & \alpha  
+  \end{matrix}
+  \right] *
+  \left[
+ \begin{matrix}
+   x \\
+   y
+  \end{matrix}
+  \right] \tag{2.4}</script><p>alpha是个常数，(x’,y’)可以看作是(x,y)分别乘以系数alpha得到，对于每一个alpha系数有公式</p>
+<script type="math/tex; mode=display">
+a'_{pq}=\alpha^{p+q}a_{pq}</script><p>因为alpha是个常数，那么变换前后的中心矩有这样的关系：</p>
+<script type="math/tex; mode=display">
+\mu'_{pq}=\alpha^{p+q+2}\mu_{pq}</script><p>最后可以得到：</p>
+<script type="math/tex; mode=display">
+\frac{\mu'_{pq}}{(\mu')^{\frac{p+q}{2}}+1}=\frac{\mu_{pq}}{\mu^{\frac{p+q}{2}}+1}</script><p>式中p+q=2,3…</p>
+<p>这也可以称为相似不变矩性。</p>
+<p>（3）中心矩对于旋转具有不变性：</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+   x' \\
+   y'
+  \end{matrix}
+  \right]
+  = 
+  \left[
+ \begin{matrix}
+   cos\theta & sin\theta \\
+   -sin\theta & -cos\theta  
+  \end{matrix}
+  \right] *
+  \left[
+ \begin{matrix}
+   x \\
+   y
+  \end{matrix}
+  \right] \tag{2.5}</script><p>旋转矩阵的模是1。</p>
+<script type="math/tex; mode=display">
+J  = 
+  \left[
+ \begin{matrix}
+   cos\theta & sin\theta \\
+   -sin\theta & cos\theta  
+  \end{matrix}
+  \right] =
+    \pm1\tag{2.5}</script><p>将(8)和(9)式与公式(2)结合，也可以得到mu’_pq与mu_pq的关系，称为正交不变性。</p>
+<p>HU矩利用二阶和三阶归一化中心矩构造了7个不变矩，他们在连续图像条件下可保持平移、缩放和旋转不变，具体定义如下：</p>
+<script type="math/tex; mode=display">
+I_1=y_{20}+y_{02}\\
+I_2=(y_{20}-y_{02})^2+4y^2_{11}\\
+I_3=(y_{30}-3y_{12})^2+(3y_{21}-y_{03})^2\\
+I_4=(y_{30}+y_{12})^2+(y_{21}+y_{03})^2\\
+I_5=(y_{30}-3y_{12})(y_{30}+y_{12})[(y_{30}+y_{12})^2-3(y_{21}+y_{03})^2]\\
++(3y_{21}-y_{03})(y_{21}+y_{03})[3(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\
+I_6=(y_{20}-y_{02})[(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\
++4y_{11}(y_{30}+y_{12})(y_{21}+y_{03})\\
+I_7=(3y_{21}-y_{03})(y_{30}+y_{12})[(y_{30}+y_{12})^2-3(y_{21}+y_{03})^2]\\
++(3y_{12}-y_{03})(y_{21}+y_{03})[3(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\</script><p>上述共有七个不变矩，如果只需要识别数十个手势的话，只需要实现前两个不变矩即可，在FPGA实现时，需要注意的是，由于算法中有除法运算，需要调用FPAG的除法器IP核，此外，但不得不说，FPGA在处理复杂的算法方面有劣势，一个几十位的除法器延时了二十几个时钟。此外，在上述的特征值中，其特征值数值较小，是比较小的小数，所以过程中最好放大2的20次方左右这样得到整数。</p>
+<p><strong>（6）识别实现</strong></p>
+<p>在识别之前，先用是个reg寄存器存储十个hu不变矩特征值，这十个值可以是自己做的十个不同手势得到的hu不变矩结果，识别的时候，将识别的手势hu结果和存储的十个hu特征值对比，最靠近谁即认为识别的结果就是该手势，当然，也得设置一个阈值，同时还有误差小于这个阈值，防止图片中没有手势的时候都误识别出结果。</p>
+<p><strong>（7）展示</strong></p>
+<p>最终采集的图片格式是320*240的(EGO1中没有DDR，存不下640 * 480的图片)，结果如下：</p>
+<p><a href="https://imgtu.com/i/RjLsDs"><img src="https://z3.ax1x.com/2021/07/09/RjLsDs.png" alt="RjLsDs.png"></a></p>
+<p>下面展示四个手势被处理后的效果：</p>
+<p>手势一：</p>
+<p><a href="https://imgtu.com/i/RjLruj"><img src="https://z3.ax1x.com/2021/07/09/RjLruj.png" alt="RjLruj.png"></a></p>
+<p>手势二：</p>
+<p><a href="https://imgtu.com/i/RjLBvQ"><img src="https://z3.ax1x.com/2021/07/09/RjLBvQ.png" alt="RjLBvQ.png"></a></p>
+<p>手势三：</p>
+<p><a href="https://imgtu.com/i/RjLw8S"><img src="https://z3.ax1x.com/2021/07/09/RjLw8S.png" alt="RjLw8S.png"></a></p>
+<p>手势四：</p>
+<p><a href="https://imgtu.com/i/RjLybn"><img src="https://z3.ax1x.com/2021/07/09/RjLybn.png" alt="RjLybn.png"></a></p>
+<p>经过灰度化二值化膨胀腐蚀边缘化后提取的效果如下(由于摄像头插上板卡的时候斜了90度，所以VGA显示的时候也斜了90度)：</p>
+<p>手势一：</p>
+<p><a href="https://imgtu.com/i/RjLcEq"><img src="https://z3.ax1x.com/2021/07/09/RjLcEq.png" alt="RjLcEq.png"></a></p>
+<p>手势二：</p>
+<p><a href="https://imgtu.com/i/RjLgU0"><img src="https://z3.ax1x.com/2021/07/09/RjLgU0.png" alt="RjLgU0.png"></a></p>
+<p>手势三：</p>
+<p><a href="https://imgtu.com/i/RjL25V"><img src="https://z3.ax1x.com/2021/07/09/RjL25V.png" alt="RjL25V.png"></a></p>
+<p>手势四:</p>
+<p><a href="https://imgtu.com/i/RjLWCT"><img src="https://z3.ax1x.com/2021/07/09/RjLWCT.png" alt="RjLWCT.png"></a></p>
+<p>经过Hu不变矩后便可以得到不同的特征值，结果如下：</p>
+<p>手势一:</p>
+<p><a href="https://imgtu.com/i/RjLh2F"><img src="https://z3.ax1x.com/2021/07/09/RjLh2F.png" alt="RjLh2F.png"></a></p>
+<p>更多的就不放了，会拖慢博客速度，哈哈哈。</p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>
+
+]]></content>
+      <categories>
+        <category>FPGA</category>
+        <category>图像处理</category>
+      </categories>
+      <tags>
+        <tag>FPGA</tag>
+        <tag>图像处理</tag>
+        <tag>手势识别</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据量化</title>
+    <url>/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/</url>
+    <content><![CDATA[<p>在训练神经网络时候，参数存储是float类型，服务器或者电脑内存都较大，但是对于部署到硬件加速的时候，片上内存则非常珍贵，往往是不够用的，且硬件端需要存储的是整型，所以我们需要对参数进行量化。</p>
+<a id="more"></a>
+<h2 id="量化方法"><a href="#量化方法" class="headerlink" title="量化方法"></a>量化方法</h2><p>对于很多研究已经表明，深度学习的参数用16bit进行量化的时候，精度损失很小(甚至一些情况下可以用10bit/8bit进行量化)。对于参数值x，量化公式如下</p>
+<script type="math/tex; mode=display">
+q(x)=floor(x/scale+zero)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1)</script><p>这里举例介绍一下scale和zero含义，比如神经网络中float32类型的参数值都在[0,2]之间，那么我们需要将其量化为int8的话,就是说我们想把[0,2]内的值缩放到[0,255]，那么原始值在[0,2]之间的x，放缩到[0,255]之间为x’应该符合如下关系：</p>
+<script type="math/tex; mode=display">
+\frac{x}{2}=\frac{x'}{255}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (2)</script><p>分母代表区域界限大小：2=2-0,255=255-0。那么x‘就等于:</p>
+<script type="math/tex; mode=display">
+x'=\frac{x}{\frac{2}{255}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (3)</script><p>那么scale就是2/255,zero是0，所以说scale由原始范围和量化后范围决定。那么zero是用来干嘛的呢？上面是说float32的[0,2]量化为int8，int8是8位的，但是深度学习中参数是正负都有的，所以只有一个sscale一个参数无法确保量化到[0,255]这个固定范围,如果float32是在[-1,1]之间，那么通过上面的式子可以依旧确定scale是2/255，只有一个scale一个参数只能量化到[-127.5,127.5].而zero呢？zero是作为一个偏置，为了使得量化到固定范围，如果我们想量化到[0,255]范围那么zero值为:</p>
+<script type="math/tex; mode=display">
+zero=x'_{max}-\frac{x_{max}}{scale}=127.5</script><p>为什么式(1)要有一个floor进行截断呢，是由于量化后是要进行取整，则简单进行截断即可，此时量化范围为[0,255]。</p>
+<h2 id="解量化"><a href="#解量化" class="headerlink" title="解量化"></a>解量化</h2><p>在数值被量化后，就已经不是本身的值了，所以在每次卷积后需要进行解量化。</p>
+<blockquote class="blockquote-center">
+            <p>值得一提的是，对于回归类问题，是一定要进行解量化的，比如预测下一阶段某一动物的体重。但是对于分类问题，最终是比较相对大小，所以无需进行解量化，但是如果分类时为了不用解量化，记得不能使用zero，因为zero会导致初始参数的正负值和量化后的正负值不同</p>
+
+          </blockquote>
+<p>由于自己做的主要是分类问题，所以都没有用到解量化，不作详解。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>综上，对于分类问题，可以只用一个scale值进行简单的量化，也无需解量化。更多的量化类介绍可以参考如下链接</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/qq_38798425/article/details/107423892">基于FPGA的卷积神经网络实现（五）数据量化（1）</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://zhuanlan.zhihu.com/p/64744154">神经网络量化简介</a></p>
+
+          </blockquote>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>]]></content>
+      <categories>
+        <category>FPGA</category>
+      </categories>
+      <tags>
+        <tag>FPGA</tag>
+        <tag>CNN</tag>
+        <tag>加速器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>漫谈--记于光华楼前</title>
     <url>/2021/07/30/%E6%BC%AB%E8%B0%88/</url>
     <content><![CDATA[<p>来上海有一个多月了，却还没好好转过校园，昨日是烟花过后第一个晴日，奥，倒也不能说是晴天，不过总算是不下雨了，难得一个不下雨也不太热的好天气，而最近自己也感觉有点累了，就出了实验室散散心，转了校园一圈，到了光华楼前的草坪处坐了一会，人不多，零零碎碎的几个情侣，还有几个母亲带着小孩在嬉戏，听说开学的时候会有很多人，那一定会是个很壮观的场景吧。</p>
@@ -33,6 +577,18 @@
       <tags>
         <tag>光华楼</tag>
         <tag>漫谈</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>西瓜书--线性模型</title>
+    <url>/2021/08/04/%E8%A5%BF%E7%93%9C%E4%B9%A6-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>西瓜书</category>
+      </categories>
+      <tags>
+        <tag>西瓜书</tag>
+        <tag>线性模型</tag>
       </tags>
   </entry>
   <entry>
@@ -208,6 +764,7 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
 <h2 id="简称"><a href="#简称" class="headerlink" title="简称"></a>简称</h2><p>fpn:feature pyramid network 图像金字塔网络，多个遍历的窗口</p>
 <p>rpn：region proposal network 区域提名网络</p>
 <h2 id="Pytorch-amp-Numpy基础原理类"><a href="#Pytorch-amp-Numpy基础原理类" class="headerlink" title="Pytorch &amp; Numpy基础原理类"></a>Pytorch &amp; Numpy基础原理类</h2><p>别人讲的太好了，所以有些就直接放链接了。</p>
+<p>dir(类)可以查看类中的方法和属性。</p>
 <h3 id="1、广播机制。"><a href="#1、广播机制。" class="headerlink" title="1、广播机制。"></a>1、广播机制。</h3><p>广播机制主要是在两个tensor/array进行运算时候，维度不一时候用到的机制，由于广播机制元素是从内往外扩充的，所以两个tensor/array之间的维度大小从内到外要一致，不一致的两个tensor/array至少有一个维度为1或者有一个压根没那个维度。</p>
 <p>具体介绍的链接如下：</p>
 <blockquote class="blockquote-center">
@@ -497,507 +1054,6 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
         <tag>CNN</tag>
         <tag>深度学习</tag>
         <tag>目标追踪</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python之魔法函数</title>
-    <url>/2021/07/20/Python%E4%B9%8B%E9%AD%94%E6%B3%95%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<p>Python是一个很类似于matlab的语言，都是一种高层解释型语言，区别于C、C++，C、C++则是编译通过后才执行(说明语法都没有错误)，Python执行之前不需要编译链接，直接是一行行执行，将除了缩进的语言都执行一遍，为了防止在读入包/模块时候出现代码执行，出现了__name__的魔法函数，也是Python的一种内置属性，除了__name__，在读faster rcnn的torch源码时候，也会频繁遇到__call__()、 __ len__()、__ init__() 、__ getitem__()等一类魔法函数，特地去搜了搜，网上讲的很好，链接如下:</p>
-<a id="more"></a>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.zhihu.com/question/49136398">if <strong>name</strong> == ‘<strong>main</strong>‘ 如何正确理解? - 知乎 (zhihu.com)</a></p>
-
-          </blockquote>
-<blockquote class="blockquote-center">
-            <p><a href="https://zhuanlan.zhihu.com/p/344951719">Python：实例讲解Python中的魔法函数（高级语法） - 知乎 (zhihu.com)</a></p>
-
-          </blockquote>
-<p>由于上述链接讲的都很完备，下面只进行简单的总结一下。                            </p>
-<h3 id="name"><a href="#name" class="headerlink" title="__name__"></a>__name__</h3><p>大概说一下__name__吧，其本质就是Python的一个内置属性，当自己作为主文件执行时，__name__是”__main__“,而当作为模块时，则__name__就是模块名，自己也特地测试了一个，图如下，其中Write_coe是我将Python参数存储为FPGA的RAM文件格式写的自定义模块函数。</p>
-<p><a href="https://imgtu.com/i/WYpEdg"><img src="https://z3.ax1x.com/2021/07/19/WYpEdg.png" alt="WYpEdg.png"></a></p>
-<h2 id="魔法函数"><a href="#魔法函数" class="headerlink" title="魔法函数"></a>魔法函数</h2><p>魔法函数是类中的可重写的方法，有助于更灵活方便的使用类。</p>
-<h3 id="1、字符串表示：-str-和-repr-的区别"><a href="#1、字符串表示：-str-和-repr-的区别" class="headerlink" title="1、字符串表示：__str__和__repr__的区别"></a>1、<strong>字符串表示：</strong>__str__和__repr__的区别</h3><p>在Python类中，这两个方法的区别主要如下：</p>
-<p>print类的时候，首先找__str__方法，若__str__方法未进行重写，则调用__repr__(或者可以说__str__未重写的时候，初始定义和__repr__一样的)</p>
-<p>而在交互式窗口直接打实例化类的时候，则调用__repr__方法，其本质就是打印一个str字符串：类名+object at+内存地址。当然__repr__也可以重写。</p>
-<h3 id="2、集合、序列相关："><a href="#2、集合、序列相关：" class="headerlink" title="2、集合、序列相关："></a>2、集合、序列相关：</h3><h4 id="2-1、-len"><a href="#2-1、-len" class="headerlink" title="2.1、__len__"></a>2.1、__len__</h4><p>在使用len(某个class)  ，而len的函数本质是将该class作为参数传入，然后调用的是类自身的__len__方法。</p>
-<h4 id="2-2、-getitem"><a href="#2-2、-getitem" class="headerlink" title="2.2、__getitem__"></a>2.2、__getitem__</h4><div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>]]></content>
-      <categories>
-        <category>Python</category>
-        <category>魔法函数</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>魔法函数</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>基于FPGA的手势识别系统设计</title>
-    <url>/2021/07/09/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/</url>
-    <content><![CDATA[<p>​        之前做图像处理的时候，也没有涉及过太多的深度学习，所以都是用传统算法做的，这个是本科期间做的大创（感谢陈老师帮该项目申请成了省级大创），其实不能说做的多好，因为真的发现图像处理领域很多传统算法被深度学习吊锤，而且现在FPGA加速器有崛起的势头，但是我们还是要惊羡于那些数学家的美妙构思（数学真是最美妙的学科），不多扯了，进入正题。</p>
-<a id="more"></a>
-<p>注:这里没有提到待卷积窗口的生成(3*3 or 5*5的)，大家可以参考这篇文章</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.cnblogs.com/ninghechuan/p/6789399.html">深刻认识shift_ram IP core</a></p>
-
-          </blockquote>
-<p>以后有时间会在加速器设计里讲如何生成待卷积窗口，最近有点忙。。。</p>
-<p>2.1 系统介绍<br>该项目通过FPGA驱动摄像头ov7725,通过配置寄存器使得ov7725采集到RGB565格式的数据，由于摄像头工作频率和FPGA工作频率不匹配，所以先存入ram中然后再由FPGA读出摄像头数据，为了进行图像分割，去掉除了手势以外的其他部分，我们对其进行了色域转换，将RGB565格式转为YCBCR格式，通过控制CBCR域值进行提取肤色。然后，滤除图像中的杂波,我们进行分别进行了两次腐蚀操作和两次膨胀操作，为了提高后续识别算法的鲁棒性，我们对其进行了sobel算子边缘化提取，最后，我们通过hu不变矩算法进行识别手势。其系统框图如下<a href="https://imgtu.com/i/RjL0gg"><img src="https://z3.ax1x.com/2021/07/09/RjL0gg.png" alt="RjL0gg.png"></a></p>
-<p>2.3图像处理算法模块</p>
-<p>此块详细描述</p>
-<p>（1）肤色提取</p>
-<p>为了进行肤色提取，我们需要先将RGB565格式转为YCbCr域进行识别。</p>
-<p>YCbCr是通过有序的三元组来表示的，三元由Y(Luminance)、Cb(Chrominance-Blue)、和Cr(Chrominance-Red)组成，其中Y表示颜色的明亮度和浓度，而Cb和Cr则分别表示颜色的蓝色浓度偏移量和红色浓度偏移量。人的肉眼对由YCbCr色彩空间编码的视频中的Y分量更敏感，而Cb和Cr的微小变化不会引起视觉上的不同，根据该原理，通过对Cb和Cr进行子采样来减小图像的数据量，使得图像对存储需求和传输带宽的要求大大降低，从而达到在完成图像压缩的同时也保证了视觉上几乎没有损失的效果，进而使得图像的输出速度更快，存储更加方便。值得一提的是，如果需要得到灰度图像的话，要将采集到的彩色图像转化为YCbCr后，将Y分量分别送给VGA的R、G、B，即此时R、G、B数值上是一致的(其实由于位数原因会不一致，比如RGB565，G是6位而此时RB只有5位)，这样便得到了灰度图，此处我们没有用到灰度图，所以不需要Y分量，但下述算法依旧会一并提及。</p>
-<p>我们配置摄像头采集到的数据是RGB565的格式，官方给出的转化公式是严格的RGB888转为YCbCr888，所以先需要将RGB565转化为RGB888，这个时候我们又遇到了一个有意思的问题，平时像素数据一般RGB565，但很多FPGA开发板支持的VGA不是RGB565的，EGO1就是RGB444的，那么如何将RGB565变为RGB444呢？又如何将RGB565变为RGB888？此处便提到了压缩和量化补偿思想。</p>
-<p>对于压缩，主要是一个思维：取高位。如果是RGB565格式想变成RGB444，那么再FPGA中always块只要如下三句即可：</p>
-<script type="math/tex; mode=display">
-R1<=R[4:1];
-            G1<=G[5:2];                                                                            B1<=B[4:1];</script><p>即分别取了原像素点RGB的高四位作为RGB444。</p>
-<p>  对于量化补偿，是用在扩充位数的时候用的，比如此处需要的RGB888。以RGB565转RGB888为例。   </p>
-<p>16bit RGB565 -&gt; 24bit RGB888的转换（高位补低位）</p>
-<p>16bit RGB565：</p>
-<script type="math/tex; mode=display">
-\\{R4 R3 R2 R1 R0} 
-
-\\{G5 G4 G3 G2 G1 G0}
-
-\\{B4 B3 B2 B1 B0}</script><p>24bit RGB888:</p>
-<script type="math/tex; mode=display">
-\\{ R4 R3 R2 R1 R0 R2 R1 R0}
-
-\\{ G5 G4 G3 G2 G1 G0 G1 G0}
-
-\\{ B4 B3 B2 B1 B0 B2 B1 B0}</script><p>官方给出的RGB888-&gt;YCbCr888转化公式如下：</p>
-<script type="math/tex; mode=display">
-Y=0.229R+0.587G+0.114B
-\\Cb=0.568(B-Y)+128
-\\Cr=0.713(R-Y)+128</script><p>由于FPGA无法实现浮点数运算，所以需要把系数变为整数，我们不妨将Y、Cb和Cr都扩大1024倍，然后所有系数取整，那么变成如下公式：</p>
-<p>Y=306R+601G+116B</p>
-<p>Cb=-176R-347G+523B+131072</p>
-<p>Cr=523R-438G-85B+131072</p>
-<p>这样便可以得到整型的运算，最后得到的结果右移10位即可，但为了时序的科学严谨性，我们不应该一次在always块中算出Y、Cb、Cr，因为一个关系式中涉及到三次乘法和两次加法，越多的运算量就越可能导致时序延时错乱，此处或许不会有问题，但不在一个块中用太复杂的运算式是一种好的习惯，我们应该选择业界普遍使用的流水线做法，将乘法在一个always块里实现，在另一个always块中实现加法。</p>
-<p>在转换为YCBCR后，通过限制CBCR阈值，可以提取出肤色，在FPGA中设定的初始值肤色范围为：</p>
-<script type="math/tex; mode=display">
-77<Cb<127
-\\133<Cr<173</script><p>这是一个经典的人的肤色阈值，但是为了个别人肤色差别需要调节，FPGA上给出了调节按键。最终在该范围内的像素使其为黑色，否则为白色，那么VGA上只显示出一只手。</p>
-<p>(2)腐蚀</p>
-<p>腐蚀是一种消除边界点，使边界向内部收缩的过程，可以用来消除小且无意义的物体。由于在第一步手势提取的可能出现杂波，那么为了消除这些小黑点杂波，我们进行两次腐蚀算法便可以将其消除。</p>
-<p>简单来说，腐蚀操作需要用3×3的结构元素，扫描图像的每一个像素点，用结构元素与其覆盖的二值图像做“与”操作，如果全为1，结果图像的该像素是1，否则为0。结果会使二值图像小一圈，消除像素杂波。算法原理如下：</p>
-<script type="math/tex; mode=display">
-\begin{matrix}
-   P1 &= & P11 & \& & P12 & \& & P13 \\
-   P2 &= & P21 & \& & P22 & \& & P23 \\
-   P3 &= & P31 & \& & P32 & \& & P33 \\
-   P &= & P1 & \& & P2 & \& & P3 \\
-  \end{matrix}\tag{2.4}</script><p>从原理上来说，其是比较简单的，但是FPGA实现时，我们需要考虑如何得到这个3<em>3的矩阵，因为FPGA扫描像素点是一个一个进行的，一行有640个数据，如何得到三行中的三个数据呢？这个时候我们需要用到FPGA中shift ram IP核，可以说这个IP核是为了构建矩阵量身定制，其是一个只有一行的循环移位的IP核，那么我们需要两个这样的IP核，进行循环移位得到3</em>3的矩阵，然后进行腐蚀滤波。</p>
-<p>（3）膨胀</p>
-<p>膨胀与腐蚀效果相反，是将与物体接触的所有背景点合并到该物体中，使边界向外部扩张的过程，由于在腐蚀的时候，是为了消除杂波，但不可避免的减小了有效的手势区域，那么我们如何来恢复被消除的手势区域，那么此时便用到了膨胀算法。</p>
-<p>膨胀算法思维核腐蚀思维类似，都需要构建3*3的矩阵，用3×3的结构元素，扫描图像的每一个像素点，用结构元素与其覆盖的二值图像做“或”操作，如果全为0，结果图像的该像素是0，否则为1。结果会使二值图像扩大一圈。算法原理如下：</p>
-<script type="math/tex; mode=display">
-\begin{matrix}
-   P1 &= & P11 & | & P12 & | & P13 \\
-   P2 &= & P21 & | & P22 & | & P23 \\
-   P3 &= & P31 & | & P32 & | & P33 \\
-   P &= & P1 & | & P2 & | & P3 \\
-  \end{matrix}\tag{2.4}</script><p>在其实现过程中，依旧需要shift ram IP核，然后得到3*3矩阵，然后用流水线法实现膨胀操作，恢复手势区域。</p>
-<p><strong>（4）Sobel边缘化</strong></p>
-<p> 此步我们进行Sobel算子边缘化提取，为什么进行Sobel化呢？Sobel化边缘提取可以提取出手势的边缘而不是整只手，这样是为了提高后续的hu不变矩识别算法的稳定性。</p>
-<p>Sobel边缘检测的核心在于像素矩阵的卷积，卷积对于数字图像处理非常重要，很多图像处理算法都是做卷积来实现的。卷积运算的本质就是对制定的图像区域的像素值进行加权求和的过程，其计算过程为图像区域中的每个像素值分别与卷积模板的每个元素对应相乘，将卷积的结果作求和运算，运算到的和就是卷积运算的结果。</p>
-<p>3×3的窗口M与卷积模板C 的卷积运算如下：</p>
-<script type="math/tex; mode=display">
-M= \left[
- \begin{matrix}
-   M1 & M2 & M3 \\
-   M4 & M5 & M6 \\
-   M7 & M8 & M9
-  \end{matrix}
-  \right] \tag{2.4}\ \ \ \ \ \ \ \
-  C= \left[
- \begin{matrix}
-   C1 & C2 & C3 \\
-   C4 & C5 & C6 \\
-   C7 & C8 & C9
-  \end{matrix}
-  \right]
-  \\M5'=M1*C1+M2*C2+M3*C3+M4*C4+M5*C5+\\M6*C6+M7*C7+M8*C8+M9*C9</script><p>G_x和G_y是Sobel的卷积因子，将这两个因子和原始图像做如下卷积，其中A表示原视图像。</p>
-<script type="math/tex; mode=display">
-G_x=\left[
- \begin{matrix}
-   M1 & M2 & M3 \\
-   M4 & M5 & M6 \\
-   M7 & M8 & M9
-  \end{matrix}
-  \right] *A\tag{2.4}\ \ \ \ \ \ \
-  G_y=\left[
- \begin{matrix}
-   M1 & M2 & M3 \\
-   M4 & M5 & M6 \\
-   M7 & M8 & M9
-  \end{matrix}
-  \right] *A</script><p>得到图像中的每一个点的横向纵向梯度G_x、G_y。最后通过如下公式来计算该点总体梯度的大小。</p>
-<script type="math/tex; mode=display">
-G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该如果算出的G大于设定的阈值，那么认为此处是边缘处，使其为黑色，否则认为不是边缘，使其为白色。</p>
-<p>上述是算法原理，很显然，这里也用到了3*3矩阵，那么又需要shift ram IP核，所以如果需要学习图像滤波等处理，shift ram需要熟练掌握。</p>
-<p><strong>（5）手势识别算法：Hu不变矩</strong></p>
-<p>对于一个提取出来的手势，我们需要有固定且唯一的特征来对其进行记录，且该特征不会受到手势的大小，旋转，平移而变化，且鲁棒性较好，所以此处引入hu不变矩算法，下面进行原理介绍:</p>
-<p>1、普通矩（也叫p+q阶不变矩），和p+q中心矩的定义</p>
-<p>对于像素分布为f(x,y)的图像，其(p+q)阶矩定义为：</p>
-<script type="math/tex; mode=display">
-m_{pq}=\int\int{x^py^qf(x,y)dxdy}\tag{5.1}</script><p>(p+q)阶中心矩定义为：</p>
-<script type="math/tex; mode=display">
-\mu_{pq}=\int\int{(x-x_0)^p(y-y_0)^qf(x,y)dxdy}\tag{5.2}</script><p>其中矩心(x_0,y_0)为：</p>
-<script type="math/tex; mode=display">
-x_0=\frac{m_{10}}{m_{00}}\ \ \ \ \ \ y_0=\frac{m_{01}}{m_{00}}</script><p>上述都是在连续量上引出的，但是FPGA只能存储离散量，得到的是离散的320<em> 240或者640 </em> 480的离散图像，那么下面引入适用于离散图像的hu不变矩：</p>
-<p>对于数字图像，离散化得到，公式如下：</p>
-<script type="math/tex; mode=display">
-m_{pq}=\sum^M_{x=1}\sum^N_{y=1}x^py^qf(x,y)</script><p>式中p、q=0，1，2….</p>
-<p>直接用普通矩或中心矩进行特征表示，不能使特征同时具有平移、旋转和比例不变性，所以我们下面进行归一化使得手势平移、旋转核比例不变性。</p>
-<p>2.归一化中心矩定义</p>
-<p>当图像发生变化时，m_pq也发生变化，而\mu_pq则具有平移不变性但对旋转依然敏感。</p>
-<p>归一化中心矩：</p>
-<script type="math/tex; mode=display">
-y_{pq}=\frac{\mu_{pq}}{\mu^r_{00}}\\
-其中r=\frac{p+q+2}{2},p+q=2,3...</script><p>如果利用归一化中心矩,则特征不仅具有平移不变性，而且还具有比例不变性。</p>
-<p>至此我们得到了最终可以应用的不变矩，为了说明其又平移、寻转、放缩不变性，下面我们进行对各个性质进行证明：</p>
-<p>（1）中心矩对于f(x,y)的平移具有不变性：</p>
-<p>假如新的坐标(x’,y’)</p>
-<script type="math/tex; mode=display">
-x'=x+\alpha\\
-y'=y+\beta</script><p>其中alpha和beta是常数，通过简单的变量代换，可以发现最终的常数会消去，得到f(x,y)和f(x’,y’)的中心矩是相同的。</p>
-<p>（2）中心矩对于缩放具有不变性：</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-   x' \\
-   y'
-  \end{matrix}
-  \right]
-  = 
-  \left[
- \begin{matrix}
-   \alpha & 0\\
-   0 & \alpha  
-  \end{matrix}
-  \right] *
-  \left[
- \begin{matrix}
-   x \\
-   y
-  \end{matrix}
-  \right] \tag{2.4}</script><p>alpha是个常数，(x’,y’)可以看作是(x,y)分别乘以系数alpha得到，对于每一个alpha系数有公式</p>
-<script type="math/tex; mode=display">
-a'_{pq}=\alpha^{p+q}a_{pq}</script><p>因为alpha是个常数，那么变换前后的中心矩有这样的关系：</p>
-<script type="math/tex; mode=display">
-\mu'_{pq}=\alpha^{p+q+2}\mu_{pq}</script><p>最后可以得到：</p>
-<script type="math/tex; mode=display">
-\frac{\mu'_{pq}}{(\mu')^{\frac{p+q}{2}}+1}=\frac{\mu_{pq}}{\mu^{\frac{p+q}{2}}+1}</script><p>式中p+q=2,3…</p>
-<p>这也可以称为相似不变矩性。</p>
-<p>（3）中心矩对于旋转具有不变性：</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-   x' \\
-   y'
-  \end{matrix}
-  \right]
-  = 
-  \left[
- \begin{matrix}
-   cos\theta & sin\theta \\
-   -sin\theta & -cos\theta  
-  \end{matrix}
-  \right] *
-  \left[
- \begin{matrix}
-   x \\
-   y
-  \end{matrix}
-  \right] \tag{2.5}</script><p>旋转矩阵的模是1。</p>
-<script type="math/tex; mode=display">
-J  = 
-  \left[
- \begin{matrix}
-   cos\theta & sin\theta \\
-   -sin\theta & cos\theta  
-  \end{matrix}
-  \right] =
-    \pm1\tag{2.5}</script><p>将(8)和(9)式与公式(2)结合，也可以得到mu’_pq与mu_pq的关系，称为正交不变性。</p>
-<p>HU矩利用二阶和三阶归一化中心矩构造了7个不变矩，他们在连续图像条件下可保持平移、缩放和旋转不变，具体定义如下：</p>
-<script type="math/tex; mode=display">
-I_1=y_{20}+y_{02}\\
-I_2=(y_{20}-y_{02})^2+4y^2_{11}\\
-I_3=(y_{30}-3y_{12})^2+(3y_{21}-y_{03})^2\\
-I_4=(y_{30}+y_{12})^2+(y_{21}+y_{03})^2\\
-I_5=(y_{30}-3y_{12})(y_{30}+y_{12})[(y_{30}+y_{12})^2-3(y_{21}+y_{03})^2]\\
-+(3y_{21}-y_{03})(y_{21}+y_{03})[3(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\
-I_6=(y_{20}-y_{02})[(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\
-+4y_{11}(y_{30}+y_{12})(y_{21}+y_{03})\\
-I_7=(3y_{21}-y_{03})(y_{30}+y_{12})[(y_{30}+y_{12})^2-3(y_{21}+y_{03})^2]\\
-+(3y_{12}-y_{03})(y_{21}+y_{03})[3(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\</script><p>上述共有七个不变矩，如果只需要识别数十个手势的话，只需要实现前两个不变矩即可，在FPGA实现时，需要注意的是，由于算法中有除法运算，需要调用FPAG的除法器IP核，此外，但不得不说，FPGA在处理复杂的算法方面有劣势，一个几十位的除法器延时了二十几个时钟。此外，在上述的特征值中，其特征值数值较小，是比较小的小数，所以过程中最好放大2的20次方左右这样得到整数。</p>
-<p><strong>（6）识别实现</strong></p>
-<p>在识别之前，先用是个reg寄存器存储十个hu不变矩特征值，这十个值可以是自己做的十个不同手势得到的hu不变矩结果，识别的时候，将识别的手势hu结果和存储的十个hu特征值对比，最靠近谁即认为识别的结果就是该手势，当然，也得设置一个阈值，同时还有误差小于这个阈值，防止图片中没有手势的时候都误识别出结果。</p>
-<p><strong>（7）展示</strong></p>
-<p>最终采集的图片格式是320*240的(EGO1中没有DDR，存不下640 * 480的图片)，结果如下：</p>
-<p><a href="https://imgtu.com/i/RjLsDs"><img src="https://z3.ax1x.com/2021/07/09/RjLsDs.png" alt="RjLsDs.png"></a></p>
-<p>下面展示四个手势被处理后的效果：</p>
-<p>手势一：</p>
-<p><a href="https://imgtu.com/i/RjLruj"><img src="https://z3.ax1x.com/2021/07/09/RjLruj.png" alt="RjLruj.png"></a></p>
-<p>手势二：</p>
-<p><a href="https://imgtu.com/i/RjLBvQ"><img src="https://z3.ax1x.com/2021/07/09/RjLBvQ.png" alt="RjLBvQ.png"></a></p>
-<p>手势三：</p>
-<p><a href="https://imgtu.com/i/RjLw8S"><img src="https://z3.ax1x.com/2021/07/09/RjLw8S.png" alt="RjLw8S.png"></a></p>
-<p>手势四：</p>
-<p><a href="https://imgtu.com/i/RjLybn"><img src="https://z3.ax1x.com/2021/07/09/RjLybn.png" alt="RjLybn.png"></a></p>
-<p>经过灰度化二值化膨胀腐蚀边缘化后提取的效果如下(由于摄像头插上板卡的时候斜了90度，所以VGA显示的时候也斜了90度)：</p>
-<p>手势一：</p>
-<p><a href="https://imgtu.com/i/RjLcEq"><img src="https://z3.ax1x.com/2021/07/09/RjLcEq.png" alt="RjLcEq.png"></a></p>
-<p>手势二：</p>
-<p><a href="https://imgtu.com/i/RjLgU0"><img src="https://z3.ax1x.com/2021/07/09/RjLgU0.png" alt="RjLgU0.png"></a></p>
-<p>手势三：</p>
-<p><a href="https://imgtu.com/i/RjL25V"><img src="https://z3.ax1x.com/2021/07/09/RjL25V.png" alt="RjL25V.png"></a></p>
-<p>手势四:</p>
-<p><a href="https://imgtu.com/i/RjLWCT"><img src="https://z3.ax1x.com/2021/07/09/RjLWCT.png" alt="RjLWCT.png"></a></p>
-<p>经过Hu不变矩后便可以得到不同的特征值，结果如下：</p>
-<p>手势一:</p>
-<p><a href="https://imgtu.com/i/RjLh2F"><img src="https://z3.ax1x.com/2021/07/09/RjLh2F.png" alt="RjLh2F.png"></a></p>
-<p>更多的就不放了，会拖慢博客速度，哈哈哈。</p>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>
-
-]]></content>
-      <categories>
-        <category>FPGA</category>
-        <category>图像处理</category>
-      </categories>
-      <tags>
-        <tag>FPGA</tag>
-        <tag>图像处理</tag>
-        <tag>手势识别</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>jupyter lab实现跨文件的函数调用</title>
-    <url>/2021/04/10/jupyter%20lab%E5%AE%9E%E7%8E%B0%E8%B7%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/</url>
-    <content><![CDATA[<p>在python各类编译器中，jupyter notebook真的是非常非常棒的调试工具，但是jupyter notebook在大工程方面却是逊于pycharm的，其虽然调试很方便，但是却不是像pycharm一样打开一整个文件夹，所以其团队又开发了jupyter lab来弥补缺陷，而jupyter lab的代码补齐真的又一言难尽，由于jupyter lab本身并不是完善，用了kite工具辅助代码补齐，即使操作完全没问题，kite也可能不工作，工作了也发现kite速度真的超慢又浪费CPU</p>
-<a id="more"></a>
-<p>算了，毕竟jupyter lab已经是一大进步了，平时我们写代码，模块化是非常重要的，所以经常会分文件进行写函数，然后跨文件调用，python中跨文件调用很简单，如果想在文件A中调用文件B中的max函数，如下即可：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment"># 待引用的py文件B路径加到了搜索列表里</span></span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) </span><br><span class="line"><span class="keyword">import</span> B</span><br><span class="line">B.<span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
-<p>或者如下</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment"># 待引用的py文件路径加到了搜索列表里</span></span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) </span><br><span class="line">form B <span class="keyword">import</span> <span class="built_in">max</span></span><br><span class="line"><span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
-<p>A和B若是在同一路径下，可以无需添加路径。</p>
-<p>但上述的方法是用来py文件跨文件调用的，而jupyter中的文件不是py而是ipynb文件，那么上述这个方法就没法在jupyter中用了，官方给出了一个解决方法，先在jupyter中建立一个文件，写入如下代码：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># In[ ]:</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io, os,sys,types</span><br><span class="line"><span class="keyword">from</span> IPython <span class="keyword">import</span> get_ipython</span><br><span class="line"><span class="keyword">from</span> nbformat <span class="keyword">import</span> read</span><br><span class="line"><span class="keyword">from</span> IPython.core.interactiveshell <span class="keyword">import</span> InteractiveShell</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotebookFinder</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Module finder that locates Jupyter Notebooks&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.loaders = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">find_module</span>(<span class="params">self, fullname, path=<span class="literal">None</span></span>):</span></span><br><span class="line">        nb_path = find_notebook(fullname, path)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> nb_path:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        key = path</span><br><span class="line">        <span class="keyword">if</span> path:</span><br><span class="line">            <span class="comment"># lists aren&#x27;t hashable</span></span><br><span class="line">            key = os.path.sep.join(path)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> self.loaders:</span><br><span class="line">            self.loaders[key] = NotebookLoader(path)</span><br><span class="line">        <span class="keyword">return</span> self.loaders[key]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_notebook</span>(<span class="params">fullname, path=<span class="literal">None</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;find a notebook, given its fully qualified name and an optional path</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    This turns &quot;foo.bar&quot; into &quot;foo/bar.ipynb&quot;</span></span><br><span class="line"><span class="string">    and tries turning &quot;Foo_Bar&quot; into &quot;Foo Bar&quot; if Foo_Bar</span></span><br><span class="line"><span class="string">    does not exist.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    name = fullname.rsplit(<span class="string">&#x27;.&#x27;</span>, <span class="number">1</span>)[-<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> path:</span><br><span class="line">        path = [<span class="string">&#x27;&#x27;</span>]</span><br><span class="line">    <span class="keyword">for</span> d <span class="keyword">in</span> path:</span><br><span class="line">        nb_path = os.path.join(d, name + <span class="string">&quot;.ipynb&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(nb_path):</span><br><span class="line">            <span class="keyword">return</span> nb_path</span><br><span class="line">        <span class="comment"># let import Notebook_Name find &quot;Notebook Name.ipynb&quot;</span></span><br><span class="line">        nb_path = nb_path.replace(<span class="string">&quot;_&quot;</span>, <span class="string">&quot; &quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(nb_path):</span><br><span class="line">            <span class="keyword">return</span> nb_path</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotebookLoader</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Module Loader for Jupyter Notebooks&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, path=<span class="literal">None</span></span>):</span></span><br><span class="line">        self.shell = InteractiveShell.instance()</span><br><span class="line">        self.path = path</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">load_module</span>(<span class="params">self, fullname</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;import a notebook as a module&quot;&quot;&quot;</span></span><br><span class="line">        path = find_notebook(fullname, self.path)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&quot;importing Jupyter notebook from %s&quot;</span> % path)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># load the notebook object</span></span><br><span class="line">        <span class="keyword">with</span> io.<span class="built_in">open</span>(path, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            nb = read(f, <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment"># create the module and add it to sys.modules</span></span><br><span class="line">        <span class="comment"># if name in sys.modules:</span></span><br><span class="line">        <span class="comment">#    return sys.modules[name]</span></span><br><span class="line">        mod = types.ModuleType(fullname)</span><br><span class="line">        mod.__file__ = path</span><br><span class="line">        mod.__loader__ = self</span><br><span class="line">        mod.__dict__[<span class="string">&#x27;get_ipython&#x27;</span>] = get_ipython</span><br><span class="line">        sys.modules[fullname] = mod</span><br><span class="line"></span><br><span class="line">        <span class="comment"># extra work to ensure that magics that would affect the user_ns</span></span><br><span class="line">        <span class="comment"># actually affect the notebook module&#x27;s ns</span></span><br><span class="line">        save_user_ns = self.shell.user_ns</span><br><span class="line">        self.shell.user_ns = mod.__dict__</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">          <span class="keyword">for</span> cell <span class="keyword">in</span> nb.cells:</span><br><span class="line">            <span class="keyword">if</span> cell.cell_type == <span class="string">&#x27;code&#x27;</span>:</span><br><span class="line">                <span class="comment"># transform the input to executable Python</span></span><br><span class="line">                code = self.shell.input_transformer_manager.transform_cell(cell.source)</span><br><span class="line">                <span class="comment"># run the code in themodule</span></span><br><span class="line">                exec(code, mod.__dict__)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            self.shell.user_ns = save_user_ns</span><br><span class="line">        <span class="keyword">return</span> mod</span><br><span class="line">sys.meta_path.append(NotebookFinder())</span><br></pre></td></tr></table></figure>
-<p>上述代码中try后的for在写入文件中的时候，编译器可能会提醒for的缩进有问题，会进行标红，不用管，缩进是没问题的。</p>
-<p>然后我们给这个文件另存为后缀为py的文件，在jupyter notebook中进行如下另存为。</p>
-<p>千万不要直接rename，直接rename是有问题的，所以不要直接rename。另存为py文件后，把这个文件放到和文件A同一个路径下，那么我们就可以如下在文件A中调用B中的函数了：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> 文件名 <span class="comment">#刚刚另存为py的那个文件名</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) <span class="comment"># 待引用的py文件B路径加到了搜索列表里</span></span><br><span class="line"><span class="keyword">import</span> B</span><br><span class="line">B.<span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
-<p>如果这时候提醒你另存为的那个文件找不到，那么就需要看看你的另存为py的那个文件名名字是否是<strong>大写字母开头</strong>，如果是小写开头也可能出问题(真的就巨坑)。</p>
-<p>然后在运行就不会提醒说找不到那个py文件了。但是有可能有如下这样报错</p>
-<p>说B文件中没有这个函数，这个一般是新建文件的时候在不同虚拟环境下创建的问题，如果是jupyter lab，如下修改即可</p>
-<p>如果是notebook，在命令行中修改。</p>
-<p>最后运行完全没问题，如果我们继续在B中写其他函数，或者修改原来的max函数，在A中运行却得不到想要的结果，这个就是A中对B进行了缓存导致的，所以需要shut down这个kernel（即文件A），然后再打开运行即可。</p>
-<p>深深体会到jupyter为什么在大工程方面被pycharm锤了，文件调用以及打开文件夹等功能真的需要改进，但不得不说jupyter 调试超棒</p>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>]]></content>
-      <categories>
-        <category>jupyter</category>
-      </categories>
-      <tags>
-        <tag>jupyter</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>一个有意思的面试题</title>
-    <url>/2021/03/27/%E4%B8%80%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/</url>
-    <content><![CDATA[<p>前两天室友面试深信服的时候，遇到了个有意思的题目，要求用c或者c++求解如下题目：用户输入一个可以包含加减乘除的数学表达式，你给这个表达式加上任意多的括号，使得这个表达式结果最大。</p>
-<a id="more"></a>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>来看一下这个题目，比如用户输入了如下表达式</p>
-<script type="math/tex; mode=display">
-1+2*3+5\tag{1.1}</script><p>那么我们随便加些括号</p>
-<script type="math/tex; mode=display">
-(1+2)*(3+5)\tag{1.2}</script><p>显然加上括号后比初始的结果要大，我们需要做的就是加些括号使得原始表达式最大。</p>
-<p>如果需要比较结果，第一想到的就是枚举出所有的可能性，由于括号个数和位置都是不定的，我们如何编程来找出加上括号的所有可能情况呢？</p>
-<p>我们知道一个左括号必然对应一个右括号，且用括号括住一个数是无意义的，比如((3))*2这种的括号就是无意义的，所以就是说一个括号括住至少两个数才是有意义的。看一下式(1.1)，那么我们就可以知道，1的左侧最多有三个有意义的左括号，因为1的右边只有三个数，三个左括号对应三个右括号，1的右侧最多有0个有意义的右括号，因为1左边没有其他数了，同理2的左侧有意义的括号数为2,2的右侧为1,3的左侧为1，右侧为2,5的左侧为0，右侧为3。</p>
-<p>我们定义1、2、3、5的左右侧有意义括号数为a0、a1、b0、b1、c0、c1、d0、d1(这里为了方便大家看，定义的很多变量，真正写代码的时候当然是用数组啦)，那么这些量符合如下约束：</p>
-<script type="math/tex; mode=display">
-a0+b0+c0+d0=a1+b1+c1+d1
-\\a0+b0+c0+d0    <=    3
-\\a0<=3\ \ \ \ \ a1<=0
-\\b0<=2\ \ \ \ \ b1<=1
-\\c0<=1\ \ \ \ \ c1<=2
-\\d0<=0\ \ \ \ \ d1<=3\tag{1.3}
-\\其都属于自然数</script><p>那么我们通过求解出符合条件的值即可知道如何添加括号。</p>
-<h2 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h2><p>显然式(1.3)应该是属于一个整型规划问题，那么lingo、matlab、R、python等等甚至可以通过函数或者可视化工具求解，C则需要自己实现整型规划问题的算法，如何求解整型规划问题网上教程很多，在此不做详解。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上述提出的解法只是自己个人的一点分析，里面得到的括号添加方式是可能有重复的，如((1+2*3+5))最外面的两个括号和一个括号、无括号的情况下是一样的，所以此法并非最优解法，欢迎大家可以提出更好的解法。</p>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>]]></content>
-      <categories>
-        <category>优化</category>
-        <category>趣味题目</category>
-      </categories>
-      <tags>
-        <tag>博客搭建</tag>
-        <tag>整型规划</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据量化</title>
-    <url>/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/</url>
-    <content><![CDATA[<p>在训练神经网络时候，参数存储是float类型，服务器或者电脑内存都较大，但是对于部署到硬件加速的时候，片上内存则非常珍贵，往往是不够用的，且硬件端需要存储的是整型，所以我们需要对参数进行量化。</p>
-<a id="more"></a>
-<h2 id="量化方法"><a href="#量化方法" class="headerlink" title="量化方法"></a>量化方法</h2><p>对于很多研究已经表明，深度学习的参数用16bit进行量化的时候，精度损失很小(甚至一些情况下可以用10bit/8bit进行量化)。对于参数值x，量化公式如下</p>
-<script type="math/tex; mode=display">
-q(x)=floor(x/scale+zero)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1)</script><p>这里举例介绍一下scale和zero含义，比如神经网络中float32类型的参数值都在[0,2]之间，那么我们需要将其量化为int8的话,就是说我们想把[0,2]内的值缩放到[0,255]，那么原始值在[0,2]之间的x，放缩到[0,255]之间为x’应该符合如下关系：</p>
-<script type="math/tex; mode=display">
-\frac{x}{2}=\frac{x'}{255}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (2)</script><p>分母代表区域界限大小：2=2-0,255=255-0。那么x‘就等于:</p>
-<script type="math/tex; mode=display">
-x'=\frac{x}{\frac{2}{255}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (3)</script><p>那么scale就是2/255,zero是0，所以说scale由原始范围和量化后范围决定。那么zero是用来干嘛的呢？上面是说float32的[0,2]量化为int8，int8是8位的，但是深度学习中参数是正负都有的，所以只有一个sscale一个参数无法确保量化到[0,255]这个固定范围,如果float32是在[-1,1]之间，那么通过上面的式子可以依旧确定scale是2/255，只有一个scale一个参数只能量化到[-127.5,127.5].而zero呢？zero是作为一个偏置，为了使得量化到固定范围，如果我们想量化到[0,255]范围那么zero值为:</p>
-<script type="math/tex; mode=display">
-zero=x'_{max}-\frac{x_{max}}{scale}=127.5</script><p>为什么式(1)要有一个floor进行截断呢，是由于量化后是要进行取整，则简单进行截断即可，此时量化范围为[0,255]。</p>
-<h2 id="解量化"><a href="#解量化" class="headerlink" title="解量化"></a>解量化</h2><p>在数值被量化后，就已经不是本身的值了，所以在每次卷积后需要进行解量化。</p>
-<blockquote class="blockquote-center">
-            <p>值得一提的是，对于回归类问题，是一定要进行解量化的，比如预测下一阶段某一动物的体重。但是对于分类问题，最终是比较相对大小，所以无需进行解量化，但是如果分类时为了不用解量化，记得不能使用zero，因为zero会导致初始参数的正负值和量化后的正负值不同</p>
-
-          </blockquote>
-<p>由于自己做的主要是分类问题，所以都没有用到解量化，不作详解。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>综上，对于分类问题，可以只用一个scale值进行简单的量化，也无需解量化。更多的量化类介绍可以参考如下链接</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://blog.csdn.net/qq_38798425/article/details/107423892">基于FPGA的卷积神经网络实现（五）数据量化（1）</a></p>
-
-          </blockquote>
-<blockquote class="blockquote-center">
-            <p><a href="https://zhuanlan.zhihu.com/p/64744154">神经网络量化简介</a></p>
-
-          </blockquote>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>]]></content>
-      <categories>
-        <category>FPGA</category>
-      </categories>
-      <tags>
-        <tag>FPGA</tag>
-        <tag>CNN</tag>
-        <tag>加速器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>latex转word</title>
-    <url>/2021/01/24/latex%E8%BD%ACword/</url>
-    <content><![CDATA[<p>现在写论文几乎都是在用latex，但是在latex中，只能生成pdf，无法生成word会给我们造成不便，网上有Tex2word等方法，但那些方法是很多年前的，用过发现也不太好用甚至不能用。所以就找到了pandoc这个很棒的工具，它可以将文档在 Markdown、LaTeX、reStructuredText、HTML、Word docx 等多种标记格式之间相互转换，并支持输出 PDF、EPUB、HTML 幻灯片等多种格式。</p>
-<a id="more"></a>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>对于已经安装了anaconda的，pandoc已经被集成到anaconda中了，可以直接使用，如果没有anaconda的，可以在<a href="https://pandoc.org/installing.html">pandoc</a>官网下载。首先在cmd命令窗口中，将路径转到latex目录下，使用方法如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd D:\latex\latex_example1</span><br></pre></td></tr></table></figure>
-<p>将上述路径改为自己文件所在路径即可。</p>
-<p>然后输入如下命令，其中example.tex改为你需要转换的tex文件，example.doc是输出的doc文件名</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex -o example.doc</span><br></pre></td></tr></table></figure>
-<p>除了可以进行tex到word的转换，还可以在Markdown、latex、HTML、Word等之间转换，后缀名变成相应的格式即可。更多可以参考下述：</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.jianshu.com/p/6ba04f669d0b">Pandoc 安装与使用</a></p>
-
-          </blockquote>
-<blockquote class="blockquote-center">
-            <p><a href="https://segmentfault.com/a/1190000021698926">Pandoc——Pandoc安装、使用、快速上手</a></p>
-
-          </blockquote>
-<h2 id="更新1"><a href="#更新1" class="headerlink" title="更新1"></a>更新1</h2><p>论文里面一般有很多张图片，但是上述命令无法转换图片，看了网上的用resource命令然后出现一堆错误，其实pandoc —help就发现他们的命令用的是错误的，不明白为什么那么多人在说什么版本问题。。。</p>
-<p>命令如下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex --resource-path&#x3D;图片文件夹路径 -o example.doc</span><br></pre></td></tr></table></figure>
-<p>如相对路径如下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex --resource-path&#x3D;Img -o example.doc</span><br></pre></td></tr></table></figure>
-<p>也可以用绝对路径</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex --resource-path&#x3D;D:\tex\Img -o example.doc</span><br></pre></td></tr></table></figure>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>
-
-
-
-
-
-
-
-]]></content>
-      <categories>
-        <category>latex</category>
-      </categories>
-      <tags>
-        <tag>latex</tag>
-        <tag>word</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客搭建和规划</title>
-    <url>/2021/01/19/hello-world/</url>
-    <content><![CDATA[<p>欢迎来到<a href="http://gezhilai.com/">我的博客</a>! 这是我的第一篇博客. 受到疫情影响，今年都无法留校，但早早的回家也不能荒废了时间，就参考了一些文章搭建了这个博客，一是为了记下自己学习的过程，二也是可以和大家分享知识。下面主要说一说博客搭建参考的文章和未来博客准备发的东西。</p>
-<a id="more"></a>
-<h2 id="博客搭建"><a href="#博客搭建" class="headerlink" title="博客搭建"></a>博客搭建</h2><h3 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h3><p>搭建过程中，参考了如下几篇文章</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.jianshu.com/p/39562a0d8eb6">可能是最详细的 Hexo + GitHub Pages 搭建博客的教程</a></p>
-
-          </blockquote>
-<blockquote class="blockquote-center">
-            <p><a href="https://zhuanlan.zhihu.com/p/26625249">GitHub+Hexo 搭建个人网站详细教程</a></p>
-
-          </blockquote>
-<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>在后续优化中，强烈推荐下面这个博主</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://tding.top/">小丁的个人博客</a></p>
-
-          </blockquote>
-<p>如果具体操作还有些问题，可以顺带看一下下面的视频，</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.bilibili.com/video/BV16W411t7mq?p=21">使用Hexo博客搭建的个人博客，使用Next主题来进行优化改造</a></p>
-
-          </blockquote>
-<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><p>1、公式无法显示问题参考如下博客，</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://blog.csdn.net/weixin_44489823/article/details/105028860">hexo next主题解决无法显示数学公式</a></p>
-
-          </blockquote>
-<p>其中mathjax开启可以在markdown顶部写如下命令进行开启显示数学公式</p>
-<blockquote class="blockquote-center">
-            <p>mathjax: true #显示数学公式</p>
-
-          </blockquote>
-<p>2、更新博客后，登录网站后发现没有新内容，是由于浏览器缓存功能导致，在浏览器设置—隐私中清除一下缓存或者等待几分钟即可</p>
-<h2 id="博客规划"><a href="#博客规划" class="headerlink" title="博客规划"></a>博客规划</h2><p>在后续中，主要会写一写以前做过和学过的东西，包括FPGA、FPGA图像处理、深度学习、机器学习以及西瓜书、花书和凸优化等书的学习分享。当然必然不会仅限于此，但自己也不知道以后还会学些什么，所以暂且写这些吧，假期期间会把上述几本书仔细读一读。</p>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>
-
-
-
-
-
-
-
-]]></content>
-      <categories>
-        <category>Hexo</category>
-        <category>搭建</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>博客搭建</tag>
       </tags>
   </entry>
 </search>
