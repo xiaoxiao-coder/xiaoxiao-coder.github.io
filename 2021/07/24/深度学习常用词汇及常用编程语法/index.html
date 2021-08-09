@@ -32,7 +32,7 @@
 <meta property="og:description" content="之前说要更新一下本科期间做的一些东西，然后再讲解一下加速器如何在FPGA上搭建，结果太忙了。。。。木得时间，后面有时间慢慢补上。 最近读了faster rcnn和yolo的源码，里面用到的一些函数自己不常用或者用法新奇或者有时候自己忘掉的，而且最先读faster rcnn，two-stage的源码的确比较复杂，原理很快看懂，读源码花了几天才搞明白，写篇博客不断更新记录一下遇到的一些函数和用法，防止">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-07-23T19:52:32.000Z">
-<meta property="article:modified_time" content="2021-08-05T07:10:48.152Z">
+<meta property="article:modified_time" content="2021-08-05T08:47:41.589Z">
 <meta property="article:author" content="Apers">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="CNN">
@@ -143,17 +143,17 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">20</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">22</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">15</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">17</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">12</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">13</span></a>
 
   </li>
         <li class="menu-item menu-item-schedule">
@@ -273,7 +273,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-05 07:10:48" itemprop="dateModified" datetime="2021-08-05T07:10:48Z">2021-08-05</time>
+                <time title="修改时间：2021-08-05 08:47:41" itemprop="dateModified" datetime="2021-08-05T08:47:41Z">2021-08-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -323,7 +323,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>18k</span>
+              <span>19k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -352,7 +352,7 @@
 <h2 id="简称"><a href="#简称" class="headerlink" title="简称"></a>简称</h2><p>fpn:feature pyramid network 图像金字塔网络，多个遍历的窗口</p>
 <p>rpn：region proposal network 区域提名网络</p>
 <h2 id="Pytorch-amp-Numpy基础原理类"><a href="#Pytorch-amp-Numpy基础原理类" class="headerlink" title="Pytorch &amp; Numpy基础原理类"></a>Pytorch &amp; Numpy基础原理类</h2><p>别人讲的太好了，所以有些就直接放链接了。</p>
-<p>dir(类)可以查看类中的方法和属性。</p>
+<p>dir(类)可以查看类中的方法和属性，比如range(10)打印不可视化，可以dir(range(10)),可以看到有str和repr方法，但其实这两个打印的都不可视化，可以用list强制转换就可以打印了(一些自定义类中，可以自己重写__len__，这样就可以使用len()函数了)。</p>
 <h3 id="1、广播机制。"><a href="#1、广播机制。" class="headerlink" title="1、广播机制。"></a>1、广播机制。</h3><p>广播机制主要是在两个tensor/array进行运算时候，维度不一时候用到的机制，由于广播机制元素是从内往外扩充的，所以两个tensor/array之间的维度大小从内到外要一致，不一致的两个tensor/array至少有一个维度为1或者有一个压根没那个维度。</p>
 <p>具体介绍的链接如下：</p>
 <blockquote class="blockquote-center">
@@ -405,7 +405,7 @@
 <p>Iterator即迭代器，Iterable对象通过<strong>iter</strong>方法可以得到Iterator(注意得到Iterator并不是返回，需要得到返回Iterator类型的，用iter()强制转换)，Iterable即可迭代对象是一个元素个数已知且可遍历的对象，通过<strong>iter</strong>方法就得到了个数未知但依旧可遍历的对象Iterator，然后通过<strong>next</strong>进行遍历Iterator，<strong>next</strong>方法不断往下取数据，无数据取出时抛出StopIteration 异常停止迭代。</p>
 <p>其实可以看出Iterator和Iterable很像，其实Iterable调用<strong>iter</strong>方法得到的Iterator，是一个继承Iterable的子类</p>
 <p>2.1.3、判别Iterable和Iterator</p>
-<p>判断一个变量的类型，可以通过isinstance()或者type()函数，但两者有所区别，type不认为子类是和父类是同一个类型，但isinstance则认为子类属于父类的类型，父类不属于子类的类型。推荐使用isinstance，因为平时往往认为子类和父类是一个类别的。</p>
+<p>判断一个变量的类型，可以通过isinstance()或者type()函数，但两者有所区别，type不认为子类是和父类是同一个类型，但isinstance则认为子类属于父类的类型，父类不属于子类的类型。推荐使用isinstance，因为平时往往认为子类和父类是一个类别的。(instance中是子类属于父类，父类不是子类，针对父类的函数，子类都可以传进去，还可以正确运行：看缪雪峰的面向对象章，这就是类的多态，)</p>
 <p>isinstance例子如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a&#x3D;1</span><br><span class="line">print(isinstance(a,int),isinstance(a,str),isinstance(a,dict),isinstance(a,(int,str,dict,list)))</span><br></pre></td></tr></table></figure>
 <p>结果如下，判别属于某个类别，isinstance第二个元素可以是元组。</p>
@@ -628,6 +628,10 @@
 <p>清华：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a></p>
 <p>阿里云：<a target="_blank" rel="noopener external nofollow noreferrer" href="http://mirrors.aliyun.com/pypi/simple/">http://mirrors.aliyun.com/pypi/simple/</a></p>
 <p>中国科技大学 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://pypi.mirrors.ustc.edu.cn/simple/">https://pypi.mirrors.ustc.edu.cn/simple/</a></p>
+<h2 id="学习网站"><a href="#学习网站" class="headerlink" title="学习网站"></a>学习网站</h2><blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.liaoxuefeng.com/wiki/1016959663602400/1017496031185408">缪雪峰的官方网站</a></p>
+
+          </blockquote>
 <div>
     
         <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
@@ -746,7 +750,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%90%8D%E8%AF%8D"><span class="nav-number">1.</span> <span class="nav-text">常用名词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E7%A7%B0"><span class="nav-number">2.</span> <span class="nav-text">简称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">Pytorch &amp; Numpy基础原理类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%B9%BF%E6%92%AD%E6%9C%BA%E5%88%B6%E3%80%82"><span class="nav-number">3.1.</span> <span class="nav-text">1、广播机制。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%AD%98%E5%82%A8%E5%92%8C%E8%A7%86%E5%9B%BE%E3%80%82"><span class="nav-number">3.2.</span> <span class="nav-text">2、存储和视图。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%96%84%E7%94%A8%EF%BC%9F%E6%9F%A5%E7%9C%8B%E5%87%BD%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">善用？查看函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy"><span class="nav-number">4.</span> <span class="nav-text">Pytorch &amp; Numpy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%93%E5%AE%89%E8%A3%85"><span class="nav-number">5.</span> <span class="nav-text">库安装</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%90%8D%E8%AF%8D"><span class="nav-number">1.</span> <span class="nav-text">常用名词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E7%A7%B0"><span class="nav-number">2.</span> <span class="nav-text">简称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">Pytorch &amp; Numpy基础原理类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%B9%BF%E6%92%AD%E6%9C%BA%E5%88%B6%E3%80%82"><span class="nav-number">3.1.</span> <span class="nav-text">1、广播机制。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%AD%98%E5%82%A8%E5%92%8C%E8%A7%86%E5%9B%BE%E3%80%82"><span class="nav-number">3.2.</span> <span class="nav-text">2、存储和视图。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%96%84%E7%94%A8%EF%BC%9F%E6%9F%A5%E7%9C%8B%E5%87%BD%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">善用？查看函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy"><span class="nav-number">4.</span> <span class="nav-text">Pytorch &amp; Numpy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%93%E5%AE%89%E8%A3%85"><span class="nav-number">5.</span> <span class="nav-text">库安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%AB%99"><span class="nav-number">6.</span> <span class="nav-text">学习网站</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -762,20 +766,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1086,13 +1090,13 @@ if(canvas.getContext){
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">38k</span>
+    <span title="站点总字数">67k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">34 分钟</span>
+    <span title="站点阅读时长">1:01</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a> 强力驱动
   </div>

@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="Dc-vXTJ_Z0o0sirD51XHawJ1YZQdyEgKKbOXaI7Mo7E">
+  <meta name="baidu-site-verification" content="k7ID4DXsv2">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"gezhilai.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="中图杯师兄给了去年的r3net代码，backbone用的是resnet，一堆堆代码垒起来了，假期还有时间，就慢慢看，看代码过程中，顺便把tf巩固一下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="r3det代码详解(一)">
+<meta property="og:url" content="http://gezhilai.com/2021/08/07/r3net%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="Apers&#39; Blog">
+<meta property="og:description" content="中图杯师兄给了去年的r3net代码，backbone用的是resnet，一堆堆代码垒起来了，假期还有时间，就慢慢看，看代码过程中，顺便把tf巩固一下。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-06T20:04:43.000Z">
+<meta property="article:modified_time" content="2021-08-09T12:11:54.518Z">
+<meta property="article:author" content="Apers">
+<meta property="article:tag" content="tensorflow">
+<meta property="article:tag" content="r3det">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://gezhilai.com/2021/08/07/r3net%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>r3det代码详解(一) | Apers' Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e7dd5726174410a42696b9a0189c1ed0# <app_id>";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Apers' Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">茶亦醉人何必酒,书能香我不须花</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">22</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">17</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">13</span></a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links" rel="section"><i class="fa fa-fw fa-link"></i>友链</a>
+
+  </li>
+        <li class="menu-item menu-item-movies">
+
+    <a href="/movies/" rel="section"><i class="fa fa-fw fa-film"></i>观影</a>
+
+  </li>
+        <li class="menu-item menu-item-books">
+
+    <a href="/books/" rel="section"><i class="fa fa-fw fa-book"></i>阅读</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/08/07/r3net%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
+      <meta itemprop="name" content="Apers">
+      <meta itemprop="description" content="若有诗书藏于心,岁月从不败美人">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Apers' Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          r3det代码详解(一)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+	
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-06 20:04:43" itemprop="dateCreated datePublished" datetime="2021-08-06T20:04:43Z">2021-08-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-09 12:11:54" itemprop="dateModified" datetime="2021-08-09T12:11:54Z">2021-08-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tensorflow/" itemprop="url" rel="index"><span itemprop="name">tensorflow</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tensorflow/r3det/" itemprop="url" rel="index"><span itemprop="name">r3det</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/08/07/r3net%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="r3det代码详解(一)" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/08/07/r3net%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/07/r3net%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>29k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>26 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>中图杯师兄给了去年的r3net代码，backbone用的是resnet，一堆堆代码垒起来了，假期还有时间，就慢慢看，看代码过程中，顺便把tf巩固一下。</p>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train</span>():</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.Graph().as_default(), tf.device(<span class="string">&#x27;/cpu:0&#x27;</span>):<span class="comment">#指定一个默认的数据流图，在当前with外也不会关闭，指定使用的运算设备</span></span><br><span class="line">                                                        <span class="comment">#strip去掉字符串两边空格，split是分割字符串，返回列表，元素是分割的</span></span><br><span class="line">        num_gpu = <span class="built_in">len</span>(cfgs.GPU_GROUP.strip().split(<span class="string">&#x27;,&#x27;</span>))<span class="comment">#自定义包，包中都有init，这是必要的，GPU_GROUP是字符串，代表使用几个GPU，这里使用了2和3，其实可以使用四个的</span></span><br><span class="line">        global_step = slim.get_or_create_global_step()<span class="comment">#创建全局阶跃张量,2.3版本中说slim的这个函数未来会弃用，但是貌似建议使用的tf.train.get_or_create_global_step的已经在tf2.0被丢弃了，在compat.v1中了</span></span><br><span class="line">        lr = warmup_lr(cfgs.LR, global_step, cfgs.WARM_SETP, num_gpu)</span><br><span class="line">        tf.summary.scalar(<span class="string">&#x27;lr&#x27;</span>, lr)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> tf.name_scope(<span class="string">&#x27;get_batch&#x27;</span>):</span><br><span class="line">            <span class="keyword">if</span> cfgs.IMAGE_PYRAMID:</span><br><span class="line">                shortside_len_list = tf.constant(cfgs.IMG_SHORT_SIDE_LEN)</span><br><span class="line">                shortside_len = tf.random_shuffle(shortside_len_list)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                shortside_len = cfgs.IMG_SHORT_SIDE_LEN</span><br><span class="line"></span><br><span class="line">            img_name_batch, img_batch, gtboxes_and_label_batch, num_objects_batch, img_h_batch, img_w_batch = \</span><br><span class="line">                next_batch(dataset_name=cfgs.DATASET_NAME,</span><br><span class="line">                           batch_size=cfgs.BATCH_SIZE * num_gpu,</span><br><span class="line">                           shortside_len=shortside_len,</span><br><span class="line">                           is_training=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        optimizer = tf.train.MomentumOptimizer(lr, momentum=cfgs.MOMENTUM)</span><br><span class="line">        r3det_plusplus = build_whole_network_r3det_plusplus.DetectionNetwork(</span><br><span class="line">            base_network_name=cfgs.NET_NAME,</span><br><span class="line">            is_training=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># data processing</span></span><br><span class="line">        inputs_list = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_gpu):</span><br><span class="line">            img = tf.expand_dims(img_batch[i], axis=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> cfgs.NET_NAME <span class="keyword">in</span> [<span class="string">&#x27;resnet152_v1d&#x27;</span>, <span class="string">&#x27;resnet101_v1d&#x27;</span>, <span class="string">&#x27;resnet50_v1d&#x27;</span>]:</span><br><span class="line">                img = img / tf.constant([cfgs.PIXEL_STD])</span><br><span class="line"></span><br><span class="line">            gtboxes_and_label_r = tf.py_func(backward_convert,</span><br><span class="line">                                             inp=[gtboxes_and_label_batch[i]],</span><br><span class="line">                                             Tout=tf.float32)</span><br><span class="line">            gtboxes_and_label_r = tf.reshape(gtboxes_and_label_r, [-<span class="number">1</span>, <span class="number">6</span>])</span><br><span class="line"></span><br><span class="line">            gtboxes_and_label_h = get_horizen_minAreaRectangle(gtboxes_and_label_batch[i])</span><br><span class="line">            gtboxes_and_label_h = tf.reshape(gtboxes_and_label_h, [-<span class="number">1</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line">            num_objects = num_objects_batch[i]</span><br><span class="line">            num_objects = tf.cast(tf.reshape(num_objects, [-<span class="number">1</span>, ]), tf.float32)</span><br><span class="line"></span><br><span class="line">            img_h = img_h_batch[i]</span><br><span class="line">            img_w = img_w_batch[i]</span><br><span class="line"></span><br><span class="line">            inputs_list.append([img, gtboxes_and_label_h, gtboxes_and_label_r, num_objects, img_h, img_w])</span><br><span class="line"></span><br><span class="line">        tower_grads = []</span><br><span class="line">        biases_regularizer = tf.no_regularizer</span><br><span class="line">        <span class="comment"># weights_regularizer = tf.contrib.layers.l2_regularizer(cfgs.WEIGHT_DECAY)</span></span><br><span class="line">        weights_regularizer = tf.keras.regularizers.l2(cfgs.WEIGHT_DECAY)</span><br><span class="line"></span><br><span class="line">        total_loss_dict = &#123;</span><br><span class="line">            <span class="string">&#x27;cls_loss&#x27;</span>: tf.constant(<span class="number">0.</span>, tf.float32),</span><br><span class="line">            <span class="string">&#x27;reg_loss&#x27;</span>: tf.constant(<span class="number">0.</span>, tf.float32),</span><br><span class="line">            <span class="string">&#x27;refine_cls_loss&#x27;</span>: tf.constant(<span class="number">0.</span>, tf.float32),</span><br><span class="line">            <span class="string">&#x27;refine_reg_loss&#x27;</span>: tf.constant(<span class="number">0.</span>, tf.float32),</span><br><span class="line">            <span class="string">&#x27;refine_cls_loss_stage3&#x27;</span>: tf.constant(<span class="number">0.</span>, tf.float32),</span><br><span class="line">            <span class="string">&#x27;refine_reg_loss_stage3&#x27;</span>: tf.constant(<span class="number">0.</span>, tf.float32),</span><br><span class="line">            <span class="string">&#x27;total_losses&#x27;</span>: tf.constant(<span class="number">0.</span>, tf.float32),</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> cfgs.USE_SUPERVISED_MASK:</span><br><span class="line">            total_loss_dict[<span class="string">&#x27;mask_loss&#x27;</span>] = tf.constant(<span class="number">0.</span>, tf.float32)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> tf.variable_scope(tf.get_variable_scope()):</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_gpu):</span><br><span class="line">                <span class="keyword">with</span> tf.device(<span class="string">&#x27;/gpu:%d&#x27;</span> % i):</span><br><span class="line">                    <span class="keyword">with</span> tf.name_scope(<span class="string">&#x27;tower_%d&#x27;</span> % i):</span><br><span class="line">                        <span class="keyword">with</span> slim.arg_scope(</span><br><span class="line">                                [slim.model_variable, slim.variable],</span><br><span class="line">                                device=<span class="string">&#x27;/device:CPU:0&#x27;</span>):</span><br><span class="line">                            <span class="keyword">with</span> slim.arg_scope([slim.conv2d, slim.conv2d_in_plane,</span><br><span class="line">                                                 slim.conv2d_transpose, slim.separable_conv2d, slim.fully_connected],</span><br><span class="line">                                                weights_regularizer=weights_regularizer,</span><br><span class="line">                                                biases_regularizer=biases_regularizer,</span><br><span class="line">                                                biases_initializer=tf.constant_initializer(<span class="number">0.0</span>)):</span><br><span class="line"></span><br><span class="line">                                gtboxes_and_label_h, gtboxes_and_label_r = tf.py_func(get_gtboxes_and_label,</span><br><span class="line">                                                                                      inp=[inputs_list[i][<span class="number">1</span>],</span><br><span class="line">                                                                                           inputs_list[i][<span class="number">2</span>],</span><br><span class="line">                                                                                           inputs_list[i][<span class="number">3</span>]],</span><br><span class="line">                                                                                      Tout=[tf.float32, tf.float32])</span><br><span class="line">                                gtboxes_and_label_h = tf.reshape(gtboxes_and_label_h, [-<span class="number">1</span>, <span class="number">5</span>])</span><br><span class="line">                                gtboxes_and_label_r = tf.reshape(gtboxes_and_label_r, [-<span class="number">1</span>, <span class="number">6</span>])</span><br><span class="line"></span><br><span class="line">                                img = inputs_list[i][<span class="number">0</span>]</span><br><span class="line">                                img_shape = inputs_list[i][-<span class="number">2</span>:]</span><br><span class="line">                                img = tf.image.crop_to_bounding_box(image=img,</span><br><span class="line">                                                                    offset_height=<span class="number">0</span>,</span><br><span class="line">                                                                    offset_width=<span class="number">0</span>,</span><br><span class="line">                                                                    target_height=tf.cast(img_shape[<span class="number">0</span>], tf.int32),</span><br><span class="line">                                                                    target_width=tf.cast(img_shape[<span class="number">1</span>], tf.int32))</span><br><span class="line"></span><br><span class="line">                                outputs = r3det_plusplus.build_whole_detection_network(input_img_batch=img,</span><br><span class="line">                                                                                       gtboxes_batch_h=gtboxes_and_label_h,</span><br><span class="line">                                                                                       gtboxes_batch_r=gtboxes_and_label_r,</span><br><span class="line">                                                                                       gpu_id=i)</span><br><span class="line">                                gtboxes_in_img_h = draw_boxes_with_categories(img_batch=img,</span><br><span class="line">                                                                              boxes=gtboxes_and_label_h[:, :-<span class="number">1</span>],</span><br><span class="line">                                                                              labels=gtboxes_and_label_h[:, -<span class="number">1</span>],</span><br><span class="line">                                                                              method=<span class="number">0</span>)</span><br><span class="line">                                gtboxes_in_img_r = draw_boxes_with_categories(img_batch=img,</span><br><span class="line">                                                                              boxes=gtboxes_and_label_r[:, :-<span class="number">1</span>],</span><br><span class="line">                                                                              labels=gtboxes_and_label_r[:, -<span class="number">1</span>],</span><br><span class="line">                                                                              method=<span class="number">1</span>)</span><br><span class="line">                                tf.summary.image(<span class="string">&#x27;Compare/gtboxes_h_gpu:%d&#x27;</span> % i, gtboxes_in_img_h)</span><br><span class="line">                                tf.summary.image(<span class="string">&#x27;Compare/gtboxes_r_gpu:%d&#x27;</span> % i, gtboxes_in_img_r)</span><br><span class="line"></span><br><span class="line">                                <span class="keyword">if</span> cfgs.ADD_BOX_IN_TENSORBOARD:</span><br><span class="line">                                    detections_in_img = draw_boxes_with_categories_and_scores(</span><br><span class="line">                                        img_batch=img,</span><br><span class="line">                                        boxes=outputs[<span class="number">0</span>],</span><br><span class="line">                                        scores=outputs[<span class="number">1</span>],</span><br><span class="line">                                        labels=outputs[<span class="number">2</span>],</span><br><span class="line">                                        method=<span class="number">1</span>)</span><br><span class="line">                                    tf.summary.image(<span class="string">&#x27;Compare/final_detection_gpu:%d&#x27;</span> % i, detections_in_img)</span><br><span class="line"></span><br><span class="line">                                loss_dict = outputs[-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">                                total_losses = <span class="number">0.0</span></span><br><span class="line">                                <span class="keyword">for</span> k <span class="keyword">in</span> loss_dict.keys():</span><br><span class="line">                                    total_losses += loss_dict[k]</span><br><span class="line">                                    total_loss_dict[k] += loss_dict[k] / num_gpu</span><br><span class="line"></span><br><span class="line">                                total_losses = total_losses / num_gpu</span><br><span class="line">                                total_loss_dict[<span class="string">&#x27;total_losses&#x27;</span>] += total_losses</span><br><span class="line"></span><br><span class="line">                                <span class="keyword">if</span> i == num_gpu - <span class="number">1</span>:</span><br><span class="line">                                    regularization_losses = tf.get_collection(</span><br><span class="line">                                        tf.GraphKeys.REGULARIZATION_LOSSES)</span><br><span class="line">                                    <span class="comment"># weight_decay_loss = tf.add_n(slim.losses.get_regularization_losses())</span></span><br><span class="line">                                    total_losses = total_losses + tf.add_n(regularization_losses)</span><br><span class="line"></span><br><span class="line">                        tf.get_variable_scope().reuse_variables()</span><br><span class="line">                        grads = optimizer.compute_gradients(total_losses)</span><br><span class="line">                        <span class="keyword">if</span> cfgs.GRADIENT_CLIPPING_BY_NORM <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                            grads = slim.learning.clip_gradient_norms(grads, cfgs.GRADIENT_CLIPPING_BY_NORM)</span><br><span class="line">                        tower_grads.append(grads)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> k <span class="keyword">in</span> total_loss_dict.keys():</span><br><span class="line">            tf.summary.scalar(<span class="string">&#x27;&#123;&#125;/&#123;&#125;&#x27;</span>.<span class="built_in">format</span>(k.split(<span class="string">&#x27;_&#x27;</span>)[<span class="number">0</span>], k), total_loss_dict[k])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(tower_grads) &gt; <span class="number">1</span>:</span><br><span class="line">            grads = sum_gradients(tower_grads)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            grads = tower_grads[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> cfgs.MUTILPY_BIAS_GRADIENT <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            final_gvs = []</span><br><span class="line">            <span class="keyword">with</span> tf.variable_scope(<span class="string">&#x27;Gradient_Mult&#x27;</span>):</span><br><span class="line">                <span class="keyword">for</span> grad, var <span class="keyword">in</span> grads:</span><br><span class="line">                    scale = <span class="number">1.</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="string">&#x27;/biases:&#x27;</span> <span class="keyword">in</span> var.name:</span><br><span class="line">                        scale *= cfgs.MUTILPY_BIAS_GRADIENT</span><br><span class="line">                    <span class="keyword">if</span> <span class="string">&#x27;conv_new&#x27;</span> <span class="keyword">in</span> var.name:</span><br><span class="line">                        scale *= <span class="number">3.</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="keyword">not</span> np.allclose(scale, <span class="number">1.0</span>):</span><br><span class="line">                        grad = tf.multiply(grad, scale)</span><br><span class="line"></span><br><span class="line">                    final_gvs.append((grad, var))</span><br><span class="line">            apply_gradient_op = optimizer.apply_gradients(final_gvs, global_step=global_step)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            apply_gradient_op = optimizer.apply_gradients(grads, global_step=global_step)</span><br><span class="line"></span><br><span class="line">        variable_averages = tf.train.ExponentialMovingAverage(<span class="number">0.9999</span>, global_step)</span><br><span class="line">        variables_averages_op = variable_averages.apply(tf.trainable_variables())</span><br><span class="line"></span><br><span class="line">        train_op = tf.group(apply_gradient_op, variables_averages_op)</span><br><span class="line">        <span class="comment"># train_op = optimizer.apply_gradients(final_gvs, global_step=global_step)</span></span><br><span class="line">        summary_op = tf.summary.merge_all()</span><br><span class="line"></span><br><span class="line">        restorer, restore_ckpt = r3det_plusplus.get_restorer()</span><br><span class="line">        saver = tf.train.Saver(max_to_keep=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">        init_op = tf.group(</span><br><span class="line">            tf.global_variables_initializer(),</span><br><span class="line">            tf.local_variables_initializer()</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        tfconfig = tf.ConfigProto(</span><br><span class="line">            allow_soft_placement=<span class="literal">True</span>, log_device_placement=<span class="literal">False</span>)</span><br><span class="line">        tfconfig.gpu_options.allow_growth = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">with</span> tf.Session(config=tfconfig) <span class="keyword">as</span> sess:</span><br><span class="line">            sess.run(init_op)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># sess.run(tf.initialize_all_variables())</span></span><br><span class="line">            coord = tf.train.Coordinator()</span><br><span class="line">            threads = tf.train.start_queue_runners(coord=coord, sess=sess)</span><br><span class="line"></span><br><span class="line">            summary_path = os.path.join(cfgs.SUMMARY_PATH, cfgs.VERSION)</span><br><span class="line">            tools.mkdir(summary_path)</span><br><span class="line">            summary_writer = tf.summary.FileWriter(summary_path, graph=sess.graph)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> restorer <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                restorer.restore(sess, restore_ckpt)</span><br><span class="line">                print(<span class="string">&#x27;restore model&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> step <span class="keyword">in</span> <span class="built_in">range</span>(cfgs.MAX_ITERATION // num_gpu):</span><br><span class="line">                training_time = time.strftime(<span class="string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span>, time.localtime(time.time()))</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> step % cfgs.SHOW_TRAIN_INFO_INTE != <span class="number">0</span> <span class="keyword">and</span> step % cfgs.SMRY_ITER != <span class="number">0</span>:</span><br><span class="line">                    _, global_stepnp = sess.run([train_op, global_step])</span><br><span class="line"></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">if</span> step % cfgs.SHOW_TRAIN_INFO_INTE == <span class="number">0</span> <span class="keyword">and</span> step % cfgs.SMRY_ITER != <span class="number">0</span>:</span><br><span class="line">                        start = time.time()</span><br><span class="line">                        _, global_stepnp, total_loss_dict_ = \</span><br><span class="line">                            sess.run([train_op, global_step, total_loss_dict])</span><br><span class="line"></span><br><span class="line">                        end = time.time()</span><br><span class="line"></span><br><span class="line">                        print(<span class="string">&#x27;***&#x27;</span>*<span class="number">20</span>)</span><br><span class="line">                        print(<span class="string">&quot;&quot;&quot;%s: global_step:%d  current_step:%d&quot;&quot;&quot;</span></span><br><span class="line">                              % (training_time, (global_stepnp-<span class="number">1</span>)*num_gpu, step*num_gpu))</span><br><span class="line">                        print(<span class="string">&quot;&quot;&quot;per_cost_time:%.3fs&quot;&quot;&quot;</span></span><br><span class="line">                              % ((end - start) / num_gpu))</span><br><span class="line">                        loss_str = <span class="string">&#x27;&#x27;</span></span><br><span class="line">                        <span class="keyword">for</span> k <span class="keyword">in</span> total_loss_dict_.keys():</span><br><span class="line">                            loss_str += <span class="string">&#x27;%s:%.3f\n&#x27;</span> % (k, total_loss_dict_[k])</span><br><span class="line">                        print(loss_str)</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">if</span> np.isnan(total_loss_dict_[<span class="string">&#x27;total_losses&#x27;</span>]):</span><br><span class="line">                            sys.exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        <span class="keyword">if</span> step % cfgs.SMRY_ITER == <span class="number">0</span>:</span><br><span class="line">                            _, global_stepnp, summary_str = sess.run([train_op, global_step, summary_op])</span><br><span class="line">                            summary_writer.add_summary(summary_str, (global_stepnp-<span class="number">1</span>)*num_gpu)</span><br><span class="line">                            summary_writer.flush()</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (step &gt; <span class="number">0</span> <span class="keyword">and</span> step % (cfgs.SAVE_WEIGHTS_INTE // num_gpu) == <span class="number">0</span>) <span class="keyword">or</span> (step &gt;= cfgs.MAX_ITERATION // num_gpu - <span class="number">1</span>):</span><br><span class="line"></span><br><span class="line">                    save_dir = os.path.join(cfgs.TRAINED_CKPT, cfgs.VERSION)</span><br><span class="line">                    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(save_dir):</span><br><span class="line">                        os.mkdir(save_dir)</span><br><span class="line"></span><br><span class="line">                    save_ckpt = os.path.join(save_dir, <span class="string">&#x27;&#123;&#125;_&#x27;</span>.<span class="built_in">format</span>(cfgs.DATASET_NAME) +</span><br><span class="line">                                             <span class="built_in">str</span>((global_stepnp-<span class="number">1</span>)*num_gpu) + <span class="string">&#x27;model.ckpt&#x27;</span>)</span><br><span class="line">                    saver.save(sess, save_ckpt)</span><br><span class="line">                    print(<span class="string">&#x27; weights had been saved&#x27;</span>)</span><br><span class="line"></span><br><span class="line">            coord.request_stop()</span><br><span class="line">            coord.join(threads)</span><br></pre></td></tr></table></figure>
+<p>下面开始逐步解释：</p>
+<p>1、</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Graph().as_default(), tf.device(<span class="string">&#x27;/cpu:0&#x27;</span>):</span><br></pre></td></tr></table></figure>
+<p>这里解释一下数据流图，学习神经网络的时候，经常会有绘制的多层感知机原理图，线代表数据流向，而圆圈就代表神经元，也就是运算单元，将数据流传输过去后，在神经元中得到运算。而tf中的数据流图和这一类的原理图颇为类似，在tf中，</p>
+<p>TensorFlow计算，表示为数据流图。<br>TensorFlow 中的所有计算都会被转化为计算图上的节点。<br>TensorFlow 是一个通过计算图的形式来表述计算的编程系统。<br>TensorFlow中的每个计算都是计算图的一个节点，而节点之间的边描述了计算之间的依赖关系。<br>TensorFlow 的计算模型是有向图,采用数据流图 (Data Flow Graphs)，其中每个节点代表一些函数或计算，而边代表了数值、矩阵或张量</p>
+<p>这样看来，是不是很像多层感知机的原理模型。</p>
+<p>在模型任务开始的时候，系统就会指定一个数据流图作为默认图，而 tf.Graph()会返回一个新的数据流图，tf.Graph().as_default 这句话的含义是指定一个数据流图(a=tf.Graph()，a.as_default())作为当前上下文管理器中的默认图，上下文管理器就是with，其作用是即使出现错误异常也会进行退出操作，使得图间的运算分离，互不干扰，在with中的都认为在当前上下文管理之中，即运算会映射到当前设定的图中，如果不指定默认的数据流图，则会将所有操作都映射到系统的初始的默认图中。as_default的意义何在？as_default返回一个上下文管理器，with可以将内部内容作为上下文，但with只是指定当前内容作为其内容，with中的回话(即session，tf1.0中常用)只有在with中有效(with tf.session啥的)，一旦调用了函数跳出了with，会话自动关闭，只有指定了作为as_default，在跳出是才可以继续使用run和eval(run是tf1.0中手动运算需要的，1.0中定义操作和执行操作是分开的，而tf2.0中已经可以自动更新了)。tf.device是用于指定使用的运算设备。补充：tensor.graph可以得到该tensor使用的数据流图，tf.compat.v1.get_default_graph()可以获得当前的默认图（有compat.v1是为了tf1.0兼容tf2.0版本，该语句是2.0版本中的，等价于tf1.0版本中的tf.get_default_graph()）。</p>
+<p>参考:<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/promisejia/article/details/80792134"> tensorflow基础知识(二) Graph计算图的创建和使用</a></p>
+
+          </blockquote></p>
+<blockquote class="blockquote-center">
+            <p>[ <a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/nanhuaibeian/article/details/101862790">tf.Graph().as_default() 详解</a></p>
+
+          </blockquote>
+<p>2、</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">num_gpu = <span class="built_in">len</span>(cfgs.GPU_GROUP.strip().split(<span class="string">&#x27;,&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<p>这个cfgs库好像是自定义库(from libs.configs import cfgs),跳转查看GPU_GROUP可以看到其是一个常数：GPU_GROUP = “2,3”，这里可以视自己服务器上GPU数量来改，如果服务器上有四个GPU，且我们想全用，可以改为：GPU_GROUP = “0,1,2,3”,而strip函数是用来去掉字符串两端的空格的，split(‘,’)用于分割字符串，一个逗号进行分割，返回的是列表，列表的元素就是分割开的字符串。</p>
+<p>3、</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">global_step = slim.get_or_create_global_step()</span><br></pre></td></tr></table></figure>
+<p>get_or_create_global_step是用于创建全局阶跃张量，简单来说主要是用于自动计算步长的，而不需要人为来纪步长。2.3版本中打印函数说明(即slim.get_or_creat_global_step?),说明中说slim的这个函数未来会弃用，建议使用的tf.train.get_or_create_global_step，但是在tf2.0中改函数已经被丢弃了，为了兼容tf1.0，将其放入了compat.v1中了，可以看出函数说明文档没有更新，还是用slim.get_or_creat_global_step吧。这个函数用于纪录步长，<strong>global_step</strong>在训练中是计数的作用，每训练一个batch就加1，可以传入参数，默认参数graph=None,即默认缺失，则会使用系统的图作为被纪录对象。纪录的全局步数很有意义，其相当于一个时钟表，方便控制程序还何时做何事，比如滑动平均、优化器、指数衰减学习率等方面都有用到，一些学习率大小是随步数来变的越来越小的，那么这个参数就很有意义了。</p>
+<p>参考了篇博客，测试一下这个全局步数量的自加的原理(注：这里没有用get_or_create_global_step函数)：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow.compat.v1 <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"> </span><br><span class="line">x = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>, <span class="number">1</span>], name=<span class="string">&#x27;x&#x27;</span>)</span><br><span class="line">y = tf.placeholder(tf.float32, shape=[<span class="literal">None</span>, <span class="number">1</span>], name=<span class="string">&#x27;y&#x27;</span>)</span><br><span class="line">w = tf.Variable(tf.constant(<span class="number">0.0</span>))</span><br><span class="line"> </span><br><span class="line">global_steps = tf.Variable(<span class="number">0</span>, trainable=<span class="literal">False</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">learning_rate = tf.train.exponential_decay(<span class="number">0.1</span>, global_steps, <span class="number">10</span>, <span class="number">2</span>, staircase=<span class="literal">False</span>)</span><br><span class="line">loss = tf.<span class="built_in">pow</span>(w*x-y, <span class="number">2</span>)</span><br><span class="line"> </span><br><span class="line">train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss,global_step=global_steps)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(tf.global_variables_initializer())</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">        sess.run(train_step, feed_dict=&#123;x:np.linspace(<span class="number">1</span>,<span class="number">2</span>,<span class="number">10</span>).reshape([<span class="number">10</span>,<span class="number">1</span>]),</span><br><span class="line">            y:np.linspace(<span class="number">1</span>,<span class="number">2</span>,<span class="number">10</span>).reshape([<span class="number">10</span>,<span class="number">1</span>])&#125;)</span><br><span class="line">        print(sess.run(learning_rate))</span><br><span class="line">        print(sess.run(global_steps))</span><br></pre></td></tr></table></figure>
+<p>由于这个代码是tf1.0的代码，所以我在此基础上改了改，tf1.0的静态操作都被放入了tensorflow.compat.v1库中了(tf.train.get_or_create_global_step还有session也以及session需要的全局初始化tf.global_variables_initializer()都放入了v1库中了)，所以导入时候特地用了tensorflow.compat.v1 as tf,使得tf1.0的代码可以在tf2.0中运行(除此以外可能还需要其他操作，比如禁止动态更新，后续讲)，代码中with 的含义是tf1.0中为了把with中的上下文都加入到一个会话(session)中，这样上下文都在sess的作用域下，可以通过sess.run进行更新。</p>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0.10717734</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">0.11486983</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">0.123114444</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">0.1319508</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">0.14142136</span></span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="number">0.15157166</span></span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="number">0.16245048</span></span><br><span class="line"><span class="number">7</span></span><br><span class="line"><span class="number">0.17411011</span></span><br><span class="line"><span class="number">8</span></span><br><span class="line"><span class="number">0.1866066</span></span><br><span class="line"><span class="number">9</span></span><br><span class="line"><span class="number">0.2</span></span><br><span class="line"><span class="number">10</span></span><br></pre></td></tr></table></figure>
+<p>其实可以看出，global_step初始化为1，但其是作为参数传入给minimize的，所以更新应该是在该函数中进行的，minimize进行求导是对一个batch来的，然后梯度下降优化器进行更新参数，所以一个batch全局步长自加一是合理的，而learning_rate再通过global_step进行改变自身。若从简单的参数来说，函数传递过去的应该是形参，不会改变global_step，但是这里的变量是tf自定义的Variable，大胆的猜测一下，这里传过去的应该是类似于引用的方法，直接改变图中的原值。</p>
+<p>参考链接：</p>
+<p>参考:<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/xc90/articles/10154277.html">TensorFlow中global_step的简单分析</a></p>
+
+          </blockquote></p>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://cloud.tencent.com/developer/article/1495172">slim.get_or_create_global_step()</a></p>
+
+          </blockquote>
+<p>4、</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lr = warmup_lr(cfgs.LR, global_step, cfgs.WARM_SETP, num_gpu)</span><br></pre></td></tr></table></figure>
+<p>这里的warmup_lr是一个函数，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">warmup_lr</span>(<span class="params">init_lr, global_step, warmup_step, num_gpu</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">warmup</span>(<span class="params">end_lr, global_step, warmup_step</span>):</span></span><br><span class="line">        start_lr = end_lr * <span class="number">0.1</span></span><br><span class="line">        global_step = tf.cast(global_step, tf.float32)</span><br><span class="line">        <span class="keyword">return</span> start_lr + (end_lr - start_lr) * global_step / warmup_step</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decay</span>(<span class="params">start_lr, global_step, num_gpu</span>):</span></span><br><span class="line">        lr = tf.train.piecewise_constant(global_step,</span><br><span class="line">                                         boundaries=[np.int64(cfgs.DECAY_STEP[<span class="number">0</span>] // num_gpu),</span><br><span class="line">                                                     np.int64(cfgs.DECAY_STEP[<span class="number">1</span>] // num_gpu),</span><br><span class="line">                                                     np.int64(cfgs.DECAY_STEP[<span class="number">2</span>] // num_gpu)],</span><br><span class="line">                                         values=[start_lr, start_lr / <span class="number">10.</span>, start_lr / <span class="number">100.</span>, start_lr / <span class="number">1000.</span>])</span><br><span class="line">        <span class="keyword">return</span> lr</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> tf.cond(tf.less_equal(global_step, warmup_step),</span><br><span class="line">                   true_fn=<span class="keyword">lambda</span>: warmup(init_lr, global_step, warmup_step),</span><br><span class="line">                   false_fn=<span class="keyword">lambda</span>: decay(init_lr, global_step, num_gpu))</span><br></pre></td></tr></table></figure>
+<p>函数传入的clsg.LR是5e-4,全局步长(之前也说过了，全局步长是在和梯度、优化器一起变化的)，cfgs.WARM_SETP以及调用的GPU数量。进入cfgs中看一下WARM_SETP，可以看到WARM_SETP = int(1.0 / 4.0 * SAVE_WEIGHTS_INTE)，其中设置了SAVE_WEIGHTS_INTE = 20000(至于为啥乘1/4不太了解了)。</p>
+<p>那么来看一下这个函数，函数里就一句return，直接看return就好了，tf.cond啥意思呢？在交互式窗口输入tf.cond?看看(注意，tf2.0中有cond函数，所以可以import tensorflow as tf,但是为了兼容tf1.0,tf1.0的所有函数方法都放入了tf.compat.v1中，所以tf.compat.v1.cond就好，tf1.0在2.0环境中运行时候，直接import tensorflow.compat.v1 as tf即可保证原来的代码都完好运行)，函数返回如下(tf1.0下的返回，即2.0环境中tf.compat.v1.cond?)：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">tf.compat.v1.cond(</span><br><span class="line">    pred,</span><br><span class="line">    true_fn=<span class="literal">None</span>,</span><br><span class="line">    false_fn=<span class="literal">None</span>,</span><br><span class="line">    strict=<span class="literal">False</span>,</span><br><span class="line">    name=<span class="literal">None</span>,</span><br><span class="line">    fn1=<span class="literal">None</span>,</span><br><span class="line">    fn2=<span class="literal">None</span>,</span><br><span class="line">)</span><br><span class="line">Docstring:</span><br><span class="line">Return `true_fn()` <span class="keyword">if</span> the predicate `pred` <span class="keyword">is</span> true <span class="keyword">else</span> `false_fn()`. (deprecated arguments)</span><br></pre></td></tr></table></figure>
+<p>可以看出这个函数功能和if  else是类似的，当pred为真的时候，返回true_fn后面的语句，否则返回false_fn的。举个例子如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow.compat.v1 <span class="keyword">as</span> tf</span><br><span class="line">x=tf.constant([<span class="number">1</span>],dtype=tf.float32)</span><br><span class="line">y=tf.constant([<span class="number">2</span>],dtype=tf.float32)</span><br><span class="line">a=tf.constant([<span class="number">2</span>],dtype=tf.float32)</span><br><span class="line">b=tf.constant([<span class="number">5</span>],dtype=tf.float32)</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(tf.global_variables_initializer()) <span class="comment">#模型初始化</span></span><br><span class="line">    z = tf.multiply(a, b)</span><br><span class="line">    print(sess.run(z))</span><br><span class="line">    result = tf.cond(x &lt; y, <span class="keyword">lambda</span>: tf.add(x, z), <span class="keyword">lambda</span>: tf.square(y))</span><br><span class="line">    print(sess.run(result))</span><br></pre></td></tr></table></figure>
+<p>输入如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">10.</span>]</span><br><span class="line">[<span class="number">11.</span>]</span><br></pre></td></tr></table></figure>
+<p>例子中都统一设定dtype为float32了，因为tf不会自动类型转换，挺傻瓜式的，至于为什么加会话即tf.Session()，是因为tf1.0中运算定义，运算执行是分开的，在一个会话内，初始化后，然后用run执行，否则print得不到想看到的结果。</p>
+<p>cond解释完毕，回到模型中的函数，如果global_step(全局步数，一个batch自加一，因为训练也是以batch为单位的，其自动更新)小于等于 warmup_step的时候，返回warmup(升温)函数，否则返回decay(衰弱)函数。看升温函数，其升温初始值为传入学习率的0.1，升温至传入的学习率位置，此阶段为升温阶段；后面开始衰弱阶段，看一下decay函数，我们来看一下tf.train.piecewise_constant()函数，如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">tf.compat.v1.train.piecewise_constant?</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Signature: tf.compat.v1.train.piecewise_constant(x, boundaries, values, name=<span class="literal">None</span>)</span><br><span class="line">Docstring:</span><br><span class="line">Piecewise constant <span class="keyword">from</span> boundaries <span class="keyword">and</span> interval values.</span><br><span class="line"></span><br><span class="line">Example: use a learning rate that<span class="string">&#x27;s 1.0 for the first 100001 steps, 0.5</span></span><br><span class="line"><span class="string">  for the next 10000 steps, and 0.1 for any additional steps.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">```python</span></span><br><span class="line"><span class="string">global_step = tf.Variable(0, trainable=False)</span></span><br><span class="line"><span class="string">boundaries = [100000, 110000]</span></span><br><span class="line"><span class="string">values = [1.0, 0.5, 0.1]</span></span><br><span class="line"><span class="string">learning_rate = tf.compat.v1.train.piecewise_constant(global_step, boundaries,</span></span><br><span class="line"><span class="string">values)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># Later, whenever we perform an optimization step, we increment global_step.</span></span><br><span class="line"><span class="string">```</span></span><br></pre></td></tr></table></figure>
+<p>这个函数的描述是：边界和区间值的分段常数。看函数说明文档的例子，可以看出，前100001步(global_step)用学习率1.0,前10000步是指0-100000闭区间正好100001步；然后100001步到110000的10000步用0.5，后面global_step再增加的时候，学习率用0.1，这是一种明显的逐渐逼近最优解的方式，在刚开始远离最优解位置的时候，学习调大一点，使得快速接近最优解点，在靠近后，调小学习率，防止跨度太大，跳过了该最优解到其他地方了。</p>
+<p>那么回到模型函数中，显然第一个参数是global_step，第二个参数是步数边界，跳入cfgs看参数，可以看到如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DECAY_STEP = [SAVE_WEIGHTS_INTE*<span class="number">12</span>, SAVE_WEIGHTS_INTE*<span class="number">16</span>, SAVE_WEIGHTS_INTE*<span class="number">20</span>]</span><br></pre></td></tr></table></figure>
+<p>SAVE_WEIGHTS_INTE之前说过，设置成20000了，这里乘12、16、20应该是可以自行修改的边界，而decay中//num_gpu应该是因为多GPU并行运算，所以步数需要除以gpu数量，//代表取除法结果的整数部分，等价于np.floor(a/b),而学习率是从初始传入的值，变为十分之一，再百分之一，最后的是千分之一。</p>
+<p>5、</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.summary.scalar(<span class="string">&#x27;lr&#x27;</span>, lr)</span><br></pre></td></tr></table></figure>
+<p>我们来看一下这个函数的说明文档：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">tf.compat.v1.summary.scalar?</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Signature: tf.compat.v1.summary.scalar(name, tensor, collections=<span class="literal">None</span>, family=<span class="literal">None</span>)</span><br><span class="line">Docstring:</span><br><span class="line">Outputs a `Summary` protocol buffer containing a single scalar value.</span><br><span class="line"></span><br><span class="line">The generated Summary has a Tensor.proto containing the <span class="built_in">input</span> Tensor.</span><br><span class="line"></span><br><span class="line">Args:</span><br><span class="line">  name: A name <span class="keyword">for</span> the generated node. Will also serve <span class="keyword">as</span> the series name <span class="keyword">in</span></span><br><span class="line">    TensorBoard.</span><br><span class="line">  tensor: A real numeric Tensor containing a single value.</span><br><span class="line">  collections: Optional <span class="built_in">list</span> of graph collections keys. The new summary op <span class="keyword">is</span></span><br><span class="line">    added to these collections. Defaults to `[GraphKeys.SUMMARIES]`.</span><br><span class="line">  family: Optional; <span class="keyword">if</span> provided, used <span class="keyword">as</span> the prefix of the summary tag name,</span><br><span class="line">    which controls the tab name used <span class="keyword">for</span> display on Tensorboard.</span><br><span class="line"></span><br><span class="line">Returns:</span><br><span class="line">  A scalar `Tensor` of <span class="built_in">type</span> `string`. Which contains a `Summary` protobuf.</span><br></pre></td></tr></table></figure>
+<p>可以看出name是当做图中的生成的节点名称，也作为tensorboard的名称。而tensor就是一个包含单个值的张量。该函数返回一个协议缓冲区(用于保存数据)，即该函数主要用来显示标量的信息，一般在画<strong>loss，accuary</strong>时会用到这个函数(比如tensorboard中绘制可视化图)。</p>
+<p>6、</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.name_scope(<span class="string">&#x27;get_batch&#x27;</span>):<span class="comment">#建立一个区域空间</span></span><br><span class="line">    <span class="keyword">if</span> cfgs.IMAGE_PYRAMID:</span><br><span class="line">        shortside_len_list = tf.constant(cfgs.IMG_SHORT_SIDE_LEN)</span><br><span class="line">        shortside_len = tf.random_shuffle(shortside_len_list)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        shortside_len = cfgs.IMG_SHORT_SIDE_LEN</span><br><span class="line"></span><br><span class="line">    img_name_batch, img_batch, gtboxes_and_label_batch, num_objects_batch, img_h_batch, img_w_batch = \</span><br><span class="line">        next_batch(dataset_name=cfgs.DATASET_NAME,</span><br><span class="line">                   batch_size=cfgs.BATCH_SIZE * num_gpu,</span><br><span class="line">                   shortside_len=shortside_len,</span><br><span class="line">                   is_training=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<p>这里顺便解释一下tf.name_scope和tf.variable_scope以及tensorboard。tf.name_scope是为了给一些Variable变量起一个区域名字，即使得数据流图更有条理性，而variable_scope也是给区域取个名字，但是其是结合tf.get_variable使用的，get_variable和普通的tf.Variable的区别在于tf.Variable总会创建一个新的变量(name属性是图中的名字，我们给的a=tf.Variable中的a是普通变量名)，如果name相同了，系统会自动修改一下这个name，进行创建；而tf.get_Variable则是可以进行共享的，如果name相同，则返回图中的那个变量，具有共享功能(比如a=tf.get_variable([1,2,3],name=”a”),b=tf.get_variable([1,2,3],name=”a”),那么a和b是共享内存的，可以理解为引用)，值得注意的是，想要进行共享，需要把共享功能设置为true，如下,这样就可以参数共享了，有些地方没有开启也可以进行共享，往往是使用的语句内部已经使用了reuse_variables。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">with tf.variable_scope(&quot;image_filters&quot;) as scope:</span><br><span class="line">    scope.reuse_variables()</span><br><span class="line">#或者如下也可以：</span><br><span class="line">with tf.variable_scope(&quot;image_filters&quot;, reuse&#x3D;True):</span><br><span class="line">	a&#x3D;tf.get_variable([1,2,3],name&#x3D;&quot;a&quot;)</span><br></pre></td></tr></table></figure>
+<p>tensorboard是一个用来可视化的工具，可以看scalar(标量)的变化曲线，也可以看模型的数据流图，通过各类scope使得可视化效果更清晰，下面看个例子(来源网络)，下述就是将一个scalar保存到本地：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">learn_tensor_board_2</span>():</span></span><br><span class="line">    <span class="comment"># prepare the original data</span></span><br><span class="line">    <span class="keyword">with</span> tf.name_scope(<span class="string">&#x27;data&#x27;</span>):</span><br><span class="line">        x_data = np.random.rand(<span class="number">100</span>).astype(np.float32)</span><br><span class="line">        y_data = <span class="number">0.3</span> * x_data + <span class="number">0.1</span></span><br><span class="line">    <span class="comment">##creat parameters</span></span><br><span class="line">    <span class="keyword">with</span> tf.name_scope(<span class="string">&#x27;parameters&#x27;</span>):</span><br><span class="line">        <span class="keyword">with</span> tf.name_scope(<span class="string">&#x27;weights&#x27;</span>):</span><br><span class="line">            weight = tf.Variable(tf.random_uniform([<span class="number">1</span>], -<span class="number">1.0</span>, <span class="number">1.0</span>))</span><br><span class="line">            tf.summary.histogram(<span class="string">&#x27;weight&#x27;</span>, weight)</span><br><span class="line">        <span class="keyword">with</span> tf.name_scope(<span class="string">&#x27;biases&#x27;</span>):</span><br><span class="line">            bias = tf.Variable(tf.zeros([<span class="number">1</span>]))</span><br><span class="line">            tf.summary.histogram(<span class="string">&#x27;bias&#x27;</span>, bias)</span><br><span class="line">    <span class="comment">##get y_prediction</span></span><br><span class="line">    <span class="keyword">with</span> tf.name_scope(<span class="string">&#x27;y_prediction&#x27;</span>):</span><br><span class="line">        y_prediction = weight * x_data + bias</span><br><span class="line">    <span class="comment">##compute the loss</span></span><br><span class="line">    <span class="keyword">with</span> tf.name_scope(<span class="string">&#x27;loss&#x27;</span>):</span><br><span class="line">        loss = tf.reduce_mean(tf.square(y_data - y_prediction))</span><br><span class="line">        tf.summary.scalar(<span class="string">&#x27;loss&#x27;</span>, loss)</span><br><span class="line">    <span class="comment">##creat optimizer</span></span><br><span class="line">    optimizer = tf.train.GradientDescentOptimizer(<span class="number">0.5</span>)</span><br><span class="line">    <span class="comment"># creat train ,minimize the loss</span></span><br><span class="line">    <span class="keyword">with</span> tf.name_scope(<span class="string">&#x27;train&#x27;</span>):</span><br><span class="line">        train = optimizer.minimize(loss)</span><br><span class="line">    <span class="comment"># creat init</span></span><br><span class="line">    <span class="keyword">with</span> tf.name_scope(<span class="string">&#x27;init&#x27;</span>):</span><br><span class="line">        init = tf.global_variables_initializer()</span><br><span class="line">    <span class="comment">##creat a Session</span></span><br><span class="line">    sess = tf.Session()</span><br><span class="line">    <span class="comment"># merged</span></span><br><span class="line">    merged = tf.summary.merge_all()</span><br><span class="line">    <span class="comment">##initialize</span></span><br><span class="line">    writer = tf.summary.FileWriter(<span class="string">&quot;tensorboard/loss-2&quot;</span>, sess.graph)</span><br><span class="line">    sess.run(init)</span><br><span class="line">    <span class="comment">## Loop</span></span><br><span class="line">    <span class="keyword">for</span> step <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">201</span>):</span><br><span class="line">        sess.run(train)</span><br><span class="line">        rs = sess.run(merged)</span><br><span class="line">        writer.add_summary(rs, step)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    learn_tensor_board_2()</span><br></pre></td></tr></table></figure>
+<p>运行上述命令后，在命令行窗口输入如下命令tensorboard打开保存的scalar图:</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensorboard --logdir=C:\Users\<span class="number">21311</span>\machine_learning\tensorflow\tensorboard\loss-<span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>然后在浏览器中输入如下：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">localhost:6006</span></span><br></pre></td></tr></table></figure>
+<p>这里的localhost其实就是本地ip，所以使用本地ip是一样的，6006是端口号，就像jupyter使用的是8888端口似的。</p>
+<p>这样就可以打开tensorboard进行查看数据流图和scalar等等了。</p>
+<p>注意：variable变量都是数据流图的量，和普通的变量不一样，普通的量在函数调用退出时内存销毁，然而variable会一直在图中保留，所以不要认为调用的函数中的variable变量会消失。</p>
+<p>参考文章：</p>
+<p>:<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/Jerr__y/article/details/70809528?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-9.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-9.control">TensorFlow入门（七） 充分理解 name / variable_scope</a></p>
+
+          </blockquote></p>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/qq_27825451/article/details/82349984">TensorFlow中的name_scope和variable_scope的使用</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/awxj68104/article/details/101636783">什么是TensorBoard？</a></p>
+
+          </blockquote>
+<p>继续回到模型程序中，第一个if cfgs.IMAGE_PYRAMID，跳转进入可以看到IMAGE_PYRAMID是False，这里应该是用于决定是否使用图像金字塔模型的。else中，cfgs.IMG_SHORT_SIDE_LEN=800,代表图像短的一边设置为800。</p>
+<p>然后我们转入batch生成的函数内看一看，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">next_batch</span>(<span class="params">dataset_name, batch_size, shortside_len, is_training</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    img_name_batch: shape(1, 1)</span></span><br><span class="line"><span class="string">    img_batch: shape:(1, new_imgH, new_imgW, C)</span></span><br><span class="line"><span class="string">    gtboxes_and_label_batch: shape(1, Num_Of_objects, 5] .each row is [x1, y1, x2, y2, label]</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="comment"># assert batch_size == 1, &quot;we only support batch_size is 1.We may support large batch_size in the future&quot;</span></span><br><span class="line"></span><br><span class="line">    valid_dataset= [<span class="string">&#x27;DOTA1.5&#x27;</span>, <span class="string">&#x27;ICDAR2015&#x27;</span>, <span class="string">&#x27;pascal&#x27;</span>, <span class="string">&#x27;coco&#x27;</span>, <span class="string">&#x27;bdd100k&#x27;</span>, <span class="string">&#x27;DOTA&#x27;</span>, <span class="string">&#x27;DOTA800&#x27;</span>, <span class="string">&#x27;DOTA600&#x27;</span>,</span><br><span class="line">                    <span class="string">&#x27;HRSC2016&#x27;</span>, <span class="string">&#x27;UCAS-AOD&#x27;</span>, <span class="string">&#x27;OHD-SJTU&#x27;</span>, <span class="string">&#x27;OHD-SJTU-600&#x27;</span>, <span class="string">&#x27;OHD-SJTU-ALL-600&#x27;</span>, <span class="string">&#x27;DOTATrain&#x27;</span>]</span><br><span class="line">    <span class="keyword">if</span> dataset_name <span class="keyword">not</span> <span class="keyword">in</span> valid_dataset:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&#x27;dataSet name must be in &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(valid_dataset))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> is_training:</span><br><span class="line">        pattern = os.path.join(<span class="string">&#x27;../data/tfrecord&#x27;</span>, dataset_name + <span class="string">&#x27;_train*&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        pattern = os.path.join(<span class="string">&#x27;../data/tfrecord&#x27;</span>, dataset_name + <span class="string">&#x27;_test*&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">&#x27;tfrecord path is --&gt;&#x27;</span>, os.path.abspath(pattern))</span><br><span class="line"></span><br><span class="line">    filename_tensorlist = tf.train.match_filenames_once(pattern)</span><br><span class="line"></span><br><span class="line">    filename_queue = tf.train.string_input_producer(filename_tensorlist)</span><br><span class="line"></span><br><span class="line">    img_name, img, gtboxes_and_label, num_obs, img_h, img_w = read_and_prepocess_single_img(filename_queue, shortside_len,</span><br><span class="line">                                                                                            is_training=is_training)</span><br><span class="line">    img_name_batch, img_batch, gtboxes_and_label_batch, num_obs_batch, img_h_batch, img_w_batch = \</span><br><span class="line">        tf.train.batch(</span><br><span class="line">                       [img_name, img, gtboxes_and_label, num_obs, img_h, img_w],</span><br><span class="line">                       batch_size=batch_size,</span><br><span class="line">                       capacity=<span class="number">16</span>,</span><br><span class="line">                       num_threads=<span class="number">16</span>,</span><br><span class="line">                       dynamic_pad=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> img_name_batch, img_batch, gtboxes_and_label_batch, num_obs_batch, img_h_batch, img_w_batch</span><br></pre></td></tr></table></figure>
+<p>可以看到valid_dataset中有很多著名的数据集，若使用自己的数据集，封装好后，把名字加入该列表中即可，若不加，则后面的if判断后会抛出错误。后面的if&amp;else是判断是训练模式or推理模式。os库常用于管理路径文件等等，os.path.join函数用于连接两个或更多的路径名组件，功能如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>1.如果各组件名首字母不包含’/’，则函数会自动加上</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.如果有一个组件是一个绝对路径，则在它之前的所有组件均会被舍弃</td>
+</tr>
+<tr>
+<td>3.如果最后一个组件为空，则生成的路径以一个’/’分隔符结尾</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">Path1 = <span class="string">&#x27;home&#x27;</span></span><br><span class="line">Path2 = <span class="string">&#x27;develop&#x27;</span></span><br><span class="line">Path3 = <span class="string">&#x27;code&#x27;</span></span><br><span class="line"></span><br><span class="line">Path10 = Path1 + Path2 + Path3</span><br><span class="line">Path20 = os.path.join(Path1,Path2,Path3)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;Path10 = &#x27;</span>,Path10)</span><br><span class="line"><span class="built_in">print</span> (<span class="string">&#x27;Path20 = &#x27;</span>,Path20)</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Path10 =  homedevelopcode</span><br><span class="line">Path20 =  home\develop\code</span><br></pre></td></tr></table></figure>
+<p>那么os.path.abspath()啥功能呢，从字面上也可以看出来，其是绝对路径的意思，若当前路径是A，你传入路径参数B，返回A/B，测试一下，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(os.path.abspath(Path20))</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\<span class="number">21311</span>\machine_learning\tensorflow\home\develop\code</span><br></pre></td></tr></table></figure>
+<p>而  filename_tensorlist = tf.train.match_filenames_once(pattern)这句话，是类似于正则表达式，在当前路径下找匹配的文件，’_train*’中的星号就是啥都行的意思。也就是说会匹配到/data/tfrecord/DOTA_train.tfrecord文件。(r3det中测试没测试好，竟然是空[],也就是没检测到)</p>
+<p>如下看一下这个函数的测试案例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow.compat.v1 <span class="keyword">as</span> tf</span><br><span class="line"> </span><br><span class="line">directory = <span class="string">&quot;*.*&quot;</span></span><br><span class="line">file_names = tf.train.match_filenames_once(directory)</span><br><span class="line"> </span><br><span class="line">init = (tf.global_variables_initializer(), tf.local_variables_initializer())</span><br><span class="line"> </span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(init)</span><br><span class="line">    print(sess.run(file_names))</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">b&#x27;.\\.ipynb_checkpoints&#x27;</span></span><br><span class="line"> <span class="string">b&#x27;.\\.ipynb_checkpoints\\Untitled-checkpoint.ipynb&#x27;</span> <span class="string">b&#x27;.\\Untitled.ipynb&#x27;</span></span><br><span class="line"> <span class="string">b&#x27;.\\tensorboard&#x27;</span> <span class="string">b&#x27;.\\tensorboard\\loss-2&#x27;</span></span><br><span class="line"> <span class="string">b&#x27;.\\tensorboard\\loss-2\\events.out.tfevents.1628397138.DESKTOP-P038UOU&#x27;</span></span><br><span class="line"> <span class="string">b&#x27;.\\tensorboard\\loss-2\\events.out.tfevents.1628397214.DESKTOP-P038UOU&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<p>参考链接如下:</p>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/zsg2063/article/details/75103654">tf.train.match_filenames_once如何验证文件是否正确读取？</a></p>
+
+          </blockquote>
+<p>对于  filename_queue = tf.train.string_input_producer(filename_tensorlist)这句话，这个函数的描述说明如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Signature:</span><br><span class="line">tf.train.string_input_producer(</span><br><span class="line">    string_tensor,</span><br><span class="line">    num_epochs=<span class="literal">None</span>,</span><br><span class="line">    shuffle=<span class="literal">True</span>,</span><br><span class="line">    seed=<span class="literal">None</span>,</span><br><span class="line">    capacity=<span class="number">32</span>,</span><br><span class="line">    shared_name=<span class="literal">None</span>,</span><br><span class="line">    name=<span class="literal">None</span>,</span><br><span class="line">    cancel_op=<span class="literal">None</span>,</span><br><span class="line">)</span><br><span class="line">Docstring:</span><br><span class="line">Output strings (e.g. filenames) to a queue <span class="keyword">for</span> an <span class="built_in">input</span> pipeline. (deprecated)</span><br></pre></td></tr></table></figure>
+<p>其本质就是生成一个文件名队列(其实就是pipeline流水线)，但是tf1.0定义和执行是分开的，需要 tf.train.start_queue_runners函数才能真的把文件加载到文件队列中，而将文件队列中的文件加载到内存中还需要reader = tf.WholeFileReader()和key, value = reader.read(filename_queue)这两句函数。</p>
+<p>参考链接如下：</p>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/lty_sky/article/details/104925112">详解TensorFlow数据读取机制（tf.train.string_input_producer）</a></p>
+
+          </blockquote>
+<p>然后read_and_prepocess_single_img函数，这个函数对读出的sample进行预处理。来看一下该函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_and_prepocess_single_img</span>(<span class="params">filename_queue, shortside_len, is_training</span>):</span></span><br><span class="line"></span><br><span class="line">    img_name, img, gtboxes_and_label, num_objects = read_single_example_and_decode(filename_queue)</span><br><span class="line"></span><br><span class="line">    img = tf.cast(img, tf.float32)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> is_training:</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> cfgs.RGB2GRAY:</span><br><span class="line">            <span class="comment"># img, gtboxes_and_label = image_preprocess.aspect_ratio_jittering(img, gtboxes_and_label)</span></span><br><span class="line">            img = image_preprocess.random_rgb2gray(img_tensor=img, gtboxes_and_label=gtboxes_and_label)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> cfgs.IMG_ROTATE:</span><br><span class="line">            <span class="comment"># rotate with 0.5 prob. and if rotate, if will random choose a theta from : tf.range(-90, 90+16, delta=15)</span></span><br><span class="line">            img, gtboxes_and_label = image_preprocess.random_rotate_img(img_tensor=img,</span><br><span class="line">                                                                        gtboxes_and_label=gtboxes_and_label)</span><br><span class="line"></span><br><span class="line">        img, gtboxes_and_label, img_h, img_w = image_preprocess.short_side_resize(img_tensor=img,</span><br><span class="line">                                                                                  gtboxes_and_label=gtboxes_and_label,</span><br><span class="line">                                                                                  target_shortside_len=shortside_len,</span><br><span class="line">                                                                                  length_limitation=cfgs.IMG_MAX_LENGTH)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> cfgs.HORIZONTAL_FLIP:</span><br><span class="line">            img, gtboxes_and_label = image_preprocess.random_flip_left_right(img_tensor=img,</span><br><span class="line">                                                                             gtboxes_and_label=gtboxes_and_label)</span><br><span class="line">        <span class="keyword">if</span> cfgs.VERTICAL_FLIP:</span><br><span class="line">            img, gtboxes_and_label = image_preprocess.random_flip_up_down(img_tensor=img,</span><br><span class="line">                                                                          gtboxes_and_label=gtboxes_and_label)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        img, gtboxes_and_label, img_h, img_w = image_preprocess.short_side_resize(img_tensor=img, gtboxes_and_label=gtboxes_and_label,</span><br><span class="line">                                                                                  target_shortside_len=shortside_len,</span><br><span class="line">                                                                                  length_limitation=cfgs.IMG_MAX_LENGTH)</span><br><span class="line">    <span class="comment"># gtboxes_and_label = tf.reshape(tf.py_func(filter_small_gt, inp=[gtboxes_and_label], Tout=[tf.float32]), [-1, 9])</span></span><br><span class="line">    <span class="keyword">if</span> cfgs.NET_NAME <span class="keyword">in</span> [<span class="string">&#x27;resnet152_v1d&#x27;</span>, <span class="string">&#x27;resnet101_v1d&#x27;</span>, <span class="string">&#x27;resnet50_v1d&#x27;</span>]:</span><br><span class="line">        img = img / <span class="number">255</span> - tf.constant([[cfgs.PIXEL_MEAN_]])</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        img = img - tf.constant([[cfgs.PIXEL_MEAN]])  <span class="comment"># sub pixel mean at last</span></span><br><span class="line">    <span class="keyword">return</span> img_name, img, gtboxes_and_label, num_objects, img_h, img_w</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这个函数中的第一句使用了read_single_example_and_decode函数，这个函数功能其实是读取出一个sample，由于sample的数据格式是特定的，所以需要进行解析，这个函数就是对其进行解析的。来看一下这个函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_single_example_and_decode</span>(<span class="params">filename_queue</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># tfrecord_options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.ZLIB)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># reader = tf.TFRecordReader(options=tfrecord_options)</span></span><br><span class="line">    reader = tf.TFRecordReader()</span><br><span class="line">    _, serialized_example = reader.read(filename_queue)</span><br><span class="line"></span><br><span class="line">    features = tf.parse_single_example(</span><br><span class="line">        serialized=serialized_example,</span><br><span class="line">        features=&#123;</span><br><span class="line">            <span class="string">&#x27;img_name&#x27;</span>: tf.FixedLenFeature([], tf.string),</span><br><span class="line">            <span class="string">&#x27;img_height&#x27;</span>: tf.FixedLenFeature([], tf.int64),</span><br><span class="line">            <span class="string">&#x27;img_width&#x27;</span>: tf.FixedLenFeature([], tf.int64),</span><br><span class="line">            <span class="string">&#x27;img&#x27;</span>: tf.FixedLenFeature([], tf.string),</span><br><span class="line">            <span class="string">&#x27;gtboxes_and_label&#x27;</span>: tf.FixedLenFeature([], tf.string),</span><br><span class="line">            <span class="string">&#x27;num_objects&#x27;</span>: tf.FixedLenFeature([], tf.int64)</span><br><span class="line">        &#125;</span><br><span class="line">    )</span><br><span class="line">    img_name = features[<span class="string">&#x27;img_name&#x27;</span>]</span><br><span class="line">    img_height = tf.cast(features[<span class="string">&#x27;img_height&#x27;</span>], tf.int32)</span><br><span class="line">    img_width = tf.cast(features[<span class="string">&#x27;img_width&#x27;</span>], tf.int32)</span><br><span class="line">    img = tf.decode_raw(features[<span class="string">&#x27;img&#x27;</span>], tf.uint8)</span><br><span class="line"></span><br><span class="line">    img = tf.reshape(img, shape=[img_height, img_width, <span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">    gtboxes_and_label = tf.decode_raw(features[<span class="string">&#x27;gtboxes_and_label&#x27;</span>], tf.int32)</span><br><span class="line">    gtboxes_and_label = tf.reshape(gtboxes_and_label, [-<span class="number">1</span>, <span class="number">9</span>])</span><br><span class="line"></span><br><span class="line">    num_objects = tf.cast(features[<span class="string">&#x27;num_objects&#x27;</span>], tf.int32)</span><br><span class="line">    <span class="keyword">return</span> img_name, img, gtboxes_and_label, num_objects</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>第一句是为了可以读取文件名队列中文件到内存中，reader.read就是读到内存中，tf.parse_single_example就是对其进行解析，其返回的是一个字典类型，我们可以打印一下看看：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="built_in">type</span>(features))</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">dict</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+<p>解析后将值赋值给img_name等等即可，由于img解析的时候用的是str格式，需要继续解码用tf.decode_raw，这个函数可以将原始字节存储变为tensor，这个函数的描述如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Signature:</span><br><span class="line">tf.decode_raw(</span><br><span class="line">    input_bytes=<span class="literal">None</span>,</span><br><span class="line">    out_type=<span class="literal">None</span>,</span><br><span class="line">    little_endian=<span class="literal">True</span>,</span><br><span class="line">    name=<span class="literal">None</span>,</span><br><span class="line">    <span class="built_in">bytes</span>=<span class="literal">None</span>,</span><br><span class="line">)</span><br><span class="line">Docstring:</span><br><span class="line">Convert raw byte strings into tensors. (deprecated arguments)</span><br></pre></td></tr></table></figure>
+<p>注意这个函数的输出形式需要指定，示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow.compat.v1 <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(tf.global_variables_initializer())</span><br><span class="line">    a=tf.decode_raw(<span class="built_in">str</span>(<span class="number">0</span>),tf.uint8)   </span><br><span class="line">    print(sess.run(a))</span><br></pre></td></tr></table></figure>
+<p>输出结果如下，48就是字符0的ascii码.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">48</span>]</span><br></pre></td></tr></table></figure>
+<p>后面又对img进行了reshape处理，reshape处理成的格式是为了和模型输入相匹配，但是这样变是否会改变数据结构呢??比如本来是[3,img_wight,img_height],这样reshape后数据应该是拉跨了的。后续又对gtbox进行处理，至于为啥一个框是9个坐标呢??应该是四个角的坐标+1个label或者是三个角坐标+中心坐标+1个label。</p>
+<p>最终函数返回了目标名，图像，gtbox和label以及目标数量。</p>
+<p>现在返回read_and_prepocess_single_img函数。</p>
+<p>第一个if判断是否需要灰度化，cfgs里该参数设定为了False不用管，第二个if判断图像是否rotate即旋转了，设定为True，那么if里的函数就是以0.5的概率进行旋转，旋转的角度在(-90,96)之间，跨度为15度??传入原始图和gtbox_and_label后返回旋转后的图像和gtbox_and_label。</p>
+<p>image_preprocess.short_side_resize这个函数用于尺寸限制，不过有点奇怪，传入的最短边在cfgs中设置为800，cfgs.IMG_MAX_LENGTH这个最大值限制也是800??迷惑。</p>
+<p>后面的两个if判断是否水平翻转和垂直翻转，cfgs中设置的都是True，然后以概率来进行翻转。</p>
+<p>如果不是训练模式，而是推理模式，那么直接进行resize到规定的尺寸就好了。</p>
+<p>cfgs.NET_NAME在cfgs中设定的是resnet152，执行的除以255应该是类似于归一化的，至于为啥减去那个参数：有三个参数(广播机制会进行使每个像素点RGB都减去这个值)。</p>
+<p>最终这个函数返回预处理后的图像名，图像，图像的gtbox和label，图像数量以及图像的高和宽。</p>
+<p>这个函数也解读完毕，再返回到next_batch函数中，到了最后一句的batch函数，这个函数将第一个参数进行入队，再以batch_size大小进行读出，具体含义如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">tf.train.batch(</span><br><span class="line">    tensors,</span><br><span class="line">    batch_size,</span><br><span class="line">    num_threads=<span class="number">1</span>,</span><br><span class="line">    capacity=<span class="number">32</span>,</span><br><span class="line">    enqueue_many=<span class="literal">False</span>,</span><br><span class="line">    shapes=<span class="literal">None</span>,</span><br><span class="line">    dynamic_pad=<span class="literal">False</span>,</span><br><span class="line">    allow_smaller_final_batch=<span class="literal">False</span>,</span><br><span class="line">    shared_name=<span class="literal">None</span>,</span><br><span class="line">    name=<span class="literal">None</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>函数功能：利用一个tensor的列表或字典来获取一个batch数据</p>
+<p>参数介绍：</p>
+<p>tensors：一个列表或字典的tensor用来进行入队<br>batch_size：设置每次从队列中获取出队数据的数量<br>num_threads：用来控制入队tensors线程的数量，如果num_threads大于1，则batch操作将是非确定性的，输出的batch可能会乱序<br>capacity：一个整数，用来设置队列中元素的最大数量<br>enqueue_many：在tensors中的tensor是否是单个样本<br>shapes：可选，每个样本的shape，默认是tensors的shape<br>dynamic_pad：Boolean值.允许输入变量的shape，出队后会自动填补维度，来保持与batch内的shapes相同<br>allow_samller_final_batch：可选，Boolean值，如果为True队列中的样本数量小于batch_size时，出队的数量会以最终遗留下来的样本进行出队，如果为Flalse，小于batch_size的样本不会做出队处理<br>shared_name：可选，通过设置该参数，可以对多个会话共享队列<br>name：可选，操作的名字<br>但是这里略有疑问，我们之前获取文件名(该文件包含了所有的训练集数据)，但读取的是全读出来了??还是只读了一个，若是全读出来了，入队倒是可以理解，然后以batch_size=16进行读出，但是数据处理shape那里又感觉颇有问题；如果是只读了一个数据??那么感觉如队的时候就有问题。</p>
+<p>参考链接如下：</p>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/sinat_29957455/article/details/83152823">tensorflow中的tf.train.batch详解</a></p>
+
+          </blockquote>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>
+
+
+
+
+    </div>
+
+    
+    
+    
+      
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Apers
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://gezhilai.com/2021/08/07/r3net%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/" title="r3det代码详解(一)">http://gezhilai.com/2021/08/07/r3net代码详解/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/tensorflow/" rel="tag"><i class="fa fa-ship"></i> tensorflow</a>
+              <a href="/tags/r3det/" rel="tag"><i class="fa fa-ship"></i> r3det</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/05/tensorflow%E4%B8%AD%E7%9A%84%E5%8F%82%E6%95%B0%E6%9B%B4%E6%96%B0%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/" rel="prev" title="tensorflow中的参数更新机制详解">
+      <i class="fa fa-chevron-left"></i> tensorflow中的参数更新机制详解
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Apers"
+      src="/images/avatar.jpg#QQ1.jpg">
+  <p class="site-author-name" itemprop="name">Apers</p>
+  <div class="site-description" itemprop="description">若有诗书藏于心,岁月从不败美人</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiaoxiao-coder" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoxiao-coder" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxiaocoder1@gmail.com" title="E-Mail → mailto:xiaoxiaocoder1@gmail.com" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-google"></i>Google</a>
+      </span>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Apers</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">67k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:01</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'mLlhk74loQanT3wsKkyBMxve-gzGzoHsz',
+      appKey     : 'gie2FNStD4ro7YKzTQYJag4u',
+      placeholder: "留下你的痕迹吧!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+
+<div class="moon-menu">
+  <div class="moon-menu-items">
+    
+    <div class="moon-menu-item" onclick="back2bottom()">
+      <i class='fa fa-chevron-down'></i>    </div>
+    
+    <div class="moon-menu-item" onclick="back2top()">
+      <i class='fa fa-chevron-up'></i>    </div>
+    
+  </div>
+  <div class="moon-menu-button">
+    <svg class="moon-menu-bg">
+      <circle class="moon-menu-cricle" cx="50%" cy="50%" r="44%"></circle>
+      <circle class="moon-menu-border" cx="50%" cy="50%" r="48%"></circle>
+    </svg>
+    <div class="moon-menu-content">
+      <div class="moon-menu-icon"><i class='fas fa-ellipsis-v'></i></div>
+      <div class="moon-menu-text"></div>
+    </div>
+  </div>
+</div><script src="/js/injector.js"></script>
+</body>
+</html>
