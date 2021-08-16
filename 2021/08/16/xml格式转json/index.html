@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="Dc-vXTJ_Z0o0sirD51XHawJ1YZQdyEgKKbOXaI7Mo7E">
+  <meta name="baidu-site-verification" content="k7ID4DXsv2">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"gezhilai.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="很多目标追踪给的数据集给的label都是xml格式的文件，labelme可视化工具需要的格式是json格式，所以需要对xml格式进行转换成json，师兄给了以前的代码，但是跑不通，下面便来具体解析一下这个代码并进行修改。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xml格式转json">
+<meta property="og:url" content="http://gezhilai.com/2021/08/16/xml%E6%A0%BC%E5%BC%8F%E8%BD%ACjson/index.html">
+<meta property="og:site_name" content="Apers&#39; Blog">
+<meta property="og:description" content="很多目标追踪给的数据集给的label都是xml格式的文件，labelme可视化工具需要的格式是json格式，所以需要对xml格式进行转换成json，师兄给了以前的代码，但是跑不通，下面便来具体解析一下这个代码并进行修改。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/15/fgg6f0.png">
+<meta property="article:published_time" content="2021-08-15T16:40:41.000Z">
+<meta property="article:modified_time" content="2021-08-16T03:21:03.182Z">
+<meta property="article:author" content="Apers">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="xml">
+<meta property="article:tag" content="json">
+<meta property="article:tag" content="os库">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://z3.ax1x.com/2021/08/15/fgg6f0.png">
+
+<link rel="canonical" href="http://gezhilai.com/2021/08/16/xml%E6%A0%BC%E5%BC%8F%E8%BD%ACjson/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>xml格式转json | Apers' Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e7dd5726174410a42696b9a0189c1ed0# <app_id>";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Apers' Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">茶亦醉人何必酒,书能香我不须花</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">26</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">21</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links" rel="section"><i class="fa fa-fw fa-link"></i>友链</a>
+
+  </li>
+        <li class="menu-item menu-item-movies">
+
+    <a href="/movies/" rel="section"><i class="fa fa-fw fa-film"></i>观影</a>
+
+  </li>
+        <li class="menu-item menu-item-books">
+
+    <a href="/books/" rel="section"><i class="fa fa-fw fa-book"></i>阅读</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/08/16/xml%E6%A0%BC%E5%BC%8F%E8%BD%ACjson/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
+      <meta itemprop="name" content="Apers">
+      <meta itemprop="description" content="若有诗书藏于心,岁月从不败美人">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Apers' Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          xml格式转json
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+	
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-15 16:40:41" itemprop="dateCreated datePublished" datetime="2021-08-15T16:40:41Z">2021-08-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-16 03:21:03" itemprop="dateModified" datetime="2021-08-16T03:21:03Z">2021-08-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/xml/" itemprop="url" rel="index"><span itemprop="name">xml</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/xml/json/" itemprop="url" rel="index"><span itemprop="name">json</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/xml/json/os%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">os库</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/08/16/xml%E6%A0%BC%E5%BC%8F%E8%BD%ACjson/" class="post-meta-item leancloud_visitors" data-flag-title="xml格式转json" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/08/16/xml%E6%A0%BC%E5%BC%8F%E8%BD%ACjson/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/16/xml%E6%A0%BC%E5%BC%8F%E8%BD%ACjson/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>11k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>很多目标追踪给的数据集给的label都是xml格式的文件，labelme可视化工具需要的格式是json格式，所以需要对xml格式进行转换成json，师兄给了以前的代码，但是跑不通，下面便来具体解析一下这个代码并进行修改。</p>
+<a id="more"></a>
+<p>首先来看一下xml格式的label文件</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fgg6f0"><img src="https://z3.ax1x.com/2021/08/15/fgg6f0.png" alt="fgg6f0.png"></a></p>
+<p>那么下面附一下读取xml文件的函数。通过ET。parse可以将xml格式文件解析为元素树(一个个节点接下去)，然后通过tree.getroot()得到元素树的根节点，根节点中的元素就是最外层的几个参数，即source、research、size和objects，其实这些参数里面有存储了下一层节点参数，本质都是可迭代对象。可以来测试一下，通过list来转换一下可迭代对象：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> child_of_root <span class="keyword">in</span> root:</span><br><span class="line">    print(child_of_root.tag)</span><br><span class="line">    print(<span class="built_in">list</span>(child_of_root))</span><br></pre></td></tr></table></figure>
+<p>输出如下，可以看出根节点包含的的确是那四个，而那四个又是可迭代对象，而其中包含的参数，即是下一层的节点参数。其中child_of_root.tag可以获取当前的元素名称，其实tag类似于字典里的key，而text类似于字典里的value。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">source</span><br><span class="line">[&lt;Element <span class="string">&#x27;filename&#x27;</span> at <span class="number">0x000001CB382693B0</span>&gt;, &lt;Element <span class="string">&#x27;origin&#x27;</span> at <span class="number">0x000001CB392C7BD0</span>&gt;]</span><br><span class="line">research</span><br><span class="line">[&lt;Element <span class="string">&#x27;version&#x27;</span> at <span class="number">0x000001CB392C78B0</span>&gt;, &lt;Element <span class="string">&#x27;provider&#x27;</span> at <span class="number">0x000001CB392C71D0</span>&gt;, &lt;Element <span class="string">&#x27;author&#x27;</span> at <span class="number">0x000001CB392C7770</span>&gt;, &lt;Element <span class="string">&#x27;pluginname&#x27;</span> at <span class="number">0x000001CB392C7C20</span>&gt;, &lt;Element <span class="string">&#x27;pluginclass&#x27;</span> at <span class="number">0x000001CB392C7360</span>&gt;, &lt;Element <span class="string">&#x27;time&#x27;</span> at <span class="number">0x000001CB392C7DB0</span>&gt;]</span><br><span class="line">size</span><br><span class="line">[&lt;Element <span class="string">&#x27;width&#x27;</span> at <span class="number">0x000001CB392C7680</span>&gt;, &lt;Element <span class="string">&#x27;height&#x27;</span> at <span class="number">0x000001CB392C77C0</span>&gt;, &lt;Element <span class="string">&#x27;depth&#x27;</span> at <span class="number">0x000001CB392C7EF0</span>&gt;]</span><br><span class="line">objects</span><br><span class="line">[&lt;Element <span class="string">&#x27;object&#x27;</span> at <span class="number">0x000001CB392C7590</span>&gt;, &lt;Element <span class="string">&#x27;object&#x27;</span> at <span class="number">0x000001CB392C7720</span>&gt;]</span><br></pre></td></tr></table></figure>
+<p>而下述代码中，根节点中，if只判断了source和objects，没有使用size，那么后面转换成json的话，必然需要读取图片得到长宽和通道数，其实不太合适，可以自行加上几个if，通过不断的for产生可迭代对象，进行遍历元素树。我们仔细看一下objects元素，遍历后，只处理其中的object。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> scipy.misc <span class="keyword">as</span> misc</span><br><span class="line"><span class="keyword">from</span> xml.dom.minidom <span class="keyword">import</span> Document</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> copy, cv2</span><br><span class="line"><span class="comment"># import imageio</span></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"><span class="keyword">import</span> xml.etree.cElementTree <span class="keyword">as</span> ET</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> osgeo <span class="keyword">import</span> gdal, gdalconst</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_xml_gtbox_and_label</span>(<span class="params">xml_path</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    :param xml_path: the path of voc xml</span></span><br><span class="line"><span class="string">    :return: a list contains gtboxes and labels, shape is [num_of_gtboxes, 9],</span></span><br><span class="line"><span class="string">           and has [x1, y1, x2, y2, x3, y3, x4, y4, label] in a per row</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    tree = ET.parse(xml_path)</span><br><span class="line">    root = tree.getroot()</span><br><span class="line">    box_list = []</span><br><span class="line">    difficult_list = []</span><br><span class="line">    isObjNone=<span class="literal">True</span></span><br><span class="line">    tmp_score_list=[]</span><br><span class="line">    <span class="keyword">for</span> child_of_root <span class="keyword">in</span> root:</span><br><span class="line">        <span class="comment"># if child_of_root.tag == &#x27;filename&#x27;:</span></span><br><span class="line">        <span class="comment">#     assert child_of_root.text == xml_path.split(&#x27;/&#x27;)[-1].split(&#x27;.&#x27;)[0] \</span></span><br><span class="line">        <span class="comment">#                                  + FLAGS.img_format, &#x27;xml_name and img_name cannot match&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> child_of_root.tag == <span class="string">&#x27;source&#x27;</span>:</span><br><span class="line">            <span class="keyword">for</span> child_item <span class="keyword">in</span> child_of_root:</span><br><span class="line">                <span class="keyword">if</span> child_item.tag == <span class="string">&#x27;filename&#x27;</span>: </span><br><span class="line">                    img_name = child_item.text</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> child_of_root.tag == <span class="string">&#x27;objects&#x27;</span>:</span><br><span class="line">            label = <span class="literal">None</span></span><br><span class="line">            <span class="keyword">for</span> child_item <span class="keyword">in</span> child_of_root:</span><br><span class="line">                <span class="keyword">if</span> child_item.tag == <span class="string">&#x27;object&#x27;</span>:</span><br><span class="line">                    <span class="keyword">for</span> child_pic <span class="keyword">in</span> child_item:</span><br><span class="line">                        <span class="keyword">if</span> child_pic.tag == <span class="string">&#x27;possibleresult&#x27;</span>:</span><br><span class="line">                            <span class="keyword">for</span> child_name <span class="keyword">in</span> child_pic:</span><br><span class="line">                                <span class="keyword">if</span> child_name.tag == <span class="string">&#x27;name&#x27;</span>:</span><br><span class="line">                                    label = child_name.text</span><br><span class="line">                                <span class="keyword">if</span> child_name.tag == <span class="string">&#x27;probability&#x27;</span>:</span><br><span class="line">                                    tmp_score=<span class="built_in">float</span>(child_name.text)</span><br><span class="line">                                    tmp_score_list.append(tmp_score)</span><br><span class="line">                                    <span class="comment"># difficult_tmp = int(not(child_name.text))</span></span><br><span class="line">                                    tmp_list=re.findall(<span class="string">&#x27;[^.\d]&#x27;</span>,child_name.text)</span><br><span class="line">                                    <span class="keyword">if</span> <span class="built_in">len</span>(tmp_list)&gt;<span class="number">0</span>:</span><br><span class="line">                                        print(xml_path)</span><br><span class="line">                                        print(tmp_list)</span><br><span class="line">                                    <span class="keyword">if</span> child_name.text.strip()==<span class="string">&#x27;&#x27;</span>:</span><br><span class="line">                                        print(xml_path)</span><br><span class="line">                                        print(<span class="string">&#x27;empty&#x27;</span>)</span><br><span class="line">                                    difficult_tmp = <span class="number">0</span><span class="comment">#int(not(child_name.text))</span></span><br><span class="line">                                    difficult_list.append(difficult_tmp)</span><br><span class="line">                        <span class="keyword">if</span> child_pic.tag == <span class="string">&#x27;points&#x27;</span>:</span><br><span class="line">                            tmp_box = []</span><br><span class="line">                            <span class="keyword">for</span> node <span class="keyword">in</span> child_pic:</span><br><span class="line">                                tmp_list=re.findall(<span class="string">&#x27;[^-,.\d]&#x27;</span>,node.text)</span><br><span class="line">                                <span class="keyword">if</span> <span class="built_in">len</span>(tmp_list)&gt;<span class="number">0</span>:</span><br><span class="line">                                    print(xml_path)</span><br><span class="line">                                    print(tmp_list)</span><br><span class="line">                                <span class="keyword">if</span> node.text.strip()==<span class="string">&#x27;&#x27;</span>:</span><br><span class="line">                                    print(xml_path)</span><br><span class="line">                                    print(<span class="string">&#x27;empty&#x27;</span>)</span><br><span class="line">                            <span class="keyword">for</span> node <span class="keyword">in</span> child_pic[:<span class="number">4</span>]:</span><br><span class="line">                                tmp_box=tmp_box+node.text.split(<span class="string">&#x27;,&#x27;</span>)</span><br><span class="line">                                isObjNone=<span class="literal">False</span></span><br><span class="line">                            tmp_box.append(label)</span><br><span class="line">                            box_list.append(tmp_box)</span><br><span class="line">    <span class="keyword">if</span> isObjNone:</span><br><span class="line">        print(xml_path)</span><br><span class="line">        print(<span class="string">&#x27;obj none!&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> img_name, box_list, difficult_list, tmp_score_list</span><br></pre></td></tr></table></figure>
+<p>我们将objects一块拿出来，见下述的#1的代码，for遍历，如果遍历的元素是object的，那么继续遍历处理，然后我们希望处理的是object中的possibleresult:这里面是包含所属类别和置信度(分类)和points:里面包含了追踪目标的四个角点(其实都是有五队，形成来一个收尾连接的闭合空间，我们只需要四对即四队角点即可)。</p>
+<p>先看处理possibleresult的，里面会保存元素name中的参数，即label的类别；然后判断力probability，这个是置信度，child_name.text得到分数后，将分数加入列表中，不过后面对child_name.text进行了一个正则表达式匹配(和深度学习中的正则化区别，深度学习中的正则化是为了加入一些约束防止过拟合)，re.findall(‘[^.\d]‘,child_name.text)是前面第一个元素进行对后面的字符串进行匹配，[]代表系列组合，比如[0-99],就会匹配0、1、2。。。99的元素。而^可以理解为取反，[abc]是匹配a、b和c的字符，即[^abc ]即匹配除了abc的所有字符，这里的\d代表所有数字，^\d代表匹配除了所有数字以外的字符，“.”的意思是匹配除了换行的所有字符串，但是这里前面加了^则不是这个含义了，这里的含义就是简单的浮点数的点点，^.是不匹配浮点数的点点的意思。这个正则表达式是用于检测置信度是否是浮点数的，如果有其他字符，则会检测出来。</p>
+<p>正则表达式参考链接如下：</p>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.runoob.com/python/python-reg-expressions.html">Python 正则表达式</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://docs.python.org/zh-cn/3/library/re.html#re.MULTILINE">re-正则表达式操作</a></p>
+
+          </blockquote>
+<p>下一个if child_name.text.strip()==’’是用于判断字符串(置信度也是以字符串形式存储的)是否为空，strip函数是用来移除字符串头尾指定的字符（默认为空格）或字符序列，需要注意的是，只移除开头和结尾的指定字符。这里就是默认移除空格，然后看其是否为空。</p>
+<p>probability判断完后，开始检测points，就是坐标，依旧是正则表达式，不匹配负号、逗号、点和数字，如果还有其他字符，则认为有问题。第二个for用来遍历取出所有的坐标，通过遍历前四组坐标（第五组和第一组重合了），然后用split进行分割，分割的界限以”,”进行，然后把结果加入list列表，list列表的加法是拼接的意思，乘法是重复拼接的意思，区别于np的操作。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1        </span></span><br><span class="line">    	<span class="keyword">if</span> child_of_root.tag == <span class="string">&#x27;objects&#x27;</span>:</span><br><span class="line">            label = <span class="literal">None</span></span><br><span class="line">            <span class="keyword">for</span> child_item <span class="keyword">in</span> child_of_root:</span><br><span class="line">                <span class="keyword">if</span> child_item.tag == <span class="string">&#x27;object&#x27;</span>:</span><br><span class="line">                    <span class="keyword">for</span> child_pic <span class="keyword">in</span> child_item:</span><br><span class="line">                        <span class="keyword">if</span> child_pic.tag == <span class="string">&#x27;possibleresult&#x27;</span>:</span><br><span class="line">                            <span class="keyword">for</span> child_name <span class="keyword">in</span> child_pic:</span><br><span class="line">                                <span class="keyword">if</span> child_name.tag == <span class="string">&#x27;name&#x27;</span>:</span><br><span class="line">                                    label = child_name.text</span><br><span class="line">                                <span class="keyword">if</span> child_name.tag == <span class="string">&#x27;probability&#x27;</span>:</span><br><span class="line">                                    tmp_score=<span class="built_in">float</span>(child_name.text)</span><br><span class="line">                                    tmp_score_list.append(tmp_score)</span><br><span class="line">                                    <span class="comment"># difficult_tmp = int(not(child_name.text))</span></span><br><span class="line">                                    tmp_list=re.findall(<span class="string">&#x27;[^.\d]&#x27;</span>,child_name.text)</span><br><span class="line">                                    <span class="keyword">if</span> <span class="built_in">len</span>(tmp_list)&gt;<span class="number">0</span>:</span><br><span class="line">                                        print(xml_path)</span><br><span class="line">                                        print(tmp_list)</span><br><span class="line">                                    <span class="keyword">if</span> child_name.text.strip()==<span class="string">&#x27;&#x27;</span>:</span><br><span class="line">                                        print(xml_path)</span><br><span class="line">                                        print(<span class="string">&#x27;empty&#x27;</span>)</span><br><span class="line">                                    difficult_tmp = <span class="number">0</span><span class="comment">#int(not(child_name.text))</span></span><br><span class="line">                                    difficult_list.append(difficult_tmp)</span><br><span class="line">                        <span class="keyword">if</span> child_pic.tag == <span class="string">&#x27;points&#x27;</span>:</span><br><span class="line">                            tmp_box = []</span><br><span class="line">                            <span class="keyword">for</span> node <span class="keyword">in</span> child_pic:</span><br><span class="line">                                tmp_list=re.findall(<span class="string">&#x27;[^-,.\d]&#x27;</span>,node.text)</span><br><span class="line">                                <span class="keyword">if</span> <span class="built_in">len</span>(tmp_list)&gt;<span class="number">0</span>:</span><br><span class="line">                                    print(xml_path)</span><br><span class="line">                                    print(tmp_list)</span><br><span class="line">                                <span class="keyword">if</span> node.text.strip()==<span class="string">&#x27;&#x27;</span>:</span><br><span class="line">                                    print(xml_path)</span><br><span class="line">                                    print(<span class="string">&#x27;empty&#x27;</span>)</span><br><span class="line">                            <span class="keyword">for</span> node <span class="keyword">in</span> child_pic[:<span class="number">4</span>]:</span><br><span class="line">                                tmp_box=tmp_box+node.text.split(<span class="string">&#x27;,&#x27;</span>)</span><br><span class="line">                                isObjNone=<span class="literal">False</span></span><br><span class="line">                            tmp_box.append(label)</span><br><span class="line">                            box_list.append(tmp_box)</span><br></pre></td></tr></table></figure>
+<p>下面看一下把xml转换成json格式的函数#2，这个函数中调用了上述描述的函数。代码如下：</p>
+<p>这里需要讲一下这个python中的路径问题，python中用的是\作为路径文件夹相隔符，然而window中常常用\（ubuntu是/），而\这个字符是转义字符，用来作为程序中的文件路径肯定是不合适的，所以一般都是用/，所以在路径使用之前，先进行检测替换一下，用/替换\,即用到了replace函数，似乎应该用replace(“\\”,”/“),但是\\是转义字符的意思，所以需要使用\\\,这样才表示window中路径斜杠。</p>
+<p>save_path赋值时候，前面加了r，对于这些路径加上r有啥含义呢？如果我们的路径直接从windows拷贝过来的，格式都是类似于C:\Users\这样的，直接作为字符串赋值，\会作为转义字符直接被忽略掉，要么变成\\\\这样，人为修改太麻烦，加上一个r后，强制把后面的这字符串强制存为字符串，即\直接就是真的字符\了，而不是转移字符。</p>
+<p>下述函数中用到了os.path.split，其作用是，如果你传入一个文件路径，它会返回元组，包括两个参数，第一个是路径(精确到文件夹)，第二个是文件名，比如os.path.split(“C:\\Users\\21311\\machine_learning\\tensorflow\\xingtubei\\1.tif”)，返回(‘C:\\Users\\21311\\machine_learning\\tensorflow\\xingtubei’, ‘1.tif’)。然后下面调用了上面分析的解析xml的函数，由于解析xml的时候，没有解析size，所以不知道长宽和深度，所以这里用gdal库读入了图片，获取了width和length，这里显然是更浪费内存的，其实直接解析xml就可以得到了。所谓的json格式可以就看做为一个字典，字典里面可以嵌套字典，key值需要按照规定的来。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convert_pascal_to_tfrecord</span>(<span class="params">image_path, xml_path</span>):</span></span><br><span class="line">    <span class="comment">#葛改save_path=r&#x27;/emwuser/gzl/gf2021/data/plane_2020/train_split_test/train/json_c&#x27;</span></span><br><span class="line">    save_path=<span class="string">r&#x27;/emwuser/gzl/gf2021/data/FAIR1M/train/part1/json_c&#x27;</span><span class="comment">#json的保存地址#r其实是为了强制认为后面的都是字符串，不考虑转义字符，无r则会考虑转义字符，这里加不加其实无所谓，但是C:\data这种的就得加上r，或者直接C:\\data</span></span><br><span class="line">    <span class="keyword">for</span> count, xml <span class="keyword">in</span> <span class="built_in">enumerate</span>(glob.glob(xml_path + <span class="string">&#x27;/*.xml&#x27;</span>)):<span class="comment">#进行索引，*代表任意匹配，得到可迭代对象</span></span><br><span class="line">        <span class="comment"># to avoid path error in different development platform</span></span><br><span class="line">        xml = xml.replace(<span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)<span class="comment">#用/替换\\,即后面的替换前面的</span></span><br><span class="line">        (_, xml_name) = os.path.split(xml)<span class="comment">#分割。返回路径和文件名。若本身就是一个文件夹路径，则返回路径和空</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># img_name = xml.split(&#x27;/&#x27;)[-1].split(&#x27;.&#x27;)[0] + FLAGS.img_format</span></span><br><span class="line">        <span class="comment"># img_path = image_path + &#x27;/&#x27; + img_name</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># if not os.path.exists(img_path):</span></span><br><span class="line">        <span class="comment">#     print(&#x27;&#123;&#125; is not exist!&#x27;.format(img_path))</span></span><br><span class="line">        <span class="comment">#     continue</span></span><br><span class="line"></span><br><span class="line">        img_name, box , difficult_list, tmp_score_list = read_xml_gtbox_and_label(xml)</span><br><span class="line">        img_name=xml_name.replace(<span class="string">&#x27;.xml&#x27;</span>, <span class="string">&#x27;.tif&#x27;</span>)</span><br><span class="line">        img_path = image_path + <span class="string">&#x27;/&#x27;</span> + img_name</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(img_path):</span><br><span class="line">            print(<span class="string">&#x27;&#123;&#125; is not exist!&#x27;</span>.<span class="built_in">format</span>(img_path))</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        json_str=&#123;&#125;</span><br><span class="line">        shapes=[]</span><br><span class="line"></span><br><span class="line">        json_str[<span class="string">&#x27;version&#x27;</span>]=<span class="string">&quot;4.5.6&quot;</span></span><br><span class="line">        json_str[<span class="string">&#x27;flags&#x27;</span>]=&#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># json_str[&#x27;image_name&#x27;]=img_name</span></span><br><span class="line">        json_str[<span class="string">&#x27;imagePath&#x27;</span>]=os.path.join(<span class="string">&#x27;..&#x27;</span>,<span class="string">&#x27;images_c&#x27;</span>,img_name)</span><br><span class="line">        <span class="comment"># img_data = cv2.imread(json_str[&#x27;imagePath&#x27;])</span></span><br><span class="line">        json_str[<span class="string">&#x27;imageData&#x27;</span>]= <span class="literal">None</span></span><br><span class="line">        dataset = gdal.Open(os.path.join(image_path, img_name))</span><br><span class="line">        json_str[<span class="string">&#x27;imageHeight&#x27;</span>]=dataset.RasterYSize<span class="comment">#img_data.shape[0]</span></span><br><span class="line">        json_str[<span class="string">&#x27;imageWidth&#x27;</span>]=dataset.RasterXSize<span class="comment">#img_data.shape[1]</span></span><br><span class="line">        <span class="keyword">del</span> dataset</span><br><span class="line">        <span class="comment"># json_str[&#x27;image_depth&#x27;]=3</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(box)):</span><br><span class="line">            shape=&#123;&#125;</span><br><span class="line">            shape[<span class="string">&#x27;label&#x27;</span>]=box[i][-<span class="number">1</span>]</span><br><span class="line">            shape[<span class="string">&#x27;shape_type&#x27;</span>]=<span class="string">&quot;polygon&quot;</span></span><br><span class="line">            shape[<span class="string">&#x27;points&#x27;</span>]=[[box[i][<span class="number">0</span>],box[i][<span class="number">1</span>]],[box[i][<span class="number">2</span>],box[i][<span class="number">3</span>]],[box[i][<span class="number">4</span>],box[i][<span class="number">5</span>]],[box[i][<span class="number">6</span>],box[i][<span class="number">7</span>]]]</span><br><span class="line">            shape[<span class="string">&#x27;points&#x27;</span>]=np.array(shape[<span class="string">&#x27;points&#x27;</span>],dtype=np.<span class="built_in">float</span>)</span><br><span class="line">            shape[<span class="string">&#x27;points&#x27;</span>]=shape[<span class="string">&#x27;points&#x27;</span>].tolist()</span><br><span class="line"></span><br><span class="line">            <span class="comment"># labelme 特有</span></span><br><span class="line">            shape[<span class="string">&#x27;group_id&#x27;</span>]= <span class="literal">None</span></span><br><span class="line">            shape[<span class="string">&#x27;flags&#x27;</span>]=&#123;&#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 图像标识平台 特有</span></span><br><span class="line">            shape[<span class="string">&#x27;score&#x27;</span>]=tmp_score_list[i]</span><br><span class="line">            shape[<span class="string">&#x27;difficult&#x27;</span>]=<span class="number">0</span><span class="comment">#difficult_list[i]#20200711</span></span><br><span class="line">            shape[<span class="string">&#x27;truncated&#x27;</span>]=<span class="number">0</span><span class="comment">#20200711</span></span><br><span class="line">            shape[<span class="string">&#x27;status&#x27;</span>]=<span class="string">&quot;add&quot;</span></span><br><span class="line"></span><br><span class="line">            shapes.append(shape)</span><br><span class="line">        json_str[<span class="string">&#x27;shapes&#x27;</span>]=shapes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(os.path.join(save_path, xml_name.replace(<span class="string">&#x27;xml&#x27;</span>, <span class="string">&#x27;json&#x27;</span>)), <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> fw:</span><br><span class="line">            json.dump(json_str, fw)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># view_bar(&#x27;Conversion progress&#x27;, count + 1,</span></span><br><span class="line">        <span class="comment">#          len(glob.glob(xml_path + &#x27;/*.xml&#x27;)))</span></span><br><span class="line"></span><br><span class="line">    print(<span class="string">&#x27;\nConversion is complete!&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>下面来看一下主函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    raw_label_dir=r&quot;/emwuser/gzl/gf2021/data/plane_2020/train_split_test/train/label_xml_c&quot;</span></span><br><span class="line"><span class="string">    raw_images_dir=r&#x27;/emwuser/gzl/gf2021/data/plane_2020/train_split_test/train/images_c&#x27;</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    raw_label_dir=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1/labelXmls_c&quot;</span></span><br><span class="line">    raw_images_dir=<span class="string">r&#x27;/emwuser/gzl/gf2021/data/FAIR1M/train/part1/images_c&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># raw_label_dir=r&quot;/emwusr/jhc/data/plane/data/train/label_xml&quot;</span></span><br><span class="line">    <span class="comment"># raw_images_dir=r&#x27;/emwusr/jhc/data/plane/data/train/images&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#save_path=r&#x27;/emwusr/nuoyizhou/pickplanedataset/competition/data/train/json&#x27;</span></span><br><span class="line">    convert_pascal_to_tfrecord(raw_images_dir,raw_label_dir)</span><br></pre></td></tr></table></figure>
+<p>其实可以发现其报错了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;/emwuser/gzl/gf2021/code/R3Det_Tensorflow_gf2021/tools_gf_2021/xml2json_zry.py&quot;</span>, line <span class="number">161</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    convert_pascal_to_tfrecord(raw_images_dir,raw_label_dir)</span><br><span class="line">  File <span class="string">&quot;/emwuser/gzl/gf2021/code/R3Det_Tensorflow_gf2021/tools_gf_2021/xml2json_zry.py&quot;</span>, line <span class="number">130</span>, <span class="keyword">in</span> convert_pascal_to_tfrecord</span><br><span class="line">    shape[<span class="string">&#x27;score&#x27;</span>]=tmp_score_list[i]</span><br><span class="line">IndexError: <span class="built_in">list</span> index out of <span class="built_in">range</span></span><br></pre></td></tr></table></figure>
+<p>即tmp_score_list超界了，可以看一下该文最上面的xml文件，可以发现里面是没有置信度的参数，而解析xml文件的时候，如果有则写入list中，如果没有，则list就不写入，这显然是不合理的，没有的话我们应该进行填充默认值，作为给的训练集数据，那么置信度可以默认为1。我们可以在convert_pascal_to_tfrecord中进行判断一下，加入如下语句</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> tmp_score_list:</span><br><span class="line">    print(<span class="string">&quot;tmp_score_list是空的&quot;</span>)</span><br><span class="line">    tmp_score_list=[<span class="number">0</span>]*<span class="built_in">len</span>(box)</span><br><span class="line">    print(tmp_score_list)</span><br></pre></td></tr></table></figure>
+<p>其中两个print可以屏蔽掉，因为循环的时候打印太多也没有意义。其实更好的应该是在read_xml_gtbox_and_label函数中判断probability那加入else，给予默认值。</p>
+<p>填充好tmp_score_list后，就可以得到json格式的文件，我们可以用labelme进行打开，但是打开还是报错的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a byte-like <span class="built_in">object</span> <span class="keyword">is</span> required,<span class="keyword">not</span> “Nonetype”</span><br></pre></td></tr></table></figure>
+<p>其实我们可以随便打开一张tif文件，然后进行标注，保存json格式的label，把json单独拿出，labelme打开json后，图像会自动显示，这个图像是json中路径寻找到的？你即使给它一个错误路径图片也可以正常显示，所以是json中存储了图片信息，在key为ImageData的value，然而我们生成json的时候，是用null填充的，所以是打不开的，不过这只是影响我们可视化而已，不影响我们图像处理，如果需要可视化的话，我们可以打开图片，随便标注一下，存下json，把这个json中的ImageData的value复制到我们函数产生的json即可。</p>
+
+    </div>
+
+    
+    
+    
+      
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Apers
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://gezhilai.com/2021/08/16/xml%E6%A0%BC%E5%BC%8F%E8%BD%ACjson/" title="xml格式转json">http://gezhilai.com/2021/08/16/xml格式转json/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"><i class="fa fa-ship"></i> python</a>
+              <a href="/tags/xml/" rel="tag"><i class="fa fa-ship"></i> xml</a>
+              <a href="/tags/json/" rel="tag"><i class="fa fa-ship"></i> json</a>
+              <a href="/tags/os%E5%BA%93/" rel="tag"><i class="fa fa-ship"></i> os库</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/07/r3net%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/" rel="prev" title="r3det代码详解(一)">
+      <i class="fa fa-chevron-left"></i> r3det代码详解(一)
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Apers"
+      src="/images/avatar.jpg#QQ1.jpg">
+  <p class="site-author-name" itemprop="name">Apers</p>
+  <div class="site-description" itemprop="description">若有诗书藏于心,岁月从不败美人</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiaoxiao-coder" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoxiao-coder" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxiaocoder1@gmail.com" title="E-Mail → mailto:xiaoxiaocoder1@gmail.com" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-google"></i>Google</a>
+      </span>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Apers</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">78k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:11</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@2.7.8/unpacked/MathJax.js?config=TeX-MML-AM_CHTML';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'mLlhk74loQanT3wsKkyBMxve-gzGzoHsz',
+      appKey     : 'gie2FNStD4ro7YKzTQYJag4u',
+      placeholder: "留下你的痕迹吧!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+
+<div class="moon-menu">
+  <div class="moon-menu-items">
+    
+    <div class="moon-menu-item" onclick="back2bottom()">
+      <i class='fa fa-chevron-down'></i>    </div>
+    
+    <div class="moon-menu-item" onclick="back2top()">
+      <i class='fa fa-chevron-up'></i>    </div>
+    
+  </div>
+  <div class="moon-menu-button">
+    <svg class="moon-menu-bg">
+      <circle class="moon-menu-cricle" cx="50%" cy="50%" r="44%"></circle>
+      <circle class="moon-menu-border" cx="50%" cy="50%" r="48%"></circle>
+    </svg>
+    <div class="moon-menu-content">
+      <div class="moon-menu-icon"><i class='fas fa-ellipsis-v'></i></div>
+      <div class="moon-menu-text"></div>
+    </div>
+  </div>
+</div><script src="/js/injector.js"></script>
+</body>
+</html>
