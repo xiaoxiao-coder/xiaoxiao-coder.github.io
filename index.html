@@ -137,17 +137,17 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">26</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">27</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">21</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">23</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">14</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">17</span></a>
 
   </li>
         <li class="menu-item menu-item-schedule">
@@ -231,6 +231,349 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/08/18/xml%E6%96%87%E4%BB%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
+      <meta itemprop="name" content="Apers">
+      <meta itemprop="description" content="若有诗书藏于心,岁月从不败美人">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Apers' Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/18/xml%E6%96%87%E4%BB%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">xml文件的数据分析</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+	
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-08-17 17:58:20 / 修改时间：11:15:52" itemprop="dateCreated datePublished" datetime="2021-08-17T17:58:20Z">2021-08-17</time>
+            </span>
+
+          
+            <span id="/2021/08/18/xml%E6%96%87%E4%BB%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="xml文件的数据分析" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/08/18/xml%E6%96%87%E4%BB%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/18/xml%E6%96%87%E4%BB%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>上篇得到了飞机的tif和对应的xml文件后(xml文件中的object只留下了飞机)，我们需要对飞机的信息进行分析汇总，此处对每一类飞机主要想统计的信息有如下：</p>
+<ul>
+<li>该类别的图片数量</li>
+<li>飞机的最小宽度</li>
+<li>飞机的最小高度</li>
+<li>飞机最小的宽高比</li>
+<li>飞机的最大宽度</li>
+<li>飞机的最大高度</li>
+<li>飞机最大的宽高比</li>
+<li>图片的最小宽度</li>
+<li>图片的最小高度</li>
+<li>图片的最小深度</li>
+<li>图片的最大宽度</li>
+<li>图片的最大高度</li>
+<li>图片的最大深度</li>
+</ul>
+<p>在之前的xml转json格式的博客中，那个read_xml_gtbox_and_label函数中加入如下的信息统计，即多读取一个size，size中三个数分别代表宽度、高度和深度，并将size数据return返回，注意其是字符串格式的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> child_of_root.tag == <span class="string">&#x27;size&#x27;</span>:</span><br><span class="line">    size = [-<span class="number">1</span>,-<span class="number">1</span>,-<span class="number">1</span>]<span class="comment">#[width,height,depth]</span></span><br><span class="line">    <span class="keyword">for</span> child_item <span class="keyword">in</span> child_of_root:</span><br><span class="line">        <span class="keyword">if</span> child_item.tag == <span class="string">&#x27;width&#x27;</span>: </span><br><span class="line">            size[<span class="number">0</span>] = child_item.text</span><br><span class="line">        <span class="keyword">if</span> child_item.tag == <span class="string">&#x27;height&#x27;</span>: </span><br><span class="line">            size[<span class="number">1</span>] = child_item.text</span><br><span class="line">        <span class="keyword">if</span> child_item.tag == <span class="string">&#x27;depth&#x27;</span>: </span><br><span class="line">            size[<span class="number">2</span>] = child_item.text</span><br></pre></td></tr></table></figure>
+<p>read_xml_gtbox_and_label函数的博客链接如下：</p>
+<blockquote class="blockquote-center">
+            <p><a href="http://gezhilai.com/2021/08/16/xml%E6%A0%BC%E5%BC%8F%E8%BD%ACjson/">xml格式转json</a></p>
+
+          </blockquote>
+<p>然后得到返回后，进行信息统计，统计得到的numpy数组进行保存。飞机的长宽以及长宽比，其实是按照矩形框来的，由于给的数据集是四边形框，我将这个框变成了xy方向上的水平矩形框进行计算高和宽。值得注意的是，飞机的尺寸竟然出现了浮点数，不知道是组委会给的xml文件有问题还是有浮点数是正常的，不过坐标是标记像素的位置的，出现浮点数有点不太正常。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    统计gf2021中目标大小(影响滑动窗口进行切片)，统计飞机的目标大小，统计含括飞机的图片尺寸，把</span></span><br><span class="line"><span class="string">    有飞机的图片另存为，同时另存xml，把xml也修改一下，把非飞机的目标丢弃掉。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> scipy.misc <span class="keyword">as</span> misc</span><br><span class="line"><span class="keyword">from</span> xml.dom.minidom <span class="keyword">import</span> Document</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> copy, cv2</span><br><span class="line"><span class="comment"># import imageio</span></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"><span class="keyword">import</span> xml.etree.cElementTree <span class="keyword">as</span> ET</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> osgeo <span class="keyword">import</span> gdal, gdalconst</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">information_statistics_save</span>(<span class="params">image_path, xml_path</span>):</span></span><br><span class="line">    plane_data = np.zeros((<span class="number">10</span>,<span class="number">13</span>))<span class="comment">#num,min_width,min_height,min_ratio,max_width,max_height,max_ratio。min_pic_width,min_pic_height,min_pic_depth,max_pic_width,max_pic_height,max_pic_depth</span></span><br><span class="line">    initialization=np.array([<span class="number">0</span>,<span class="number">10000</span>,<span class="number">10000</span>,<span class="number">10000</span>,-<span class="number">1</span>,-<span class="number">1</span>,-<span class="number">1</span>,<span class="number">10000</span>,<span class="number">10000</span>,<span class="number">10000</span>,-<span class="number">1</span>,-<span class="number">1</span>,-<span class="number">1</span>])</span><br><span class="line">    plane_data  = plane_data    +   initialization <span class="comment">#初始化，广播机制</span></span><br><span class="line">    plane_label = [<span class="string">&quot;Boeing737&quot;</span>,<span class="string">&quot;Boeing747&quot;</span>,<span class="string">&quot;Boeing777&quot;</span>,<span class="string">&quot;C919&quot;</span>,<span class="string">&quot;A220&quot;</span>,<span class="string">&quot;A321&quot;</span>,<span class="string">&quot;A330&quot;</span>,<span class="string">&quot;A350&quot;</span>,<span class="string">&quot;ARJ21&quot;</span>,<span class="string">&quot;other-airplane&quot;</span>]</span><br><span class="line">    <span class="keyword">for</span> count, xml <span class="keyword">in</span> <span class="built_in">enumerate</span>(glob.glob(xml_path + <span class="string">&#x27;/*.xml&#x27;</span>)):<span class="comment">#进行索引，*代表任意匹配，得到可迭代对象</span></span><br><span class="line">        <span class="comment"># to avoid path error in different development platform</span></span><br><span class="line">        xml = xml.replace(<span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)<span class="comment">#用/替换\\,后面的替换前面的</span></span><br><span class="line">        (_, xml_name) = os.path.split(xml)<span class="comment">#分割。返回路径和文件名。若本身就是一个文件夹路径，则返回路径和空</span></span><br><span class="line">        <span class="comment">#print(xml)</span></span><br><span class="line">        img_name, box , size, difficult_list, tmp_score_list = read_xml_gtbox_and_label(xml)</span><br><span class="line">        img_name=xml_name.replace(<span class="string">&#x27;.xml&#x27;</span>, <span class="string">&#x27;.tif&#x27;</span>)</span><br><span class="line">        img_path = image_path + <span class="string">&#x27;/&#x27;</span> + img_name</span><br><span class="line"></span><br><span class="line">        size = np.float32(size)</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">for</span> box_one_object <span class="keyword">in</span> box:</span><br><span class="line">            <span class="keyword">if</span> box_one_object[<span class="number">8</span>] <span class="keyword">in</span> plane_label:</span><br><span class="line">                index_label=plane_label.index(box_one_object[<span class="number">8</span>])</span><br><span class="line">                <span class="comment">#print(index_label)</span></span><br><span class="line">                plane_data[index_label,<span class="number">0</span>]=plane_data[index_label,<span class="number">0</span>]+<span class="number">1</span><span class="comment">#该类型飞机数量加1</span></span><br><span class="line">                box_float=np.float32(box_one_object[<span class="number">0</span>:<span class="number">8</span>])<span class="comment">#float只能对单个数使用，数组类的用np.float</span></span><br><span class="line">                x_box=box_float[[<span class="number">0</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>]]</span><br><span class="line">                y_box=box_float[[<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>]]</span><br><span class="line">                <span class="comment">#print(x_box,y_box)</span></span><br><span class="line">                width = np.<span class="built_in">max</span>(x_box)-np.<span class="built_in">min</span>(x_box)</span><br><span class="line">                height = np.<span class="built_in">max</span>(y_box)-np.<span class="built_in">min</span>(y_box)</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">int</span>(width*<span class="number">100</span>) ==<span class="number">758</span>:</span><br><span class="line">                    print(xml)</span><br><span class="line">                <span class="keyword">if</span> width &lt; plane_data[index_label,<span class="number">1</span>]:</span><br><span class="line">                    plane_data[index_label,<span class="number">1</span>]=width</span><br><span class="line">                <span class="keyword">if</span> height &lt; plane_data[index_label,<span class="number">2</span>]:                    </span><br><span class="line">                    plane_data[index_label,<span class="number">2</span>]=height </span><br><span class="line">                <span class="keyword">if</span> width/height &lt; plane_data[index_label,<span class="number">3</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">3</span>]=width/height   </span><br><span class="line">                <span class="keyword">if</span> width &gt; plane_data[index_label,<span class="number">4</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">4</span>]=width </span><br><span class="line">                <span class="keyword">if</span> height &gt; plane_data[index_label,<span class="number">5</span>]:</span><br><span class="line">                    plane_data[index_label,<span class="number">5</span>]=height</span><br><span class="line">                <span class="keyword">if</span> width/height &gt; plane_data[index_label,<span class="number">6</span>]:                    </span><br><span class="line">                    plane_data[index_label,<span class="number">6</span>]=width/height </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">0</span>] &lt; plane_data[index_label,<span class="number">7</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">7</span>]=size[<span class="number">0</span>]   </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">1</span>] &lt; plane_data[index_label,<span class="number">8</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">8</span>]=size[<span class="number">1</span>]                       </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">2</span>] &lt; plane_data[index_label,<span class="number">9</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">9</span>]=size[<span class="number">2</span>]   </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">0</span>] &gt; plane_data[index_label,<span class="number">10</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">10</span>]=size[<span class="number">0</span>]   </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">1</span>] &gt; plane_data[index_label,<span class="number">11</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">11</span>]=size[<span class="number">1</span>]                       </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">2</span>] &gt; plane_data[index_label,<span class="number">12</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">12</span>]=size[<span class="number">2</span>] </span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                print(<span class="string">&quot;出现错误&quot;</span>) </span><br><span class="line">            </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(img_path):</span><br><span class="line">            print(<span class="string">&#x27;&#123;&#125; is not exist!&#x27;</span>.<span class="built_in">format</span>(img_path))</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="comment"># view_bar(&#x27;Conversion progress&#x27;, count + 1,</span></span><br><span class="line">        <span class="comment">#          len(glob.glob(xml_path + &#x27;/*.xml&#x27;)))</span></span><br><span class="line">    print(plane_data)</span><br><span class="line">    np.save(<span class="string">&quot;plane_data.npy&quot;</span>,plane_data)</span><br><span class="line">    <span class="comment">#b = np.load(&quot;filename.npy&quot;)</span></span><br><span class="line">    print(<span class="string">&#x27;\nStatistics is complete!&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> plane_data</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    image_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1_plane/images&quot;</span></span><br><span class="line">    xml_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1_plane/labelXmls&quot;</span></span><br><span class="line"></span><br><span class="line">    information_statistics_save(image_path,xml_path)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
+      <meta itemprop="name" content="Apers">
+      <meta itemprop="description" content="若有诗书藏于心,岁月从不败美人">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Apers' Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/" class="post-title-link" itemprop="url">数据集筛选及其xml格式的label修改</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+	
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-08-17 17:33:43 / 修改时间：09:56:53" itemprop="dateCreated datePublished" datetime="2021-08-17T17:33:43Z">2021-08-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%98%9F%E5%9B%BE%E6%9D%AF/" itemprop="url" rel="index"><span itemprop="name">星图杯</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%98%9F%E5%9B%BE%E6%9D%AF/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/" class="post-meta-item leancloud_visitors" data-flag-title="数据集筛选及其xml格式的label修改" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>组委会先发布了一部分的数据，去年星图杯是用于飞机目标追踪的，由于今年的飞机种类和去年几乎一致（多了C919,不过后续的数据信息统计可以发现就几张，先扔掉），所以想先选出飞机的图片和xml的label来，我就写了个文件来选出飞机和对应的修改后的xml，需要考虑的时候，通过xml的objects/object/possibleresult/name来进行判别是否是飞机。由于只想留下飞机，所以需要做如下两点：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/08/17/python%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%B1%87%E6%80%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
+      <meta itemprop="name" content="Apers">
+      <meta itemprop="description" content="若有诗书藏于心,岁月从不败美人">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Apers' Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/17/python%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%B1%87%E6%80%BB/" class="post-title-link" itemprop="url">python常用语法汇总--不断更新中</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+	
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-08-17 13:56:18 / 修改时间：09:27:28" itemprop="dateCreated datePublished" datetime="2021-08-17T13:56:18Z">2021-08-17</time>
+            </span>
+
+          
+            <span id="/2021/08/17/python%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%B1%87%E6%80%BB/" class="post-meta-item leancloud_visitors" data-flag-title="python常用语法汇总--不断更新中" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/08/17/python%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%B1%87%E6%80%BB/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/17/python%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%B1%87%E6%80%BB/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>754</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>之前也总结过一个，faster rcnn时候总结的，详见链接如下：</p>
+<h2 id="R3det"><a href="#R3det" class="headerlink" title="R3det"></a>R3det</h2><h3 id="字符串类："><a href="#字符串类：" class="headerlink" title="字符串类："></a>字符串类：</h3><p>path前面加r含义</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">path=<span class="string">r&quot;C:\data\a.csv&quot;</span></span><br><span class="line">path=path.replace(<span class="string">&quot;\\&quot;</span>,<span class="string">&quot;/&quot;</span>)</span><br><span class="line">a=pd.read_csv(path)</span><br></pre></td></tr></table></figure>
+<p>strip</p>
+<p>os.path.split</p>
+<h3 id="列表类："><a href="#列表类：" class="headerlink" title="列表类："></a>列表类：</h3><p>判断是否在列表中，并获取下标，例子如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">animal = <span class="string">&quot;dog&quot;</span></span><br><span class="line">animals= [<span class="string">&quot;cat&quot;</span>,<span class="string">&quot;dog&quot;</span>,<span class="string">&quot;pig&quot;</span>]</span><br><span class="line"><span class="keyword">if</span> animal <span class="keyword">in</span> animals:</span><br><span class="line">    index=animals.index(animal)</span><br><span class="line">    print(index)</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>列表之前说过，其乘法和加法是区别于np的，其实拼接的意思，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">b=[<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">print(a+b)</span><br><span class="line">print(a*<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="np数组："><a href="#np数组：" class="headerlink" title="np数组："></a>np数组：</h3><p>保存/读取数组的方法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np.save(<span class="string">&quot;filename.npy&quot;</span>,a)<span class="comment">#保存数组a，保存为的文件名是filename.npy</span></span><br><span class="line">b = np.load(<span class="string">&quot;filename.npy&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>float可以对单个数来，对[“123”,”234”]的，应该用np.float32()进行,例子如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">digit=[<span class="string">&quot;123&quot;</span>,<span class="string">&quot;456&quot;</span>,<span class="string">&quot;22&quot;</span>]</span><br><span class="line">digit_float=np.float32(digit)</span><br><span class="line">print(digit_float)</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">123.</span> <span class="number">456.</span>  <span class="number">22.</span>]</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
       
   
   
@@ -586,338 +929,6 @@
   
   
   
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/08/04/%E8%A5%BF%E7%93%9C%E4%B9%A6-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
-      <meta itemprop="name" content="Apers">
-      <meta itemprop="description" content="若有诗书藏于心,岁月从不败美人">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Apers' Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/04/%E8%A5%BF%E7%93%9C%E4%B9%A6-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">西瓜书--线性模型</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-	
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-08-03 21:42:54 / 修改时间：14:00:54" itemprop="dateCreated datePublished" datetime="2021-08-03T21:42:54Z">2021-08-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%A5%BF%E7%93%9C%E4%B9%A6/" itemprop="url" rel="index"><span itemprop="name">西瓜书</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/08/04/%E8%A5%BF%E7%93%9C%E4%B9%A6-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/" class="post-meta-item leancloud_visitors" data-flag-title="西瓜书--线性模型" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/08/04/%E8%A5%BF%E7%93%9C%E4%B9%A6-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/04/%E8%A5%BF%E7%93%9C%E4%B9%A6-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>0</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/07/30/%E6%BC%AB%E8%B0%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
-      <meta itemprop="name" content="Apers">
-      <meta itemprop="description" content="若有诗书藏于心,岁月从不败美人">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Apers' Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/30/%E6%BC%AB%E8%B0%88/" class="post-title-link" itemprop="url">漫谈--记于光华楼前</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-	
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-07-29 19:01:03 / 修改时间：13:17:46" itemprop="dateCreated datePublished" datetime="2021-07-29T19:01:03Z">2021-07-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%85%89%E5%8D%8E%E6%A5%BC/" itemprop="url" rel="index"><span itemprop="name">光华楼</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%85%89%E5%8D%8E%E6%A5%BC/%E9%82%AF%E9%83%B8%E6%A0%A1%E5%8C%BA/" itemprop="url" rel="index"><span itemprop="name">邯郸校区</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/07/30/%E6%BC%AB%E8%B0%88/" class="post-meta-item leancloud_visitors" data-flag-title="漫谈--记于光华楼前" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/07/30/%E6%BC%AB%E8%B0%88/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/30/%E6%BC%AB%E8%B0%88/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>612</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>来上海有一个多月了，却还没好好转过校园，昨日是烟花过后第一个晴日，奥，倒也不能说是晴天，不过总算是不下雨了，难得一个不下雨也不太热的好天气，而最近自己也感觉有点累了，就出了实验室散散心，转了校园一圈，到了光华楼前的草坪处坐了一会，人不多，零零碎碎的几个情侣，还有几个母亲带着小孩在嬉戏，听说开学的时候会有很多人，那一定会是个很壮观的场景吧。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/30/%E6%BC%AB%E8%B0%88/" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
-      <meta itemprop="name" content="Apers">
-      <meta itemprop="description" content="若有诗书藏于心,岁月从不败美人">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Apers' Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">基于FPGA的无人机目标跟踪系统实现</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-	
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-07-26 15:04:04" itemprop="dateCreated datePublished" datetime="2021-07-26T15:04:04Z">2021-07-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-07-27 10:46:39" itemprop="dateModified" datetime="2021-07-27T10:46:39Z">2021-07-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/FPGA/" itemprop="url" rel="index"><span itemprop="name">FPGA</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/" class="post-meta-item leancloud_visitors" data-flag-title="基于FPGA的无人机目标跟踪系统实现" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>7.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>这是第三届全国大学生集成电路创新创业大赛中科芯杯的赛题，当时没有找到合适的队友，就选择了一个人参赛，所以队名还起了名字叫一个人的风景，当时准确率是华东赛区本科生组第一名，可惜华东赛区只有三个队伍能够晋级总决赛，那三个队伍是研究生队伍，我是第四，赛区赛就比较倒霉呀，他们三个队伍总决赛的时候分别是杯赛第一名、第二和第四名，这就很坑了。。。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
   
   <nav class="pagination">
@@ -989,20 +1000,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1313,13 +1324,13 @@ if(canvas.getContext){
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">78k</span>
+    <span title="站点总字数">89k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:11</span>
+    <span title="站点阅读时长">1:21</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
