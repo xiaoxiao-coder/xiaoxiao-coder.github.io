@@ -4,6 +4,7 @@
     <title>xml文件的数据分析</title>
     <url>/2021/08/18/xml%E6%96%87%E4%BB%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/</url>
     <content><![CDATA[<p>上篇得到了飞机的tif和对应的xml文件后(xml文件中的object只留下了飞机)，我们需要对飞机的信息进行分析汇总，此处对每一类飞机主要想统计的信息有如下：</p>
+<a id="more"></a>
 <ul>
 <li>该类别的图片数量</li>
 <li>飞机的最小宽度</li>
@@ -77,6 +78,7 @@
     <title>python常用语法汇总--不断更新中</title>
     <url>/2021/08/17/python%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%B1%87%E6%80%BB/</url>
     <content><![CDATA[<p>之前也总结过一个，faster rcnn时候总结的，详见链接如下：</p>
+<a id="more"></a>
 <h2 id="R3det"><a href="#R3det" class="headerlink" title="R3det"></a>R3det</h2><h3 id="字符串类："><a href="#字符串类：" class="headerlink" title="字符串类："></a>字符串类：</h3><p>path前面加r含义</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">path=<span class="string">r&quot;C:\data\a.csv&quot;</span></span><br><span class="line">path=path.replace(<span class="string">&quot;\\&quot;</span>,<span class="string">&quot;/&quot;</span>)</span><br><span class="line">a=pd.read_csv(path)</span><br></pre></td></tr></table></figure>
 <p>strip</p>
