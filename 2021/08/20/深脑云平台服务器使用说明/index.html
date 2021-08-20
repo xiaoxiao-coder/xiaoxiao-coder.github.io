@@ -24,17 +24,39 @@
     var CONFIG = {"hostname":"gezhilai.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="若有诗书藏于心,岁月从不败美人">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Apers&#39; Blog">
-<meta property="og:url" content="http://gezhilai.com/tags/xml/index.html">
+  <meta name="description" content="服务器开始逐渐使用DBCloud Lab 进行管理，此篇用于在开通账号后，给各位实验室人的使用说明指南，在此感谢实验室同学lwq借给的演示账号。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深脑云平台服务器使用说明">
+<meta property="og:url" content="http://gezhilai.com/2021/08/20/%E6%B7%B1%E8%84%91%E4%BA%91%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/index.html">
 <meta property="og:site_name" content="Apers&#39; Blog">
-<meta property="og:description" content="若有诗书藏于心,岁月从不败美人">
+<meta property="og:description" content="服务器开始逐渐使用DBCloud Lab 进行管理，此篇用于在开通账号后，给各位实验室人的使用说明指南，在此感谢实验室同学lwq借给的演示账号。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fLyCse.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fLyBw9.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fLyL6S.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fL69f0.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fLcsxK.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fLcIRP.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fLgViR.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fLgJJI.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fLgRyT.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fLgv0e.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fL2NN9.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fL2q4s.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fLWjmT.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fLfQ1I.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fLfhg1.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fL4PL6.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fL4GFg.md.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/20/fL4ayq.md.png">
+<meta property="article:published_time" content="2021-08-20T10:39:15.000Z">
+<meta property="article:modified_time" content="2021-08-20T03:17:50.557Z">
 <meta property="article:author" content="Apers">
+<meta property="article:tag" content="-服务器 -深脑云">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://z3.ax1x.com/2021/08/20/fLyCse.png">
 
-<link rel="canonical" href="http://gezhilai.com/tags/xml/">
+<link rel="canonical" href="http://gezhilai.com/2021/08/20/%E6%B7%B1%E8%84%91%E4%BA%91%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/">
 
 
 <script id="page-configurations">
@@ -42,12 +64,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签: xml | Apers' Blog</title>
+  <title>深脑云平台服务器使用说明 | Apers' Blog</title>
   
 
 
@@ -229,57 +251,202 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/08/20/%E6%B7%B1%E8%84%91%E4%BA%91%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
+      <meta itemprop="name" content="Apers">
+      <meta itemprop="description" content="若有诗书藏于心,岁月从不败美人">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Apers' Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深脑云平台服务器使用说明
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+	
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-08-20 10:39:15 / 修改时间：03:17:50" itemprop="dateCreated datePublished" datetime="2021-08-20T10:39:15Z">2021-08-20</time>
+            </span>
+
+          
+            <span id="/2021/08/20/%E6%B7%B1%E8%84%91%E4%BA%91%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/" class="post-meta-item leancloud_visitors" data-flag-title="深脑云平台服务器使用说明" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
   
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">xml
-          <small>标签</small>
-        </h2>
-      </div>
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/08/20/%E6%B7%B1%E8%84%91%E4%BA%91%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/20/%E6%B7%B1%E8%84%91%E4%BA%91%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>762</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2021</span>
+        <p>服务器开始逐渐使用<strong>DBCloud Lab</strong> 进行管理，此篇用于在开通账号后，给各位实验室人的使用说明指南，在此感谢实验室同学lwq借给的演示账号。</p>
+<a id="more"></a>
+<h2 id="1、first-step"><a href="#1、first-step" class="headerlink" title="1、first step"></a>1、first step</h2><p>登录下面的网站：</p>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="http://222.73.22.185:47688/login">DBCloud Lab</a></p>
+
+          </blockquote>
+<p>输入账号和密码，进入如下界面：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fLyCse"><img src="https://z3.ax1x.com/2021/08/20/fLyCse.png" alt="fLyCse.png"></a></p>
+<h2 id="2、second-step"><a href="#2、second-step" class="headerlink" title="2、second step"></a>2、second step</h2><p>点击资源管理—服务器列表，可以看到自己组别内的GPU型号、数量和使用情况等等，如下：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fLyBw9"><img src="https://z3.ax1x.com/2021/08/20/fLyBw9.png" alt="fLyBw9.png"></a></p>
+<p>点击如下位置：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fLyL6S"><img src="https://z3.ax1x.com/2021/08/20/fLyL6S.png" alt="fLyL6S.png"></a></p>
+<p>进入的界面如下：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fL69f0"><img src="https://z3.ax1x.com/2021/08/20/fL69f0.png" alt="fL69f0.png"></a></p>
+<h2 id="3、third-step"><a href="#3、third-step" class="headerlink" title="3、third step"></a>3、third step</h2><p>点击创建实例，如下图，注意点击创建实例时候需要选中GPU数量，组内可自行分配。</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fLcsxK"><img src="https://z3.ax1x.com/2021/08/20/fLcsxK.png" alt="fLcsxK.png"></a></p>
+<p>点击创建实例后得到如下界面，点击下图的确认界面即创建成功：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fLcIRP"><img src="https://z3.ax1x.com/2021/08/20/fLcIRP.png" alt="fLcIRP.png"></a></p>
+<p>创建好的实例列表都可以在当前界面下面看到，如下图：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fLgViR"><img src="https://z3.ax1x.com/2021/08/20/fLgViR.png" alt="fLgViR.png"></a></p>
+<p>点击实例访问信息，如下图：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fLgJJI"><img src="https://z3.ax1x.com/2021/08/20/fLgJJI.png" alt="fLgJJI.png"></a></p>
+<p>可以看到的信息如下：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fLgRyT"><img src="https://z3.ax1x.com/2021/08/20/fLgRyT.png" alt="fLgRyT.png"></a></p>
+<p>可以点击打开终端按键进行打开终端：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fLgv0e"><img src="https://z3.ax1x.com/2021/08/20/fLgv0e.png" alt="fLgv0e.png"></a></p>
+<h2 id="4、forth-step"><a href="#4、forth-step" class="headerlink" title="4、forth step"></a>4、forth step</h2><p>DBCloud中使用的终端有点卡，所以下面使用ssh进行连接，ssh信息在实例访问信息中，如下图：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fL2NN9"><img src="https://z3.ax1x.com/2021/08/20/fL2NN9.png" alt="fL2NN9.png"></a></p>
+<p>记住ssh服务—代理访问的信息，即下图，该ip地址和端口号在ssh连接时候需要使用：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fL2q4s"><img src="https://z3.ax1x.com/2021/08/20/fL2q4s.png" alt="fL2q4s.png"></a></p>
+<h2 id="5、fifth-step"><a href="#5、fifth-step" class="headerlink" title="5、fifth step"></a>5、fifth step</h2><p>知道了ssh的ip和端口号，我们需要一个远程连接的软件，这里推荐使用mobaXterm(感谢雷正鑫师兄的推荐)，软件链接如下，下载免费版即可：</p>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://mobaxterm.mobatek.net/">mobaxterm</a></p>
+
+          </blockquote>
+<p>软件安装后，得到如下界面，然后点击左上角的session：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fLWjmT"><img src="https://z3.ax1x.com/2021/08/20/fLWjmT.png" alt="fLWjmT.png"></a></p>
+<p>得到如下界面：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fLfQ1I"><img src="https://z3.ax1x.com/2021/08/20/fLfQ1I.png" alt="fLfQ1I.png"></a></p>
+<p>点击最左侧的SSH按键，得到如下界面：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fLfhg1"><img src="https://z3.ax1x.com/2021/08/20/fLfhg1.png" alt="fLfhg1.png"></a></p>
+<p>将forth step中记下的ssh的ip和端口号填在此处，如下图所示：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fL4PL6"><img src="https://z3.ax1x.com/2021/08/20/fL4PL6.png" alt="fL4PL6.png"></a></p>
+<p>到此步即完成添加，点击OK即可，此时软件界面右侧出现我们添加的ip，如下图</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fL4GFg"><img src="https://z3.ax1x.com/2021/08/20/fL4GFg.md.png" alt="fL4GFg.md.png"></a></p>
+<p>双击上图的ip，得到如下界面，输入个人账号然后回车，然后会提醒输入密码，输入密码即可</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/fL4ayq"><img src="https://z3.ax1x.com/2021/08/20/fL4ayq.md.png" alt="fL4ayq.md.png"></a></p>
+<p>注：如果在校外使用或在校内未连接校园网使用，需要连接VPN才能使用</p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>
+
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
+      
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2021-08-15T16:40:41Z"
-              content="2021-08-15">
-          08-15
-        </time>
-      </div>
+        
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/08/16/xml%E6%A0%BC%E5%BC%8F%E8%BD%ACjson/" itemprop="url">
-            <span itemprop="name">xml格式转json</span>
-          </a>
-      </div>
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Apers
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://gezhilai.com/2021/08/20/%E6%B7%B1%E8%84%91%E4%BA%91%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/" title="深脑云平台服务器使用说明">http://gezhilai.com/2021/08/20/深脑云平台服务器使用说明/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
 
-    </header>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8-%E6%B7%B1%E8%84%91%E4%BA%91/" rel="tag"><i class="fa fa-ship"></i> -服务器 -深脑云</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/18/xml%E6%96%87%E4%BB%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" rel="prev" title="xml文件的数据分析">
+      <i class="fa fa-chevron-left"></i> xml文件的数据分析
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
   </article>
-
-    </div>
-  </div>
   
   
   
-
-  
-
 
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -326,6 +493,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81first-step"><span class="nav-number">1.</span> <span class="nav-text">1、first step</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81second-step"><span class="nav-number">2.</span> <span class="nav-text">2、second step</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81third-step"><span class="nav-number">3.</span> <span class="nav-text">3、third step</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81forth-step"><span class="nav-number">4.</span> <span class="nav-text">4、forth step</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5%E3%80%81fifth-step"><span class="nav-number">5.</span> <span class="nav-text">5、fifth step</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

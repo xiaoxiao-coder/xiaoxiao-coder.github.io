@@ -1,6 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>深脑云平台服务器使用说明</title>
+    <url>/2021/08/20/%E6%B7%B1%E8%84%91%E4%BA%91%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/</url>
+    <content><![CDATA[<p>服务器开始逐渐使用<strong>DBCloud Lab</strong> 进行管理，此篇用于在开通账号后，给各位实验室人的使用说明指南，在此感谢实验室同学lwq借给的演示账号。</p>
+<a id="more"></a>
+<h2 id="1、first-step"><a href="#1、first-step" class="headerlink" title="1、first step"></a>1、first step</h2><p>登录下面的网站：</p>
+<blockquote class="blockquote-center">
+            <p><a href="http://222.73.22.185:47688/login">DBCloud Lab</a></p>
+
+          </blockquote>
+<p>输入账号和密码，进入如下界面：</p>
+<p><a href="https://imgtu.com/i/fLyCse"><img src="https://z3.ax1x.com/2021/08/20/fLyCse.png" alt="fLyCse.png"></a></p>
+<h2 id="2、second-step"><a href="#2、second-step" class="headerlink" title="2、second step"></a>2、second step</h2><p>点击资源管理—服务器列表，可以看到自己组别内的GPU型号、数量和使用情况等等，如下：</p>
+<p><a href="https://imgtu.com/i/fLyBw9"><img src="https://z3.ax1x.com/2021/08/20/fLyBw9.png" alt="fLyBw9.png"></a></p>
+<p>点击如下位置：</p>
+<p><a href="https://imgtu.com/i/fLyL6S"><img src="https://z3.ax1x.com/2021/08/20/fLyL6S.png" alt="fLyL6S.png"></a></p>
+<p>进入的界面如下：</p>
+<p><a href="https://imgtu.com/i/fL69f0"><img src="https://z3.ax1x.com/2021/08/20/fL69f0.png" alt="fL69f0.png"></a></p>
+<h2 id="3、third-step"><a href="#3、third-step" class="headerlink" title="3、third step"></a>3、third step</h2><p>点击创建实例，如下图，注意点击创建实例时候需要选中GPU数量，组内可自行分配。</p>
+<p><a href="https://imgtu.com/i/fLcsxK"><img src="https://z3.ax1x.com/2021/08/20/fLcsxK.png" alt="fLcsxK.png"></a></p>
+<p>点击创建实例后得到如下界面，点击下图的确认界面即创建成功：</p>
+<p><a href="https://imgtu.com/i/fLcIRP"><img src="https://z3.ax1x.com/2021/08/20/fLcIRP.png" alt="fLcIRP.png"></a></p>
+<p>创建好的实例列表都可以在当前界面下面看到，如下图：</p>
+<p><a href="https://imgtu.com/i/fLgViR"><img src="https://z3.ax1x.com/2021/08/20/fLgViR.png" alt="fLgViR.png"></a></p>
+<p>点击实例访问信息，如下图：</p>
+<p><a href="https://imgtu.com/i/fLgJJI"><img src="https://z3.ax1x.com/2021/08/20/fLgJJI.png" alt="fLgJJI.png"></a></p>
+<p>可以看到的信息如下：</p>
+<p><a href="https://imgtu.com/i/fLgRyT"><img src="https://z3.ax1x.com/2021/08/20/fLgRyT.png" alt="fLgRyT.png"></a></p>
+<p>可以点击打开终端按键进行打开终端：</p>
+<p><a href="https://imgtu.com/i/fLgv0e"><img src="https://z3.ax1x.com/2021/08/20/fLgv0e.png" alt="fLgv0e.png"></a></p>
+<h2 id="4、forth-step"><a href="#4、forth-step" class="headerlink" title="4、forth step"></a>4、forth step</h2><p>DBCloud中使用的终端有点卡，所以下面使用ssh进行连接，ssh信息在实例访问信息中，如下图：</p>
+<p><a href="https://imgtu.com/i/fL2NN9"><img src="https://z3.ax1x.com/2021/08/20/fL2NN9.png" alt="fL2NN9.png"></a></p>
+<p>记住ssh服务—代理访问的信息，即下图，该ip地址和端口号在ssh连接时候需要使用：</p>
+<p><a href="https://imgtu.com/i/fL2q4s"><img src="https://z3.ax1x.com/2021/08/20/fL2q4s.png" alt="fL2q4s.png"></a></p>
+<h2 id="5、fifth-step"><a href="#5、fifth-step" class="headerlink" title="5、fifth step"></a>5、fifth step</h2><p>知道了ssh的ip和端口号，我们需要一个远程连接的软件，这里推荐使用mobaXterm(感谢雷正鑫师兄的推荐)，软件链接如下，下载免费版即可：</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://mobaxterm.mobatek.net/">mobaxterm</a></p>
+
+          </blockquote>
+<p>软件安装后，得到如下界面，然后点击左上角的session：</p>
+<p><a href="https://imgtu.com/i/fLWjmT"><img src="https://z3.ax1x.com/2021/08/20/fLWjmT.png" alt="fLWjmT.png"></a></p>
+<p>得到如下界面：</p>
+<p><a href="https://imgtu.com/i/fLfQ1I"><img src="https://z3.ax1x.com/2021/08/20/fLfQ1I.png" alt="fLfQ1I.png"></a></p>
+<p>点击最左侧的SSH按键，得到如下界面：</p>
+<p><a href="https://imgtu.com/i/fLfhg1"><img src="https://z3.ax1x.com/2021/08/20/fLfhg1.png" alt="fLfhg1.png"></a></p>
+<p>将forth step中记下的ssh的ip和端口号填在此处，如下图所示：</p>
+<p><a href="https://imgtu.com/i/fL4PL6"><img src="https://z3.ax1x.com/2021/08/20/fL4PL6.png" alt="fL4PL6.png"></a></p>
+<p>到此步即完成添加，点击OK即可，此时软件界面右侧出现我们添加的ip，如下图</p>
+<p><a href="https://imgtu.com/i/fL4GFg"><img src="https://z3.ax1x.com/2021/08/20/fL4GFg.md.png" alt="fL4GFg.md.png"></a></p>
+<p>双击上图的ip，得到如下界面，输入个人账号然后回车，然后会提醒输入密码，输入密码即可</p>
+<p><a href="https://imgtu.com/i/fL4ayq"><img src="https://z3.ax1x.com/2021/08/20/fL4ayq.md.png" alt="fL4ayq.md.png"></a></p>
+<p>注：如果在校外使用或在校内未连接校园网使用，需要连接VPN才能使用</p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>
+
+]]></content>
+      <tags>
+        <tag>-服务器 -深脑云</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>xml文件的数据分析</title>
     <url>/2021/08/18/xml%E6%96%87%E4%BB%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/</url>
     <content><![CDATA[<p>上篇得到了飞机的tif和对应的xml文件后(xml文件中的object只留下了飞机)，我们需要对飞机的信息进行分析汇总，此处对每一类飞机主要想统计的信息有如下：</p>
@@ -81,6 +144,8 @@
 <a id="more"></a>
 <h2 id="R3det"><a href="#R3det" class="headerlink" title="R3det"></a>R3det</h2><h3 id="字符串类："><a href="#字符串类：" class="headerlink" title="字符串类："></a>字符串类：</h3><p>path前面加r含义</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">path=<span class="string">r&quot;C:\data\a.csv&quot;</span></span><br><span class="line">path=path.replace(<span class="string">&quot;\\&quot;</span>,<span class="string">&quot;/&quot;</span>)</span><br><span class="line">a=pd.read_csv(path)</span><br></pre></td></tr></table></figure>
+<p>字符串是否在字符串中：</p>
+<p>“tif” in “0.tif”的结果是True</p>
 <p>strip</p>
 <p>os.path.split</p>
 <h3 id="列表类："><a href="#列表类：" class="headerlink" title="列表类："></a>列表类：</h3><p>判断是否在列表中，并获取下标，例子如下：</p>
@@ -895,6 +960,11 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
             <p><a href="https://blog.csdn.net/nima1994/article/details/79207805/">python gdal安装与简单使用</a></p>
 
           </blockquote>
+<p>华为的mindspore框架安装：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">conda create -n mindspore python=3.7.5</span><br><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple mindspore</span><br></pre></td></tr></table></figure>
+<p>之所以新建一个环境，是因为mindspore所需要的python环境是3.7及以上的，若3.7之下的版本，是装不成功的。</p>
+<p>cv2安装：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple opencv-python</span><br></pre></td></tr></table></figure>
 <h2 id="anaconda中新建环境"><a href="#anaconda中新建环境" class="headerlink" title="anaconda中新建环境"></a>anaconda中新建环境</h2><p>命令如下：</p>
 <p>conda create —name=labelme python=3.6</p>
 <p>代表创建了一个新的环境，环境名称叫labelme，使用的是python版本是3.6.</p>
