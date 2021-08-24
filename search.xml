@@ -68,6 +68,7 @@
 <p>点击进入，进入如下界面</p>
 <p><a href="https://imgtu.com/i/hFfCYd"><img src="https://z3.ax1x.com/2021/08/24/hFfCYd.md.png" alt="hFfCYd.md.png"></a></p>
 <p>添加如下语句，其中hhh改为自己的用户名，Port后的改为自己的端口号。</p>
+<p><a href="https://imgtu.com/i/hFfdh9"><img src="https://z3.ax1x.com/2021/08/24/hFfdh9.md.png" alt="hFfdh9.md.png"></a></p>
 <p>此时已完成操作，点击如下图处即可连接服务器并选择打开的文件夹路径</p>
 <p><a href="https://imgtu.com/i/hFfOhj"><img src="https://z3.ax1x.com/2021/08/24/hFfOhj.md.png" alt="hFfOhj.md.png"></a></p>
 <p>注：若无法调试，插件商城重新安装python即可，若依旧不可以，降低ssh的版本。</p>
