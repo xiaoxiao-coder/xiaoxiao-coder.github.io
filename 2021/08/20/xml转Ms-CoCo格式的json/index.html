@@ -24,20 +24,19 @@
     var CONFIG = {"hostname":"gezhilai.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="组委会先发布了一部分的数据，去年星图杯是用于飞机目标追踪的，由于今年的飞机种类和去年几乎一致（多了C919,不过后续的数据信息统计可以发现就几张，先扔掉），所以想先选出飞机的图片和xml的label来，我就写了个文件来选出飞机和对应的修改后的xml，需要考虑的时候，通过xml的objects&#x2F;object&#x2F;possibleresult&#x2F;name来进行判别是否是飞机。由于只想留下飞机，所以需要做如下">
+  <meta name="description" content="上次写过xml转json格式的代码，那个是一个xml对应一个json，这个json后来又写到了tfrecord格式的文件，模型加载这个tfrecord文件即可，最近又遇到了Ms CoCo格式的json格式，这种格式是把所有的xml文件转成json的，模型应该是直接加载这个json就可以（不确定）。下面就来描述一下如何把批量的xml转成一个Ms CoCo格式的json。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据集筛选及其xml格式的label修改">
-<meta property="og:url" content="http://gezhilai.com/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/index.html">
+<meta property="og:title" content="xml转Ms CoCo格式的json">
+<meta property="og:url" content="http://gezhilai.com/2021/08/20/xml%E8%BD%ACMs-CoCo%E6%A0%BC%E5%BC%8F%E7%9A%84json/index.html">
 <meta property="og:site_name" content="Apers&#39; Blog">
-<meta property="og:description" content="组委会先发布了一部分的数据，去年星图杯是用于飞机目标追踪的，由于今年的飞机种类和去年几乎一致（多了C919,不过后续的数据信息统计可以发现就几张，先扔掉），所以想先选出飞机的图片和xml的label来，我就写了个文件来选出飞机和对应的修改后的xml，需要考虑的时候，通过xml的objects&#x2F;object&#x2F;possibleresult&#x2F;name来进行判别是否是飞机。由于只想留下飞机，所以需要做如下">
+<meta property="og:description" content="上次写过xml转json格式的代码，那个是一个xml对应一个json，这个json后来又写到了tfrecord格式的文件，模型加载这个tfrecord文件即可，最近又遇到了Ms CoCo格式的json格式，这种格式是把所有的xml文件转成json的，模型应该是直接加载这个json就可以（不确定）。下面就来描述一下如何把批量的xml转成一个Ms CoCo格式的json。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-08-17T17:33:43.000Z">
-<meta property="article:modified_time" content="2021-08-17T11:33:03.461Z">
+<meta property="article:published_time" content="2021-08-20T13:59:37.000Z">
+<meta property="article:modified_time" content="2021-08-20T13:07:26.267Z">
 <meta property="article:author" content="Apers">
-<meta property="article:tag" content="-星图杯 -r3det -python -xml">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://gezhilai.com/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/">
+<link rel="canonical" href="http://gezhilai.com/2021/08/20/xml%E8%BD%ACMs-CoCo%E6%A0%BC%E5%BC%8F%E7%9A%84json/">
 
 
 <script id="page-configurations">
@@ -50,7 +49,7 @@
   };
 </script>
 
-  <title>数据集筛选及其xml格式的label修改 | Apers' Blog</title>
+  <title>xml转Ms CoCo格式的json | Apers' Blog</title>
   
 
 
@@ -239,7 +238,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/">
+    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/08/20/xml%E8%BD%ACMs-CoCo%E6%A0%BC%E5%BC%8F%E7%9A%84json/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
@@ -252,7 +251,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          数据集筛选及其xml格式的label修改
+          xml转Ms CoCo格式的json
         </h1>
 
         <div class="post-meta">
@@ -264,24 +263,11 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-08-17 17:33:43 / 修改时间：11:33:03" itemprop="dateCreated datePublished" datetime="2021-08-17T17:33:43Z">2021-08-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%98%9F%E5%9B%BE%E6%9D%AF/" itemprop="url" rel="index"><span itemprop="name">星图杯</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%98%9F%E5%9B%BE%E6%9D%AF/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
-                </span>
+              <time title="创建时间：2021-08-20 13:59:37 / 修改时间：13:07:26" itemprop="dateCreated datePublished" datetime="2021-08-20T13:59:37Z">2021-08-20</time>
             </span>
 
           
-            <span id="/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/" class="post-meta-item leancloud_visitors" data-flag-title="数据集筛选及其xml格式的label修改" title="阅读次数">
+            <span id="/2021/08/20/xml%E8%BD%ACMs-CoCo%E6%A0%BC%E5%BC%8F%E7%9A%84json/" class="post-meta-item leancloud_visitors" data-flag-title="xml转Ms CoCo格式的json" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -303,8 +289,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/08/20/xml%E8%BD%ACMs-CoCo%E6%A0%BC%E5%BC%8F%E7%9A%84json/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/20/xml%E8%BD%ACMs-CoCo%E6%A0%BC%E5%BC%8F%E7%9A%84json/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -314,14 +300,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>5k</span>
+              <span>190</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
+              <span>1 分钟</span>
             </span>
 
         </div>
@@ -333,38 +319,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>组委会先发布了一部分的数据，去年星图杯是用于飞机目标追踪的，由于今年的飞机种类和去年几乎一致（多了C919,不过后续的数据信息统计可以发现就几张，先扔掉），所以想先选出飞机的图片和xml的label来，我就写了个文件来选出飞机和对应的修改后的xml，需要考虑的时候，通过xml的objects/object/possibleresult/name来进行判别是否是飞机。由于只想留下飞机，所以需要做如下两点：</p>
+        <p>上次写过xml转json格式的代码，那个是一个xml对应一个json，这个json后来又写到了tfrecord格式的文件，模型加载这个tfrecord文件即可，最近又遇到了Ms CoCo格式的json格式，这种格式是把所有的xml文件转成json的，模型应该是直接加载这个json就可以（不确定）。下面就来描述一下如何把批量的xml转成一个Ms CoCo格式的json。</p>
 <a id="more"></a>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>1、通过name来看是否是飞机，不是则通过一些方法删除该object</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>2、检测删除完后的objects是否为空，非空说明xml有飞机，保存该xml和对应的tif</strong></td>
-</tr>
-</tbody>
-</table>
-</div>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    把gf2021的数据集中的飞机都选出来，即一张图片中若含有飞机模型的，则选出来，同时需要修改xml文件，将</span></span><br><span class="line"><span class="string">    objects属性中的非飞机的object去掉，由于删除的非annotation直系节点，需要转换一下才能删除。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> scipy.misc <span class="keyword">as</span> misc</span><br><span class="line"><span class="keyword">from</span> xml.dom.minidom <span class="keyword">import</span> Document</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> copy, cv2</span><br><span class="line"><span class="comment"># import imageio</span></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"><span class="keyword">import</span> xml.etree.cElementTree <span class="keyword">as</span> ET</span><br><span class="line"><span class="keyword">from</span> xml.etree.ElementTree <span class="keyword">import</span> ElementTree,Element</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> osgeo <span class="keyword">import</span> gdal, gdalconst</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">choose_plane</span>(<span class="params">image_path, xml_path,image_save_path,xml_save_path</span>):</span></span><br><span class="line">    plane_label = [<span class="string">&quot;Boeing737&quot;</span>,<span class="string">&quot;Boeing747&quot;</span>,<span class="string">&quot;Boeing777&quot;</span>,<span class="string">&quot;C919&quot;</span>,<span class="string">&quot;A220&quot;</span>,<span class="string">&quot;A321&quot;</span>,<span class="string">&quot;A330&quot;</span>,<span class="string">&quot;A350&quot;</span>,<span class="string">&quot;ARJ21&quot;</span>,<span class="string">&quot;other-airplane&quot;</span>]</span><br><span class="line">    <span class="keyword">for</span> count, xml <span class="keyword">in</span> <span class="built_in">enumerate</span>(glob.glob(xml_path + <span class="string">&#x27;/*.xml&#x27;</span>)):<span class="comment">#进行索引，*代表任意匹配，得到可迭代对象</span></span><br><span class="line">        <span class="comment">#flag =0</span></span><br><span class="line">        <span class="comment"># to avoid path error in different development platform</span></span><br><span class="line">        xml = xml.replace(<span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)<span class="comment">#用/替换\\,后面的替换前面的</span></span><br><span class="line">        (_, xml_name) = os.path.split(xml)<span class="comment">#分割。返回路径和文件名。若本身就是一个文件夹路径，则返回路径和空</span></span><br><span class="line">        <span class="comment">#print(xml,xml_name)</span></span><br><span class="line"></span><br><span class="line">        img_name=xml_name.replace(<span class="string">&#x27;.xml&#x27;</span>, <span class="string">&#x27;.tif&#x27;</span>)</span><br><span class="line">        img_path = image_path + <span class="string">&#x27;/&#x27;</span> + img_name</span><br><span class="line">        <span class="comment">#1. 读取xml文件</span></span><br><span class="line">        tree = ElementTree()</span><br><span class="line">        tree.parse(xml)</span><br><span class="line">        root = tree.getroot()</span><br><span class="line"></span><br><span class="line">        <span class="comment">#A. 找到父节点</span></span><br><span class="line">        node_root  = root.findall( <span class="string">&quot;objects&quot;</span>)<span class="comment">#不能直接找object,直接找object，删掉的只是object，但是tree只能删除objects，没有用，所以进行替换</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> objects_list <span class="keyword">in</span> node_root:<span class="comment">#遍历objects,其实只有一个</span></span><br><span class="line">            <span class="keyword">for</span> object_list <span class="keyword">in</span> <span class="built_in">list</span>(objects_list):<span class="comment">#得到object,不加list竟然无法遍历，迷惑</span></span><br><span class="line">                <span class="comment">#print(object_list)</span></span><br><span class="line">                <span class="keyword">if</span> object_list.find(<span class="string">&quot;possibleresult/name&quot;</span>).text <span class="keyword">not</span> <span class="keyword">in</span> plane_label:</span><br><span class="line">                    <span class="comment">#print(&quot;成功移除&quot;)</span></span><br><span class="line">                    objects_list.remove(object_list)</span><br><span class="line">                    <span class="comment">#flag    =   1</span></span><br><span class="line">            <span class="comment">#替换直系节点objects</span></span><br><span class="line">            <span class="keyword">for</span> i,external_node <span class="keyword">in</span> <span class="built_in">enumerate</span>(root):</span><br><span class="line">                <span class="keyword">if</span> external_node.tag == <span class="string">&quot;objects&quot;</span>:<span class="comment">#寻找objects节点</span></span><br><span class="line">                    root[i]=objects_list </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> objects_list:<span class="comment">#判断是否为空,空的list的bool属性为false.非空的为true</span></span><br><span class="line">            <span class="comment">#if flag == 1:</span></span><br><span class="line">            <span class="comment">#    print(xml,object_list.find(&quot;possibleresult/name&quot;).text,objects_list.find(&quot;object/possibleresult/name&quot;).text)</span></span><br><span class="line">            <span class="comment">#存储xml</span></span><br><span class="line">            xml_save=xml_save_path+<span class="string">&quot;/&quot;</span>+xml_name</span><br><span class="line">            tree.write(xml_save, encoding=<span class="string">&quot;utf-8&quot;</span>,xml_declaration=<span class="literal">True</span>)   </span><br><span class="line">            <span class="comment">#存储图片</span></span><br><span class="line">            shutil.copyfile(img_path, image_save_path+<span class="string">&quot;/&quot;</span>+img_name)<span class="comment">#将第一个参数的文件复制到第二个里面            </span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(img_path):</span><br><span class="line">            print(<span class="string">&#x27;&#123;&#125; is not exist!&#x27;</span>.<span class="built_in">format</span>(img_path))</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># view_bar(&#x27;Conversion progress&#x27;, count + 1,</span></span><br><span class="line">        <span class="comment">#          len(glob.glob(xml_path + &#x27;/*.xml&#x27;)))</span></span><br><span class="line"></span><br><span class="line">    print(<span class="string">&#x27;\nStatistics is complete!&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    image_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1/images&quot;</span></span><br><span class="line">    xml_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1/labelXmls&quot;</span></span><br><span class="line"></span><br><span class="line">    image_save_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1_plane/images&quot;</span></span><br><span class="line">    xml_save_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1_plane/labelXmls&quot;</span></span><br><span class="line"></span><br><span class="line">    choose_plane(image_path,xml_path,image_save_path,xml_save_path)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>其主体就是choose_plane,来分析一下choose_plane：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plane_label = [<span class="string">&quot;Boeing737&quot;</span>,<span class="string">&quot;Boeing747&quot;</span>,<span class="string">&quot;Boeing777&quot;</span>,<span class="string">&quot;C919&quot;</span>,<span class="string">&quot;A220&quot;</span>,<span class="string">&quot;A321&quot;</span>,<span class="string">&quot;A330&quot;</span>,<span class="string">&quot;A350&quot;</span>,<span class="string">&quot;ARJ21&quot;</span>,<span class="string">&quot;other-airplane&quot;</span>]</span><br></pre></td></tr></table></figure>
-<p>这一句是用来后续判别xml的objects/object/possibleresult/name的属性值是否是飞机的，只要判断name的属性值是否在该列表中即可。</p>
-<p>然后循环进行读取文件夹下的xml文件，通过通过split找到文件名、文件路径，由此通过replace即可得到对应的image路径。</p>
-<p>然后读取xml文件，代码如下，其中findall用于寻找annotation的直系子节点或者下属节点，也可以传入”objects/object”，其返回的是一个列表，列表中的元素是objects，我们知道objects只有一个，所以其实node_root[0]就是objects，用for循环也可以(本代码是用for来的)。其实我们希望删除的是object，为什么不findall(“objects/object”)呢？因为我们如果寻找object的话，的确可以很好的删除，但是删除了object后，原来的root是没变的，所以需要把删除后的替换进去，如果直接root[3]赋值我们删除后的object的话(root[3]是objects)，objects就变成object了，所以这是不对的。如果我们直接寻找出来的就是objects，那么再往下找object，删除objects中的object，然后用该objects替换root中的objects，就可以完美解决。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">img_name=xml_name.replace(<span class="string">&#x27;.xml&#x27;</span>, <span class="string">&#x27;.tif&#x27;</span>)</span><br><span class="line">img_path = image_path + <span class="string">&#x27;/&#x27;</span> + img_name</span><br><span class="line"><span class="comment">#1. 读取xml文件</span></span><br><span class="line">tree = ElementTree()</span><br><span class="line">tree.parse(xml)</span><br><span class="line">root = tree.getroot()</span><br><span class="line"></span><br><span class="line"><span class="comment">#A. 找到父节点</span></span><br><span class="line">node_root  = root.findall( <span class="string">&quot;objects&quot;</span>)<span class="comment">#不能直接找object,直接找object，删掉的只是object，但是tree只能删除objects，没有用，所以进行替换</span></span><br></pre></td></tr></table></figure>
-<p>上面已经说了如何删除object了，那么删除后，需要对root中的objects进行替换，一般objects是root的第四个属性，就是root[3]，但是也可能不是，所以就用到了下面这个循环了：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#替换直系节点objects</span></span><br><span class="line"><span class="keyword">for</span> i,external_node <span class="keyword">in</span> <span class="built_in">enumerate</span>(root):</span><br><span class="line">    <span class="keyword">if</span> external_node.tag == <span class="string">&quot;objects&quot;</span>:<span class="comment">#寻找objects节点</span></span><br><span class="line">        root[i]=objects_list </span><br></pre></td></tr></table></figure>
-<p>最后需要判断一下删除后的objects是否为空，如果空了，说明没有飞机，如果不是空(不是空的列表的bool值是true)，则存储替换objects后的root和对应的tif，存储的文件夹自行指定;</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> objects_list:<span class="comment">#判断是否为空,空的list的bool属性为false.非空的为true</span></span><br><span class="line">    <span class="comment">#if flag == 1:</span></span><br><span class="line">    <span class="comment">#    print(xml,object_list.find(&quot;possibleresult/name&quot;).text,objects_list.find(&quot;object/possibleresult/name&quot;).text)</span></span><br><span class="line">    <span class="comment">#存储xml</span></span><br><span class="line">    xml_save=xml_save_path+<span class="string">&quot;/&quot;</span>+xml_name</span><br><span class="line">    tree.write(xml_save, encoding=<span class="string">&quot;utf-8&quot;</span>,xml_declaration=<span class="literal">True</span>)   </span><br><span class="line">    <span class="comment">#存储图片</span></span><br><span class="line">    shutil.copyfile(img_path, image_save_path+<span class="string">&quot;/&quot;</span>+img_name)<span class="comment">#将第一个参数的文件复制到第二个里面     </span></span><br></pre></td></tr></table></figure>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>
+<h2 id="1、xml格式"><a href="#1、xml格式" class="headerlink" title="1、xml格式"></a>1、xml格式</h2>
     </div>
 
     
@@ -381,7 +338,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://gezhilai.com/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/" title="数据集筛选及其xml格式的label修改">http://gezhilai.com/2021/08/18/数据集筛选及其xml格式的label修改/</a>
+    <a href="http://gezhilai.com/2021/08/20/xml%E8%BD%ACMs-CoCo%E6%A0%BC%E5%BC%8F%E7%9A%84json/" title="xml转Ms CoCo格式的json">http://gezhilai.com/2021/08/20/xml转Ms-CoCo格式的json/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -391,9 +348,6 @@
 
 
       <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E6%98%9F%E5%9B%BE%E6%9D%AF-r3det-python-xml/" rel="tag"><i class="fa fa-ship"></i> -星图杯 -r3det -python -xml</a>
-          </div>
 
         
 
@@ -401,13 +355,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/08/17/python%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%B1%87%E6%80%BB/" rel="prev" title="python常用语法汇总--不断更新中">
-      <i class="fa fa-chevron-left"></i> python常用语法汇总--不断更新中
+    <a href="/2021/08/20/%E6%B7%B1%E8%84%91%E4%BA%91%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/" rel="prev" title="深脑云平台服务器使用说明">
+      <i class="fa fa-chevron-left"></i> 深脑云平台服务器使用说明
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/08/18/xml%E6%96%87%E4%BB%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" rel="next" title="xml文件的数据分析">
-      xml文件的数据分析 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -466,6 +417,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81xml%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">1、xml格式</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -890,59 +842,6 @@ if(canvas.getContext){
   
 
   
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@2.7.8/unpacked/MathJax.js?config=TeX-MML-AM_CHTML';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
 
   
 

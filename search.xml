@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>xml转Ms CoCo格式的json</title>
+    <url>/2021/08/20/xml%E8%BD%ACMs-CoCo%E6%A0%BC%E5%BC%8F%E7%9A%84json/</url>
+    <content><![CDATA[<p>上次写过xml转json格式的代码，那个是一个xml对应一个json，这个json后来又写到了tfrecord格式的文件，模型加载这个tfrecord文件即可，最近又遇到了Ms CoCo格式的json格式，这种格式是把所有的xml文件转成json的，模型应该是直接加载这个json就可以（不确定）。下面就来描述一下如何把批量的xml转成一个Ms CoCo格式的json。</p>
+<a id="more"></a>
+<h2 id="1、xml格式"><a href="#1、xml格式" class="headerlink" title="1、xml格式"></a>1、xml格式</h2>]]></content>
+  </entry>
+  <entry>
     <title>深脑云平台服务器使用说明</title>
     <url>/2021/08/20/%E6%B7%B1%E8%84%91%E4%BA%91%E5%B9%B3%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/</url>
     <content><![CDATA[<p>服务器开始逐渐使用<strong>DBCloud Lab</strong> 进行管理，此篇用于在开通账号后，给各位实验室人的使用说明指南，在此感谢lwq借给的演示账号。</p>
@@ -52,6 +59,52 @@
 <p>双击上图的ip，得到如下界面，输入个人账号然后回车，然后会提醒输入密码，输入密码即可</p>
 <p><a href="https://imgtu.com/i/fL4ayq"><img src="https://z3.ax1x.com/2021/08/20/fL4ayq.md.png" alt="fL4ayq.md.png"></a></p>
 <p>注：如果在校外使用或在校内未连接校园网使用，需要连接VPN才能使用</p>
+<h2 id="更新3：Vscode的配置"><a href="#更新3：Vscode的配置" class="headerlink" title="更新3：Vscode的配置"></a>更新3：Vscode的配置</h2><p>自行下载一个vscode，在扩展商店中下载插件remote-ssh，，如下图，推荐下载0.65.1版本，亲测最新版本有坑</p>
+<p><a href="https://imgtu.com/i/hFRwE4"><img src="https://z3.ax1x.com/2021/08/24/hFRwE4.md.png" alt="hFRwE4.md.png"></a></p>
+<p>然后在vscode左侧就会出现一个远程连接的按钮，如下，先点击加号，得到第二步的输入口，在输入口中输入服务器的ip(初始教程那个代理ip，不是真实ip)，如下图</p>
+<p><a href="https://imgtu.com/i/hFWmGR"><img src="https://z3.ax1x.com/2021/08/24/hFWmGR.md.png" alt="hFWmGR.md.png"></a></p>
+<p>然后出现如下界面：</p>
+<p><a href="https://imgtu.com/i/hFWWQ0"><img src="https://z3.ax1x.com/2021/08/24/hFWWQ0.md.png" alt="hFWWQ0.md.png"></a></p>
+<p>点击进入，进入如下界面</p>
+<p><a href="https://imgtu.com/i/hFfCYd"><img src="https://z3.ax1x.com/2021/08/24/hFfCYd.md.png" alt="hFfCYd.md.png"></a></p>
+<p>添加如下语句，其中hhh改为自己的用户名，Port后的改为自己的端口号。</p>
+<p>此时已完成操作，点击如下图处即可连接服务器并选择打开的文件夹路径</p>
+<p><a href="https://imgtu.com/i/hFfOhj"><img src="https://z3.ax1x.com/2021/08/24/hFfOhj.md.png" alt="hFfOhj.md.png"></a></p>
+<p>注：若无法调试，插件商城重新安装python即可，若依旧不可以，降低ssh的版本。</p>
+<h2 id="第四次更新"><a href="#第四次更新" class="headerlink" title="第四次更新"></a>第四次更新</h2><p>服务器创建账号好，需要自己安装anaconda。</p>
+<p>首先通过如下文件下载linux下的anaconda</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">wget -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/Anaconda3-<span class="number">2020.07</span>-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
+<p>通过如下语句执行该文件：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">bash Anaconda3-<span class="number">2020.07</span>-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
+<p>记得cd转入到该目录下再输入上述命令，中途会要求选择yes或者enter，输入enter和yes即可。</p>
+<p>最后即可安装完毕。</p>
+<p>此时conda依旧是不能用的，需要配置环境变量，root的环境变量没有权限添加，所以需要在.bashrc中添加，输入如下命令，用vim打开bashrc</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">vim ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p>在该文件最后添加如下语句</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">export PATH=$PATH:/home/lll/anaconda3/<span class="built_in">bin</span></span><br></pre></td></tr></table></figure>
+<p>其中$PATH：后的路径记得改为自己anaconda的路径。</p>
+<p>然后ctr+:的按键即可退出编辑，输入wq!(lwq的wq，哈哈，其实是write+quit的意思)，即可保存退出，此时安装完毕，conda可以正常使用</p>
+<p>参考链接：</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/anpwu/article/details/109788684">给远程服务器(Linux) 安装Anaconda</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/qq_42154813/article/details/114691906">LINUX服务器下安装Anaconda并配置环境变量</a></p>
+
+          </blockquote>
+<h2 id="第一次更新"><a href="#第一次更新" class="headerlink" title="第一次更新"></a>第一次更新</h2><p>在mobaxterm双击左侧ip后，输入用户名和密码，进入终端，若发现未进入base环境，但如下命令可用：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">conda env <span class="built_in">list</span></span><br></pre></td></tr></table></figure>
+<p>但如下的激活无效，且报错Your shell has not been properly configured to use ‘conda activate’</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">conda activate base</span><br></pre></td></tr></table></figure>
+<p>出现此报错的原因是因为之前的虚拟环境没有退出，终端输入<code>source deactivate</code>，然后需要重新进入虚拟环境： <code>source activate</code>。如此即可conda activate 环境名。</p>
+<p>注：好像每次都需要重新这样操作，即使conda config —set auto_activate_base true了也没有用，欢迎解决此问题的人进行补充操作说明。</p>
+<h2 id="第二次更新"><a href="#第二次更新" class="headerlink" title="第二次更新"></a>第二次更新</h2><p>vscode更新后，可能会导致ssh远程连接失败，报错：_workbench.downloadResource‘ failed。具体解决方案如下：</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/ibless/article/details/118610776">VS Code的Error: Running the contributed command: ‘_workbench.downloadResource‘ failed解决</a></p>
+
+          </blockquote>
+<p>如果按照这个连上了，可能还会出现无法调试的现象，但是给远程安装python编译器就安装不上，这是ssh插件的问题，最新版本有bug存在，降低到0.65.1即可。</p>
 <div>
     
         <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
@@ -969,6 +1022,34 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
 <p>conda create —name=labelme python=3.6</p>
 <p>代表创建了一个新的环境，环境名称叫labelme，使用的是python版本是3.6.</p>
 <p>可以通过conda env list查看我们所创建的所有环境，通过conda activate labelme来激活labelme环境。</p>
+<p>若conda激活环境失败(很明显的就是都不在base环境中)，Your shell has not been properly configured to use ‘conda activate’。出现此报错的原因是因为之前的虚拟环境没有退出<code>source deactivate</code>，所以需要重新进入虚拟环境： <code>source activate</code>。</p>
+<p>退出虚拟环境：<code>source deactivate</code>或<code>conda deactivate</code></p>
+<p>参考链接如下：</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.jianshu.com/p/88c52724b016">conda激活环境失败</a></p>
+
+          </blockquote>
+<h2 id="在jupyter中使用虚拟环境"><a href="#在jupyter中使用虚拟环境" class="headerlink" title="在jupyter中使用虚拟环境"></a>在jupyter中使用虚拟环境</h2><p>创建好新的环境后，如果使用jupyter时想用该环境的话，还需要配置一下：</p>
+<p>首先查看当前的所有环境：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">conda env <span class="built_in">list</span></span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># conda environments:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">base                  *  D:\anzhuang\anaconda</span><br><span class="line">gf                       D:\anzhuang\anaconda\envs\gf</span><br><span class="line">kite                     D:\anzhuang\anaconda\envs\kite</span><br><span class="line">labelme                  D:\anzhuang\anaconda\envs\labelme</span><br><span class="line">mindspore                D:\anzhuang\anaconda\envs\mindspore</span><br><span class="line">new_env                  D:\anzhuang\anaconda\envs\new_env</span><br><span class="line">pycharm                  D:\anzhuang\anaconda\envs\pycharm</span><br><span class="line">pythonProject1           D:\anzhuang\anaconda\envs\pythonProject1</span><br><span class="line">pythonProject2           D:\anzhuang\anaconda\envs\pythonProject2</span><br><span class="line">tensorflow               D:\anzhuang\anaconda\envs\tensorflow</span><br></pre></td></tr></table></figure>
+<p>如果我们想在jupyter中使用gf这个环境的话，需要如下操作：</p>
+<p>首先激活该环境：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">conda activate gf</span><br></pre></td></tr></table></figure>
+<p>然后安装ipykernel</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">conda install ipykernel</span><br></pre></td></tr></table></figure>
+<p>最后添加对应文件：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">python -m ipykernel install --name gf</span><br></pre></td></tr></table></figure>
+<p>此时已完成新环境的添加，如下打开jupyter即可：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
+<p>注意：创建新环境的时候，激活后，使用jupyter notebook可能提示没有jupyter，那是没有安装jupyter，安装一下即可：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">conda install jupyter</span><br></pre></td></tr></table></figure>
+<h2 id="在jupyter中某个环境kernel-error"><a href="#在jupyter中某个环境kernel-error" class="headerlink" title="在jupyter中某个环境kernel error"></a>在jupyter中某个环境kernel error</h2><blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/weixin_44457768/article/details/106027628">Jupyter notebook中报错，出现kernel error解决方法</a></p>
+
+          </blockquote>
+<p>其中jupyter kernelspec list可以查看所有的环境用的kernel路径（json中配置了python编译器位置）</p>
 <h2 id="Pycharm中使用anconda中的环境"><a href="#Pycharm中使用anconda中的环境" class="headerlink" title="Pycharm中使用anconda中的环境"></a>Pycharm中使用anconda中的环境</h2><p>file-setting-Project Interpreter-system Interperter处，将python编译器变成anconda的，如果anaconda已加入环境变量中，是可以自动识别出来的</p>
 <h2 id="学习网站"><a href="#学习网站" class="headerlink" title="学习网站"></a>学习网站</h2><blockquote class="blockquote-center">
             <p><a href="https://www.liaoxuefeng.com/wiki/1016959663602400/1017496031185408">缪雪峰的官方网站</a></p>
