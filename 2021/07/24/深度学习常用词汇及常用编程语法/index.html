@@ -32,7 +32,7 @@
 <meta property="og:description" content="之前说要更新一下本科期间做的一些东西，然后再讲解一下加速器如何在FPGA上搭建，结果太忙了。。。。木得时间，后面有时间慢慢补上。 最近读了faster rcnn和yolo的源码，里面用到的一些函数自己不常用或者用法新奇或者有时候自己忘掉的，而且最先读faster rcnn，two-stage的源码的确比较复杂，原理很快看懂，读源码花了几天才搞明白，写篇博客不断更新记录一下遇到的一些函数和用法，防止">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-07-23T19:52:32.000Z">
-<meta property="article:modified_time" content="2021-08-23T12:06:58.866Z">
+<meta property="article:modified_time" content="2021-09-01T05:08:54.860Z">
 <meta property="article:author" content="Apers">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="CNN">
@@ -273,7 +273,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-23 12:06:58" itemprop="dateModified" datetime="2021-08-23T12:06:58Z">2021-08-23</time>
+                <time title="修改时间：2021-09-01 05:08:54" itemprop="dateModified" datetime="2021-09-01T05:08:54Z">2021-09-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -323,14 +323,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>20k</span>
+              <span>21k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>18 分钟</span>
+              <span>19 分钟</span>
             </span>
 
         </div>
@@ -621,6 +621,7 @@
 <p>函数+？可以得到函数介绍，比如torch.stack?，记得函数后面不要加括号。</p>
 <p>verilog中负数不能比较大小，坑爹呀</p>
 <p>json</p>
+<h2 id="文件读取"><a href="#文件读取" class="headerlink" title="文件读取"></a>文件读取</h2><p>np.loadtxt(“a.txt”,dtype = np.complex128),这就是以复数的形式读取文件，否则默认形式是float，float是实数域的，自然不可以读复数域的。</p>
 <h2 id="库安装"><a href="#库安装" class="headerlink" title="库安装"></a>库安装</h2><p>指定镜像地址的命令如下</p>
 <p>pip install -i 镜像地址 包名</p>
 <p>例如： pip install -i <a target="_blank" rel="noopener external nofollow noreferrer" href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> numpy</p>
@@ -671,6 +672,13 @@
           </blockquote>
 <p>其中jupyter kernelspec list可以查看所有的环境用的kernel路径（json中配置了python编译器位置）</p>
 <h2 id="Pycharm中使用anconda中的环境"><a href="#Pycharm中使用anconda中的环境" class="headerlink" title="Pycharm中使用anconda中的环境"></a>Pycharm中使用anconda中的环境</h2><p>file-setting-Project Interpreter-system Interperter处，将python编译器变成anconda的，如果anaconda已加入环境变量中，是可以自动识别出来的</p>
+<h2 id="本地打开服务器的tensorboard"><a href="#本地打开服务器的tensorboard" class="headerlink" title="本地打开服务器的tensorboard"></a>本地打开服务器的tensorboard</h2><p>tensorboard —logdir=. —bind_all然后ip:6006就可以在本地打开了</p>
+<h2 id="模型训练中显示启动卷积失败，cuda等等问题。"><a href="#模型训练中显示启动卷积失败，cuda等等问题。" class="headerlink" title="模型训练中显示启动卷积失败，cuda等等问题。"></a>模型训练中显示启动卷积失败，cuda等等问题。</h2><p>os.environ[‘CUDA_VISIBLE_DEVICES’] = ‘/gpu:0’</p>
+<p>有一次写代码发现明明写的是：</p>
+<p>os.environ[“CUDA_VISIBLE_DEVICES”] = “0,1,2,3,4,5,6,7”</p>
+<p>但是却显示只发现了 gpu：0，百思不得其解，百度谷歌都没有发现类似问题，后来检查才发现有一个调用的py文件里写了一句：</p>
+<p>os.environ[“CUDA_VISIBLE_DEVICES”] = “0”</p>
+<p>删掉之后，可以发现全部的gpu</p>
 <h2 id="学习网站"><a href="#学习网站" class="headerlink" title="学习网站"></a>学习网站</h2><blockquote class="blockquote-center">
             <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.liaoxuefeng.com/wiki/1016959663602400/1017496031185408">缪雪峰的官方网站</a></p>
 
@@ -793,7 +801,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%90%8D%E8%AF%8D"><span class="nav-number">1.</span> <span class="nav-text">常用名词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E7%A7%B0"><span class="nav-number">2.</span> <span class="nav-text">简称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">Pytorch &amp; Numpy基础原理类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%B9%BF%E6%92%AD%E6%9C%BA%E5%88%B6%E3%80%82"><span class="nav-number">3.1.</span> <span class="nav-text">1、广播机制。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%AD%98%E5%82%A8%E5%92%8C%E8%A7%86%E5%9B%BE%E3%80%82"><span class="nav-number">3.2.</span> <span class="nav-text">2、存储和视图。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%96%84%E7%94%A8%EF%BC%9F%E6%9F%A5%E7%9C%8B%E5%87%BD%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">善用？查看函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy"><span class="nav-number">4.</span> <span class="nav-text">Pytorch &amp; Numpy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%93%E5%AE%89%E8%A3%85"><span class="nav-number">5.</span> <span class="nav-text">库安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anaconda%E4%B8%AD%E6%96%B0%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="nav-number">6.</span> <span class="nav-text">anaconda中新建环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8jupyter%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">7.</span> <span class="nav-text">在jupyter中使用虚拟环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8jupyter%E4%B8%AD%E6%9F%90%E4%B8%AA%E7%8E%AF%E5%A2%83kernel-error"><span class="nav-number">8.</span> <span class="nav-text">在jupyter中某个环境kernel error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pycharm%E4%B8%AD%E4%BD%BF%E7%94%A8anconda%E4%B8%AD%E7%9A%84%E7%8E%AF%E5%A2%83"><span class="nav-number">9.</span> <span class="nav-text">Pycharm中使用anconda中的环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%AB%99"><span class="nav-number">10.</span> <span class="nav-text">学习网站</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%90%8D%E8%AF%8D"><span class="nav-number">1.</span> <span class="nav-text">常用名词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E7%A7%B0"><span class="nav-number">2.</span> <span class="nav-text">简称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">Pytorch &amp; Numpy基础原理类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%B9%BF%E6%92%AD%E6%9C%BA%E5%88%B6%E3%80%82"><span class="nav-number">3.1.</span> <span class="nav-text">1、广播机制。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%AD%98%E5%82%A8%E5%92%8C%E8%A7%86%E5%9B%BE%E3%80%82"><span class="nav-number">3.2.</span> <span class="nav-text">2、存储和视图。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%96%84%E7%94%A8%EF%BC%9F%E6%9F%A5%E7%9C%8B%E5%87%BD%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">善用？查看函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy"><span class="nav-number">4.</span> <span class="nav-text">Pytorch &amp; Numpy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96"><span class="nav-number">5.</span> <span class="nav-text">文件读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%93%E5%AE%89%E8%A3%85"><span class="nav-number">6.</span> <span class="nav-text">库安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anaconda%E4%B8%AD%E6%96%B0%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="nav-number">7.</span> <span class="nav-text">anaconda中新建环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8jupyter%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">8.</span> <span class="nav-text">在jupyter中使用虚拟环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8jupyter%E4%B8%AD%E6%9F%90%E4%B8%AA%E7%8E%AF%E5%A2%83kernel-error"><span class="nav-number">9.</span> <span class="nav-text">在jupyter中某个环境kernel error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pycharm%E4%B8%AD%E4%BD%BF%E7%94%A8anconda%E4%B8%AD%E7%9A%84%E7%8E%AF%E5%A2%83"><span class="nav-number">10.</span> <span class="nav-text">Pycharm中使用anconda中的环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E6%89%93%E5%BC%80%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84tensorboard"><span class="nav-number">11.</span> <span class="nav-text">本地打开服务器的tensorboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%90%AF%E5%8A%A8%E5%8D%B7%E7%A7%AF%E5%A4%B1%E8%B4%A5%EF%BC%8Ccuda%E7%AD%89%E7%AD%89%E9%97%AE%E9%A2%98%E3%80%82"><span class="nav-number">12.</span> <span class="nav-text">模型训练中显示启动卷积失败，cuda等等问题。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%AB%99"><span class="nav-number">13.</span> <span class="nav-text">学习网站</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1133,7 +1141,7 @@ if(canvas.getContext){
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">92k</span>
+    <span title="站点总字数">93k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
