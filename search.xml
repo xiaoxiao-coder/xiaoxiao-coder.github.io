@@ -1,694 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Python之魔法函数</title>
-    <url>/2021/07/20/Python%E4%B9%8B%E9%AD%94%E6%B3%95%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<p>Python是一个很类似于matlab的语言，都是一种高层解释型语言，区别于C、C++，C、C++则是编译通过后才执行(说明语法都没有错误)，Python执行之前不需要编译链接，直接是一行行执行，将除了缩进的语言都执行一遍，为了防止在读入包/模块时候出现代码执行，出现了__name__的魔法函数，也是Python的一种内置属性，除了__name__，在读faster rcnn的torch源码时候，也会频繁遇到__call__()、 __ len__()、__ init__() 、__ getitem__()等一类魔法函数，特地去搜了搜，网上讲的很好，链接如下:</p>
-<a id="more"></a>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.zhihu.com/question/49136398">if <strong>name</strong> == ‘<strong>main</strong>‘ 如何正确理解? - 知乎 (zhihu.com)</a></p>
-
-          </blockquote>
-<blockquote class="blockquote-center">
-            <p><a href="https://zhuanlan.zhihu.com/p/344951719">Python：实例讲解Python中的魔法函数（高级语法） - 知乎 (zhihu.com)</a></p>
-
-          </blockquote>
-<p>由于上述链接讲的都很完备，下面只进行简单的总结一下。                            </p>
-<h3 id="name"><a href="#name" class="headerlink" title="__name__"></a>__name__</h3><p>大概说一下__name__吧，其本质就是Python的一个内置属性，当自己作为主文件执行时，__name__是”__main__“,而当作为模块时，则__name__就是模块名，自己也特地测试了一个，图如下，其中Write_coe是我将Python参数存储为FPGA的RAM文件格式写的自定义模块函数。</p>
-<p><a href="https://imgtu.com/i/WYpEdg"><img src="https://z3.ax1x.com/2021/07/19/WYpEdg.png" alt="WYpEdg.png"></a></p>
-<h2 id="魔法函数"><a href="#魔法函数" class="headerlink" title="魔法函数"></a>魔法函数</h2><p>魔法函数是类中的可重写的方法，有助于更灵活方便的使用类。</p>
-<h3 id="1、字符串表示：-str-和-repr-的区别"><a href="#1、字符串表示：-str-和-repr-的区别" class="headerlink" title="1、字符串表示：__str__和__repr__的区别"></a>1、<strong>字符串表示：</strong>__str__和__repr__的区别</h3><p>在Python类中，这两个方法的区别主要如下：</p>
-<p>print类的时候，首先找__str__方法，若__str__方法未进行重写，则调用__repr__(或者可以说__str__未重写的时候，初始定义和__repr__一样的)</p>
-<p>而在交互式窗口直接打实例化类的时候，则调用__repr__方法，其本质就是打印一个str字符串：类名+object at+内存地址。当然__repr__也可以重写。</p>
-<h3 id="2、集合、序列相关："><a href="#2、集合、序列相关：" class="headerlink" title="2、集合、序列相关："></a>2、集合、序列相关：</h3><h4 id="2-1、-len"><a href="#2-1、-len" class="headerlink" title="2.1、__len__"></a>2.1、__len__</h4><p>在使用len(某个class)  ，而len的函数本质是将该class作为参数传入，然后调用的是类自身的__len__方法。</p>
-<h4 id="2-2、-getitem"><a href="#2-2、-getitem" class="headerlink" title="2.2、__getitem__"></a>2.2、__getitem__</h4><div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>]]></content>
-      <categories>
-        <category>Python</category>
-        <category>魔法函数</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>魔法函数</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博客搭建和规划</title>
-    <url>/2021/01/19/hello-world/</url>
-    <content><![CDATA[<p>欢迎来到<a href="http://gezhilai.com/">我的博客</a>! 这是我的第一篇博客. 受到疫情影响，今年都无法留校，但早早的回家也不能荒废了时间，就参考了一些文章搭建了这个博客，一是为了记下自己学习的过程，二也是可以和大家分享知识。下面主要说一说博客搭建参考的文章和未来博客准备发的东西。</p>
-<a id="more"></a>
-<h2 id="博客搭建"><a href="#博客搭建" class="headerlink" title="博客搭建"></a>博客搭建</h2><h3 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h3><p>搭建过程中，参考了如下几篇文章</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.jianshu.com/p/39562a0d8eb6">可能是最详细的 Hexo + GitHub Pages 搭建博客的教程</a></p>
-
-          </blockquote>
-<blockquote class="blockquote-center">
-            <p><a href="https://zhuanlan.zhihu.com/p/26625249">GitHub+Hexo 搭建个人网站详细教程</a></p>
-
-          </blockquote>
-<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>在后续优化中，强烈推荐下面这个博主</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://tding.top/">小丁的个人博客</a></p>
-
-          </blockquote>
-<p>如果具体操作还有些问题，可以顺带看一下下面的视频，</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.bilibili.com/video/BV16W411t7mq?p=21">使用Hexo博客搭建的个人博客，使用Next主题来进行优化改造</a></p>
-
-          </blockquote>
-<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><p>1、公式无法显示问题参考如下博客，</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://blog.csdn.net/weixin_44489823/article/details/105028860">hexo next主题解决无法显示数学公式</a></p>
-
-          </blockquote>
-<p>其中mathjax开启可以在markdown顶部写如下命令进行开启显示数学公式</p>
-<blockquote class="blockquote-center">
-            <p>mathjax: true #显示数学公式</p>
-
-          </blockquote>
-<p>2、更新博客后，登录网站后发现没有新内容，是由于浏览器缓存功能导致，在浏览器设置—隐私中清除一下缓存或者等待几分钟即可</p>
-<h2 id="博客规划"><a href="#博客规划" class="headerlink" title="博客规划"></a>博客规划</h2><p>在后续中，主要会写一写以前做过和学过的东西，包括FPGA、FPGA图像处理、深度学习、机器学习以及西瓜书、花书和凸优化等书的学习分享。当然必然不会仅限于此，但自己也不知道以后还会学些什么，所以暂且写这些吧，假期期间会把上述几本书仔细读一读。</p>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>
-
-
-
-
-
-
-
-]]></content>
-      <categories>
-        <category>Hexo</category>
-        <category>搭建</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>博客搭建</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>jupyter lab实现跨文件的函数调用</title>
-    <url>/2021/04/10/jupyter%20lab%E5%AE%9E%E7%8E%B0%E8%B7%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/</url>
-    <content><![CDATA[<p>在python各类编译器中，jupyter notebook真的是非常非常棒的调试工具，但是jupyter notebook在大工程方面却是逊于pycharm的，其虽然调试很方便，但是却不是像pycharm一样打开一整个文件夹，所以其团队又开发了jupyter lab来弥补缺陷，而jupyter lab的代码补齐真的又一言难尽，由于jupyter lab本身并不是完善，用了kite工具辅助代码补齐，即使操作完全没问题，kite也可能不工作，工作了也发现kite速度真的超慢又浪费CPU</p>
-<a id="more"></a>
-<p>算了，毕竟jupyter lab已经是一大进步了，平时我们写代码，模块化是非常重要的，所以经常会分文件进行写函数，然后跨文件调用，python中跨文件调用很简单，如果想在文件A中调用文件B中的max函数，如下即可：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment"># 待引用的py文件B路径加到了搜索列表里</span></span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) </span><br><span class="line"><span class="keyword">import</span> B</span><br><span class="line">B.<span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
-<p>或者如下</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment"># 待引用的py文件路径加到了搜索列表里</span></span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) </span><br><span class="line">form B <span class="keyword">import</span> <span class="built_in">max</span></span><br><span class="line"><span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
-<p>A和B若是在同一路径下，可以无需添加路径。</p>
-<p>但上述的方法是用来py文件跨文件调用的，而jupyter中的文件不是py而是ipynb文件，那么上述这个方法就没法在jupyter中用了，官方给出了一个解决方法，先在jupyter中建立一个文件，写入如下代码：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># In[ ]:</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io, os,sys,types</span><br><span class="line"><span class="keyword">from</span> IPython <span class="keyword">import</span> get_ipython</span><br><span class="line"><span class="keyword">from</span> nbformat <span class="keyword">import</span> read</span><br><span class="line"><span class="keyword">from</span> IPython.core.interactiveshell <span class="keyword">import</span> InteractiveShell</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotebookFinder</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Module finder that locates Jupyter Notebooks&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.loaders = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">find_module</span>(<span class="params">self, fullname, path=<span class="literal">None</span></span>):</span></span><br><span class="line">        nb_path = find_notebook(fullname, path)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> nb_path:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        key = path</span><br><span class="line">        <span class="keyword">if</span> path:</span><br><span class="line">            <span class="comment"># lists aren&#x27;t hashable</span></span><br><span class="line">            key = os.path.sep.join(path)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> self.loaders:</span><br><span class="line">            self.loaders[key] = NotebookLoader(path)</span><br><span class="line">        <span class="keyword">return</span> self.loaders[key]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_notebook</span>(<span class="params">fullname, path=<span class="literal">None</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;find a notebook, given its fully qualified name and an optional path</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    This turns &quot;foo.bar&quot; into &quot;foo/bar.ipynb&quot;</span></span><br><span class="line"><span class="string">    and tries turning &quot;Foo_Bar&quot; into &quot;Foo Bar&quot; if Foo_Bar</span></span><br><span class="line"><span class="string">    does not exist.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    name = fullname.rsplit(<span class="string">&#x27;.&#x27;</span>, <span class="number">1</span>)[-<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> path:</span><br><span class="line">        path = [<span class="string">&#x27;&#x27;</span>]</span><br><span class="line">    <span class="keyword">for</span> d <span class="keyword">in</span> path:</span><br><span class="line">        nb_path = os.path.join(d, name + <span class="string">&quot;.ipynb&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(nb_path):</span><br><span class="line">            <span class="keyword">return</span> nb_path</span><br><span class="line">        <span class="comment"># let import Notebook_Name find &quot;Notebook Name.ipynb&quot;</span></span><br><span class="line">        nb_path = nb_path.replace(<span class="string">&quot;_&quot;</span>, <span class="string">&quot; &quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(nb_path):</span><br><span class="line">            <span class="keyword">return</span> nb_path</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotebookLoader</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Module Loader for Jupyter Notebooks&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, path=<span class="literal">None</span></span>):</span></span><br><span class="line">        self.shell = InteractiveShell.instance()</span><br><span class="line">        self.path = path</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">load_module</span>(<span class="params">self, fullname</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;import a notebook as a module&quot;&quot;&quot;</span></span><br><span class="line">        path = find_notebook(fullname, self.path)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&quot;importing Jupyter notebook from %s&quot;</span> % path)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># load the notebook object</span></span><br><span class="line">        <span class="keyword">with</span> io.<span class="built_in">open</span>(path, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            nb = read(f, <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment"># create the module and add it to sys.modules</span></span><br><span class="line">        <span class="comment"># if name in sys.modules:</span></span><br><span class="line">        <span class="comment">#    return sys.modules[name]</span></span><br><span class="line">        mod = types.ModuleType(fullname)</span><br><span class="line">        mod.__file__ = path</span><br><span class="line">        mod.__loader__ = self</span><br><span class="line">        mod.__dict__[<span class="string">&#x27;get_ipython&#x27;</span>] = get_ipython</span><br><span class="line">        sys.modules[fullname] = mod</span><br><span class="line"></span><br><span class="line">        <span class="comment"># extra work to ensure that magics that would affect the user_ns</span></span><br><span class="line">        <span class="comment"># actually affect the notebook module&#x27;s ns</span></span><br><span class="line">        save_user_ns = self.shell.user_ns</span><br><span class="line">        self.shell.user_ns = mod.__dict__</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">          <span class="keyword">for</span> cell <span class="keyword">in</span> nb.cells:</span><br><span class="line">            <span class="keyword">if</span> cell.cell_type == <span class="string">&#x27;code&#x27;</span>:</span><br><span class="line">                <span class="comment"># transform the input to executable Python</span></span><br><span class="line">                code = self.shell.input_transformer_manager.transform_cell(cell.source)</span><br><span class="line">                <span class="comment"># run the code in themodule</span></span><br><span class="line">                exec(code, mod.__dict__)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            self.shell.user_ns = save_user_ns</span><br><span class="line">        <span class="keyword">return</span> mod</span><br><span class="line">sys.meta_path.append(NotebookFinder())</span><br></pre></td></tr></table></figure>
-<p>上述代码中try后的for在写入文件中的时候，编译器可能会提醒for的缩进有问题，会进行标红，不用管，缩进是没问题的。</p>
-<p>然后我们给这个文件另存为后缀为py的文件，在jupyter notebook中进行如下另存为。</p>
-<p>千万不要直接rename，直接rename是有问题的，所以不要直接rename。另存为py文件后，把这个文件放到和文件A同一个路径下，那么我们就可以如下在文件A中调用B中的函数了：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> 文件名 <span class="comment">#刚刚另存为py的那个文件名</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) <span class="comment"># 待引用的py文件B路径加到了搜索列表里</span></span><br><span class="line"><span class="keyword">import</span> B</span><br><span class="line">B.<span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
-<p>如果这时候提醒你另存为的那个文件找不到，那么就需要看看你的另存为py的那个文件名名字是否是<strong>大写字母开头</strong>，如果是小写开头也可能出问题(真的就巨坑)。</p>
-<p>然后在运行就不会提醒说找不到那个py文件了。但是有可能有如下这样报错</p>
-<p>说B文件中没有这个函数，这个一般是新建文件的时候在不同虚拟环境下创建的问题，如果是jupyter lab，如下修改即可</p>
-<p>如果是notebook，在命令行中修改。</p>
-<p>最后运行完全没问题，如果我们继续在B中写其他函数，或者修改原来的max函数，在A中运行却得不到想要的结果，这个就是A中对B进行了缓存导致的，所以需要shut down这个kernel（即文件A），然后再打开运行即可。</p>
-<p>深深体会到jupyter为什么在大工程方面被pycharm锤了，文件调用以及打开文件夹等功能真的需要改进，但不得不说jupyter 调试超棒</p>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>]]></content>
-      <categories>
-        <category>jupyter</category>
-      </categories>
-      <tags>
-        <tag>jupyter</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>latex转word</title>
-    <url>/2021/01/24/latex%E8%BD%ACword/</url>
-    <content><![CDATA[<p>现在写论文几乎都是在用latex，但是在latex中，只能生成pdf，无法生成word会给我们造成不便，网上有Tex2word等方法，但那些方法是很多年前的，用过发现也不太好用甚至不能用。所以就找到了pandoc这个很棒的工具，它可以将文档在 Markdown、LaTeX、reStructuredText、HTML、Word docx 等多种标记格式之间相互转换，并支持输出 PDF、EPUB、HTML 幻灯片等多种格式。</p>
-<a id="more"></a>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>对于已经安装了anaconda的，pandoc已经被集成到anaconda中了，可以直接使用，如果没有anaconda的，可以在<a href="https://pandoc.org/installing.html">pandoc</a>官网下载。首先在cmd命令窗口中，将路径转到latex目录下，使用方法如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd D:\latex\latex_example1</span><br></pre></td></tr></table></figure>
-<p>将上述路径改为自己文件所在路径即可。</p>
-<p>然后输入如下命令，其中example.tex改为你需要转换的tex文件，example.doc是输出的doc文件名</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex -o example.doc</span><br></pre></td></tr></table></figure>
-<p>除了可以进行tex到word的转换，还可以在Markdown、latex、HTML、Word等之间转换，后缀名变成相应的格式即可。更多可以参考下述：</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.jianshu.com/p/6ba04f669d0b">Pandoc 安装与使用</a></p>
-
-          </blockquote>
-<blockquote class="blockquote-center">
-            <p><a href="https://segmentfault.com/a/1190000021698926">Pandoc——Pandoc安装、使用、快速上手</a></p>
-
-          </blockquote>
-<h2 id="更新1"><a href="#更新1" class="headerlink" title="更新1"></a>更新1</h2><p>论文里面一般有很多张图片，但是上述命令无法转换图片，看了网上的用resource命令然后出现一堆错误，其实pandoc —help就发现他们的命令用的是错误的，不明白为什么那么多人在说什么版本问题。。。</p>
-<p>命令如下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex --resource-path&#x3D;图片文件夹路径 -o example.doc</span><br></pre></td></tr></table></figure>
-<p>如相对路径如下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex --resource-path&#x3D;Img -o example.doc</span><br></pre></td></tr></table></figure>
-<p>也可以用绝对路径</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex --resource-path&#x3D;D:\tex\Img -o example.doc</span><br></pre></td></tr></table></figure>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>
-
-
-
-
-
-
-
-]]></content>
-      <categories>
-        <category>latex</category>
-      </categories>
-      <tags>
-        <tag>latex</tag>
-        <tag>word</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>python常用语法汇总--不断更新中</title>
-    <url>/2021/08/17/python%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%B1%87%E6%80%BB/</url>
-    <content><![CDATA[<p>之前也总结过一个，faster rcnn时候总结的，详见链接如下：</p>
-<a id="more"></a>
-<h2 id="R3det"><a href="#R3det" class="headerlink" title="R3det"></a>R3det</h2><h3 id="字符串类："><a href="#字符串类：" class="headerlink" title="字符串类："></a>字符串类：</h3><p>path前面加r含义</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">path=<span class="string">r&quot;C:\data\a.csv&quot;</span></span><br><span class="line">path=path.replace(<span class="string">&quot;\\&quot;</span>,<span class="string">&quot;/&quot;</span>)</span><br><span class="line">a=pd.read_csv(path)</span><br></pre></td></tr></table></figure>
-<p>字符串是否在字符串中：</p>
-<p>“tif” in “0.tif”的结果是True</p>
-<p>strip</p>
-<p>os.path.split</p>
-<h3 id="列表类："><a href="#列表类：" class="headerlink" title="列表类："></a>列表类：</h3><p>判断是否在列表中，并获取下标，例子如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">animal = <span class="string">&quot;dog&quot;</span></span><br><span class="line">animals= [<span class="string">&quot;cat&quot;</span>,<span class="string">&quot;dog&quot;</span>,<span class="string">&quot;pig&quot;</span>]</span><br><span class="line"><span class="keyword">if</span> animal <span class="keyword">in</span> animals:</span><br><span class="line">    index=animals.index(animal)</span><br><span class="line">    print(index)</span><br></pre></td></tr></table></figure>
-<p>输出如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>列表之前说过，其乘法和加法是区别于np的，其实拼接的意思，如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">b=[<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">print(a+b)</span><br><span class="line">print(a*<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<p>输出如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
-<h3 id="np数组："><a href="#np数组：" class="headerlink" title="np数组："></a>np数组：</h3><p>保存/读取数组的方法如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">np.save(<span class="string">&quot;filename.npy&quot;</span>,a)<span class="comment">#保存数组a，保存为的文件名是filename.npy</span></span><br><span class="line">b = np.load(<span class="string">&quot;filename.npy&quot;</span>)</span><br></pre></td></tr></table></figure>
-<p>float可以对单个数来，对[“123”,”234”]的，应该用np.float32()进行,例子如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">digit=[<span class="string">&quot;123&quot;</span>,<span class="string">&quot;456&quot;</span>,<span class="string">&quot;22&quot;</span>]</span><br><span class="line">digit_float=np.float32(digit)</span><br><span class="line">print(digit_float)</span><br></pre></td></tr></table></figure>
-<p>输出如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="number">123.</span> <span class="number">456.</span>  <span class="number">22.</span>]</span><br></pre></td></tr></table></figure>]]></content>
-  </entry>
-  <entry>
-    <title>tensorflow中的参数更新机制详解</title>
-    <url>/2021/08/05/tensorflow%E4%B8%AD%E7%9A%84%E5%8F%82%E6%95%B0%E6%9B%B4%E6%96%B0%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<p>之前用的都是torch，tf倒是没怎么用过，最近由于种种原因，需要学一学tensorflow，不过tf中的大多数函数类方法都无法自动进行int—&gt;float类型强制转换，还得自行cast转换，着实麻烦。深度学习的核心所在就是梯度下降，各种优化器都是基于导数的梯度下降来的，所以自动求导更新就是至关重要的，这一节就来讲一讲tensorflow中的参数更新机制。</p>
-<a id="more"></a>
-<p>tf和torch中一样，各类参数都是以tensor即张量类型进行存储，由于模型中并不是所有的量都需要计算梯度，所以tf中会用tf.Variable(x)将tensor标记为可训练即可求导的变量。其实如果直接从少量参数和少量代码来看，似乎引入Variable意义不大，我们可以直接对需要求导的参数进行求导，得到梯度后，进行w=w-r*grad进行更新即可(w代表需要训练的参数，r为学习率，grad代表参数)，但是神经网络模型中参数巨量，这样操作会导致参数混乱，而且需要我们自己更新参数，远没有模块化的便利，所以我们希望的模块化，以函数或者方法的形式，可以反复的复用，极大的提高便捷性，所以才会出现一系列函数和方法来辅助简便化参数自动更新。</p>
-<p>值得注意的是，如果搜过以前的很多博客，应该知道图变量Variable没法自动数据流更新，也就是说你赋值过后，对图变量进行一些运算后，其数据流并没有运转起来(可以理解为没有进行运算)，需要如下才能使得数据流运转起来进行计算：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = tf.Variable(<span class="number">3</span>, name=<span class="string">&#x27;x&#x27;</span>)</span><br><span class="line">y = x * <span class="number">5</span></span><br><span class="line">sess = tf.InteractiveSession()</span><br><span class="line">sess.run(tf.global_variables_initializer())</span><br><span class="line">sess.run(y)</span><br></pre></td></tr></table></figure>
-<p>也就是使用了交互接口，然后运行初始化，在运行y在能得到x*5后操作，显得特别臃肿，但在现在的tensorflow2.0版本中，终于取消了这种颇为愚昧的操作，直接简单的像np一样运算操作就好了,即有了自动更新机制。(网上大多数以前的博客都没更新，其实已经不需要使用run来操作了)，我们可以看一下1.0版本时候的操作，那个时候tf中的数据流定义和运算是分开的(定义一个操作和执行这个操作是分开的)，</p>
-<p>在通过tf.Variable对tensor标记后，我们可以通过tf.GradientTape()对这些可训练参数进行导数计算，然后将这些计算得到的梯度信息都存在磁盘里(“Tape”),磁盘名可以自取。用法如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.GradientTape(persistent=<span class="literal">True</span>,watch_accessed_variables=<span class="literal">True</span>) <span class="keyword">as</span> www:</span><br><span class="line">    a2=tf.<span class="built_in">pow</span>(a,<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
-<p>其中tf.GradientTape有两个参数，含义入下：</p>
-<script type="math/tex; mode=display">
-persistent: 布尔值，用来指定新创建的gradient tape是否是可持续性的。默认是False，意味着只能够调用一次gradient（）函数。
-\\watch\_accessed\_variables: 布尔值，表明这个gradien tap是不是会自动追踪任何能被训练（trainable）的变量。默认是True。要是为False的话，意味着你需要手动去指定你想追踪的那些变量,手动追踪用watch。</script><p>上述的代码中，如果a是可训练参数，那么tf.GrandientTape就会自动计算a的所有操作步骤的梯度，(通过这些所有操作步骤的梯度，链式法则就可以知道各个操作之间的导数关系)。</p>
-<p>而 with A as B是什么意思呢?其实样式和for很类似，是控制流语句，for是不断遍历可迭代对象，将数据取出来(通过__next__ 操作的)，而with是把 A中的返回送给B，不过B可以接收A的任何返回（可以是方法类等等，取决自己如何用），在with下的语句执行完毕后，还会执行魔法函数__exit__（应该是在该退出函数时候将所有结果保存在了Tape中）,具体功能其实和try except是很像的，具体分析链接如下：</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://blog.csdn.net/qiqicos/article/details/79200089">python中with…as的用法</a></p>
-
-          </blockquote>
-<blockquote class="blockquote-center">
-            <p><a href="https://blog.csdn.net/frank_ljiang/article/details/106281919">with在python中的用法和含义</a></p>
-
-          </blockquote>
-<p>下面贴一个具体例子：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=tf.constant([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],shape=(<span class="number">2</span>,<span class="number">3</span>),dtype=tf.float32)</span><br><span class="line">b=tf.Variable(a)</span><br><span class="line"><span class="keyword">with</span> tf.GradientTape(persistent=<span class="literal">True</span>,watch_accessed_variables=<span class="literal">True</span>) <span class="keyword">as</span> www:</span><br><span class="line">    www.watch(a)</span><br><span class="line">    a2=tf.<span class="built_in">pow</span>(a,<span class="number">3</span>)</span><br><span class="line">    b2=tf.exp(b)</span><br><span class="line">grad_a=www.gradient(a2,a)</span><br><span class="line">grad_b=www.gradient(b2,b)</span><br><span class="line">print(grad_a,grad_b)</span><br></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tf.Tensor(</span><br><span class="line">[[  <span class="number">3.</span>  <span class="number">12.</span>  <span class="number">27.</span>]</span><br><span class="line"> [ <span class="number">48.</span>  <span class="number">75.</span> <span class="number">108.</span>]], shape=(<span class="number">2</span>, <span class="number">3</span>), dtype=float32) tf.Tensor(</span><br><span class="line">[[  <span class="number">2.7182817</span>   <span class="number">7.389056</span>   <span class="number">20.085537</span> ]</span><br><span class="line"> [ <span class="number">54.59815</span>   <span class="number">148.41316</span>   <span class="number">403.4288</span>   ]], shape=(<span class="number">2</span>, <span class="number">3</span>), dtype=float32)</span><br></pre></td></tr></table></figure>
-<p>上述将tf.GradientTape的两个属性设为True,是可以连续使用gradient和自动纪录可训练参数的导数，而由于tensor类型不是可训练参数，所以需要手动指定watch来纪录其操作是的导数计算，如果tf.GradientTape的第二个参数设定为False，即使是可训练参数也需要手动进行指定。而www.gradient(A,B)就是从磁盘中提取出A关于B的导数。</p>
-<p>本文参考链接如下：</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://blog.csdn.net/Forrest97/article/details/105913952">with tf.GradientTape() as tape 梯度带 Tensorflow自动求导API</a></p>
-
-          </blockquote>
-<blockquote class="blockquote-center">
-            <p><a href="https://blog.csdn.net/xierhacker/article/details/53174558?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-3.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-3.control">TensorFlow学习（四）：梯度带(GradientTape)，优化器(Optimizer)和损失函数(losses)</a></p>
-
-          </blockquote>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>]]></content>
-      <tags>
-        <tag>-深度学习 -tensorflow</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>xml文件的数据分析</title>
-    <url>/2021/08/18/xml%E6%96%87%E4%BB%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<p>上篇得到了飞机的tif和对应的xml文件后(xml文件中的object只留下了飞机)，我们需要对飞机的信息进行分析汇总，此处对每一类飞机主要想统计的信息有如下：</p>
-<a id="more"></a>
-<ul>
-<li>该类别的图片数量</li>
-<li>飞机的最小宽度</li>
-<li>飞机的最小高度</li>
-<li>飞机最小的宽高比</li>
-<li>飞机的最大宽度</li>
-<li>飞机的最大高度</li>
-<li>飞机最大的宽高比</li>
-<li>图片的最小宽度</li>
-<li>图片的最小高度</li>
-<li>图片的最小深度</li>
-<li>图片的最大宽度</li>
-<li>图片的最大高度</li>
-<li>图片的最大深度</li>
-</ul>
-<p>在之前的xml转json格式的博客中，那个read_xml_gtbox_and_label函数中加入如下的信息统计，即多读取一个size，size中三个数分别代表宽度、高度和深度，并将size数据return返回，注意其是字符串格式的。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> child_of_root.tag == <span class="string">&#x27;size&#x27;</span>:</span><br><span class="line">    size = [-<span class="number">1</span>,-<span class="number">1</span>,-<span class="number">1</span>]<span class="comment">#[width,height,depth]</span></span><br><span class="line">    <span class="keyword">for</span> child_item <span class="keyword">in</span> child_of_root:</span><br><span class="line">        <span class="keyword">if</span> child_item.tag == <span class="string">&#x27;width&#x27;</span>: </span><br><span class="line">            size[<span class="number">0</span>] = child_item.text</span><br><span class="line">        <span class="keyword">if</span> child_item.tag == <span class="string">&#x27;height&#x27;</span>: </span><br><span class="line">            size[<span class="number">1</span>] = child_item.text</span><br><span class="line">        <span class="keyword">if</span> child_item.tag == <span class="string">&#x27;depth&#x27;</span>: </span><br><span class="line">            size[<span class="number">2</span>] = child_item.text</span><br></pre></td></tr></table></figure>
-<p>read_xml_gtbox_and_label函数的博客链接如下：</p>
-<blockquote class="blockquote-center">
-            <p><a href="http://gezhilai.com/2021/08/16/xml%E6%A0%BC%E5%BC%8F%E8%BD%ACjson/">xml格式转json</a></p>
-
-          </blockquote>
-<p>然后得到返回后，进行信息统计，统计得到的numpy数组进行保存。飞机的长宽以及长宽比，其实是按照矩形框来的，由于给的数据集是四边形框，我将这个框变成了xy方向上的水平矩形框进行计算高和宽。值得注意的是，飞机的尺寸竟然出现了浮点数，不知道是组委会给的xml文件有问题还是有浮点数是正常的，不过坐标是标记像素的位置的，出现浮点数有点不太正常。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    统计gf2021中目标大小(影响滑动窗口进行切片)，统计飞机的目标大小，统计含括飞机的图片尺寸，把</span></span><br><span class="line"><span class="string">    有飞机的图片另存为，同时另存xml，把xml也修改一下，把非飞机的目标丢弃掉。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> scipy.misc <span class="keyword">as</span> misc</span><br><span class="line"><span class="keyword">from</span> xml.dom.minidom <span class="keyword">import</span> Document</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> copy, cv2</span><br><span class="line"><span class="comment"># import imageio</span></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"><span class="keyword">import</span> xml.etree.cElementTree <span class="keyword">as</span> ET</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> osgeo <span class="keyword">import</span> gdal, gdalconst</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">information_statistics_save</span>(<span class="params">image_path, xml_path</span>):</span></span><br><span class="line">    plane_data = np.zeros((<span class="number">10</span>,<span class="number">13</span>))<span class="comment">#num,min_width,min_height,min_ratio,max_width,max_height,max_ratio。min_pic_width,min_pic_height,min_pic_depth,max_pic_width,max_pic_height,max_pic_depth</span></span><br><span class="line">    initialization=np.array([<span class="number">0</span>,<span class="number">10000</span>,<span class="number">10000</span>,<span class="number">10000</span>,-<span class="number">1</span>,-<span class="number">1</span>,-<span class="number">1</span>,<span class="number">10000</span>,<span class="number">10000</span>,<span class="number">10000</span>,-<span class="number">1</span>,-<span class="number">1</span>,-<span class="number">1</span>])</span><br><span class="line">    plane_data  = plane_data    +   initialization <span class="comment">#初始化，广播机制</span></span><br><span class="line">    plane_label = [<span class="string">&quot;Boeing737&quot;</span>,<span class="string">&quot;Boeing747&quot;</span>,<span class="string">&quot;Boeing777&quot;</span>,<span class="string">&quot;C919&quot;</span>,<span class="string">&quot;A220&quot;</span>,<span class="string">&quot;A321&quot;</span>,<span class="string">&quot;A330&quot;</span>,<span class="string">&quot;A350&quot;</span>,<span class="string">&quot;ARJ21&quot;</span>,<span class="string">&quot;other-airplane&quot;</span>]</span><br><span class="line">    <span class="keyword">for</span> count, xml <span class="keyword">in</span> <span class="built_in">enumerate</span>(glob.glob(xml_path + <span class="string">&#x27;/*.xml&#x27;</span>)):<span class="comment">#进行索引，*代表任意匹配，得到可迭代对象</span></span><br><span class="line">        <span class="comment"># to avoid path error in different development platform</span></span><br><span class="line">        xml = xml.replace(<span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)<span class="comment">#用/替换\\,后面的替换前面的</span></span><br><span class="line">        (_, xml_name) = os.path.split(xml)<span class="comment">#分割。返回路径和文件名。若本身就是一个文件夹路径，则返回路径和空</span></span><br><span class="line">        <span class="comment">#print(xml)</span></span><br><span class="line">        img_name, box , size, difficult_list, tmp_score_list = read_xml_gtbox_and_label(xml)</span><br><span class="line">        img_name=xml_name.replace(<span class="string">&#x27;.xml&#x27;</span>, <span class="string">&#x27;.tif&#x27;</span>)</span><br><span class="line">        img_path = image_path + <span class="string">&#x27;/&#x27;</span> + img_name</span><br><span class="line"></span><br><span class="line">        size = np.float32(size)</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">for</span> box_one_object <span class="keyword">in</span> box:</span><br><span class="line">            <span class="keyword">if</span> box_one_object[<span class="number">8</span>] <span class="keyword">in</span> plane_label:</span><br><span class="line">                index_label=plane_label.index(box_one_object[<span class="number">8</span>])</span><br><span class="line">                <span class="comment">#print(index_label)</span></span><br><span class="line">                plane_data[index_label,<span class="number">0</span>]=plane_data[index_label,<span class="number">0</span>]+<span class="number">1</span><span class="comment">#该类型飞机数量加1</span></span><br><span class="line">                box_float=np.float32(box_one_object[<span class="number">0</span>:<span class="number">8</span>])<span class="comment">#float只能对单个数使用，数组类的用np.float</span></span><br><span class="line">                x_box=box_float[[<span class="number">0</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>]]</span><br><span class="line">                y_box=box_float[[<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>]]</span><br><span class="line">                <span class="comment">#print(x_box,y_box)</span></span><br><span class="line">                width = np.<span class="built_in">max</span>(x_box)-np.<span class="built_in">min</span>(x_box)</span><br><span class="line">                height = np.<span class="built_in">max</span>(y_box)-np.<span class="built_in">min</span>(y_box)</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">int</span>(width*<span class="number">100</span>) ==<span class="number">758</span>:</span><br><span class="line">                    print(xml)</span><br><span class="line">                <span class="keyword">if</span> width &lt; plane_data[index_label,<span class="number">1</span>]:</span><br><span class="line">                    plane_data[index_label,<span class="number">1</span>]=width</span><br><span class="line">                <span class="keyword">if</span> height &lt; plane_data[index_label,<span class="number">2</span>]:                    </span><br><span class="line">                    plane_data[index_label,<span class="number">2</span>]=height </span><br><span class="line">                <span class="keyword">if</span> width/height &lt; plane_data[index_label,<span class="number">3</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">3</span>]=width/height   </span><br><span class="line">                <span class="keyword">if</span> width &gt; plane_data[index_label,<span class="number">4</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">4</span>]=width </span><br><span class="line">                <span class="keyword">if</span> height &gt; plane_data[index_label,<span class="number">5</span>]:</span><br><span class="line">                    plane_data[index_label,<span class="number">5</span>]=height</span><br><span class="line">                <span class="keyword">if</span> width/height &gt; plane_data[index_label,<span class="number">6</span>]:                    </span><br><span class="line">                    plane_data[index_label,<span class="number">6</span>]=width/height </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">0</span>] &lt; plane_data[index_label,<span class="number">7</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">7</span>]=size[<span class="number">0</span>]   </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">1</span>] &lt; plane_data[index_label,<span class="number">8</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">8</span>]=size[<span class="number">1</span>]                       </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">2</span>] &lt; plane_data[index_label,<span class="number">9</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">9</span>]=size[<span class="number">2</span>]   </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">0</span>] &gt; plane_data[index_label,<span class="number">10</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">10</span>]=size[<span class="number">0</span>]   </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">1</span>] &gt; plane_data[index_label,<span class="number">11</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">11</span>]=size[<span class="number">1</span>]                       </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">2</span>] &gt; plane_data[index_label,<span class="number">12</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">12</span>]=size[<span class="number">2</span>] </span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                print(<span class="string">&quot;出现错误&quot;</span>) </span><br><span class="line">            </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(img_path):</span><br><span class="line">            print(<span class="string">&#x27;&#123;&#125; is not exist!&#x27;</span>.<span class="built_in">format</span>(img_path))</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="comment"># view_bar(&#x27;Conversion progress&#x27;, count + 1,</span></span><br><span class="line">        <span class="comment">#          len(glob.glob(xml_path + &#x27;/*.xml&#x27;)))</span></span><br><span class="line">    print(plane_data)</span><br><span class="line">    np.save(<span class="string">&quot;plane_data.npy&quot;</span>,plane_data)</span><br><span class="line">    <span class="comment">#b = np.load(&quot;filename.npy&quot;)</span></span><br><span class="line">    print(<span class="string">&#x27;\nStatistics is complete!&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> plane_data</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    image_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1_plane/images&quot;</span></span><br><span class="line">    xml_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1_plane/labelXmls&quot;</span></span><br><span class="line"></span><br><span class="line">    information_statistics_save(image_path,xml_path)</span><br></pre></td></tr></table></figure>
-]]></content>
-  </entry>
-  <entry>
-    <title>一个有意思的面试题</title>
-    <url>/2021/03/27/%E4%B8%80%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/</url>
-    <content><![CDATA[<p>前两天室友面试深信服的时候，遇到了个有意思的题目，要求用c或者c++求解如下题目：用户输入一个可以包含加减乘除的数学表达式，你给这个表达式加上任意多的括号，使得这个表达式结果最大。</p>
-<a id="more"></a>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>来看一下这个题目，比如用户输入了如下表达式</p>
-<script type="math/tex; mode=display">
-1+2*3+5\tag{1.1}</script><p>那么我们随便加些括号</p>
-<script type="math/tex; mode=display">
-(1+2)*(3+5)\tag{1.2}</script><p>显然加上括号后比初始的结果要大，我们需要做的就是加些括号使得原始表达式最大。</p>
-<p>如果需要比较结果，第一想到的就是枚举出所有的可能性，由于括号个数和位置都是不定的，我们如何编程来找出加上括号的所有可能情况呢？</p>
-<p>我们知道一个左括号必然对应一个右括号，且用括号括住一个数是无意义的，比如((3))*2这种的括号就是无意义的，所以就是说一个括号括住至少两个数才是有意义的。看一下式(1.1)，那么我们就可以知道，1的左侧最多有三个有意义的左括号，因为1的右边只有三个数，三个左括号对应三个右括号，1的右侧最多有0个有意义的右括号，因为1左边没有其他数了，同理2的左侧有意义的括号数为2,2的右侧为1,3的左侧为1，右侧为2,5的左侧为0，右侧为3。</p>
-<p>我们定义1、2、3、5的左右侧有意义括号数为a0、a1、b0、b1、c0、c1、d0、d1(这里为了方便大家看，定义的很多变量，真正写代码的时候当然是用数组啦)，那么这些量符合如下约束：</p>
-<script type="math/tex; mode=display">
-a0+b0+c0+d0=a1+b1+c1+d1
-\\a0+b0+c0+d0    <=    3
-\\a0<=3\ \ \ \ \ a1<=0
-\\b0<=2\ \ \ \ \ b1<=1
-\\c0<=1\ \ \ \ \ c1<=2
-\\d0<=0\ \ \ \ \ d1<=3\tag{1.3}
-\\其都属于自然数</script><p>那么我们通过求解出符合条件的值即可知道如何添加括号。</p>
-<h2 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h2><p>显然式(1.3)应该是属于一个整型规划问题，那么lingo、matlab、R、python等等甚至可以通过函数或者可视化工具求解，C则需要自己实现整型规划问题的算法，如何求解整型规划问题网上教程很多，在此不做详解。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上述提出的解法只是自己个人的一点分析，里面得到的括号添加方式是可能有重复的，如((1+2*3+5))最外面的两个括号和一个括号、无括号的情况下是一样的，所以此法并非最优解法，欢迎大家可以提出更好的解法。</p>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>]]></content>
-      <categories>
-        <category>优化</category>
-        <category>趣味题目</category>
-      </categories>
-      <tags>
-        <tag>博客搭建</tag>
-        <tag>整型规划</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>xml转Ms CoCo格式的json</title>
     <url>/2021/08/20/xml%E8%BD%ACMs-CoCo%E6%A0%BC%E5%BC%8F%E7%9A%84json/</url>
     <content><![CDATA[<p>上次写过xml转json格式的代码，那个是一个xml对应一个json，这个json后来又写到了tfrecord格式的文件，模型加载这个tfrecord文件即可，最近又遇到了Ms CoCo格式的json格式，这种格式是把所有的xml文件转成json的，模型应该是直接加载这个json就可以（不确定）。下面就来描述一下如何把批量的xml转成一个Ms CoCo格式的json。</p>
 <a id="more"></a>
 <h2 id="1、xml格式"><a href="#1、xml格式" class="headerlink" title="1、xml格式"></a>1、xml格式</h2>]]></content>
-  </entry>
-  <entry>
-    <title>基于FPGA的手势识别系统设计</title>
-    <url>/2021/07/09/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/</url>
-    <content><![CDATA[<p>​        之前做图像处理的时候，也没有涉及过太多的深度学习，所以都是用传统算法做的，这个是本科期间做的大创（感谢陈老师帮该项目申请成了省级大创），其实不能说做的多好，因为真的发现图像处理领域很多传统算法被深度学习吊锤，而且现在FPGA加速器有崛起的势头，但是我们还是要惊羡于那些数学家的美妙构思（数学真是最美妙的学科），不多扯了，进入正题。</p>
-<a id="more"></a>
-<p>注:这里没有提到待卷积窗口的生成(3*3 or 5*5的)，大家可以参考这篇文章</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://www.cnblogs.com/ninghechuan/p/6789399.html">深刻认识shift_ram IP core</a></p>
-
-          </blockquote>
-<p>以后有时间会在加速器设计里讲如何生成待卷积窗口，最近有点忙。。。</p>
-<p>2.1 系统介绍<br>该项目通过FPGA驱动摄像头ov7725,通过配置寄存器使得ov7725采集到RGB565格式的数据，由于摄像头工作频率和FPGA工作频率不匹配，所以先存入ram中然后再由FPGA读出摄像头数据，为了进行图像分割，去掉除了手势以外的其他部分，我们对其进行了色域转换，将RGB565格式转为YCBCR格式，通过控制CBCR域值进行提取肤色。然后，滤除图像中的杂波,我们进行分别进行了两次腐蚀操作和两次膨胀操作，为了提高后续识别算法的鲁棒性，我们对其进行了sobel算子边缘化提取，最后，我们通过hu不变矩算法进行识别手势。其系统框图如下<a href="https://imgtu.com/i/RjL0gg"><img src="https://z3.ax1x.com/2021/07/09/RjL0gg.png" alt="RjL0gg.png"></a></p>
-<p>2.3图像处理算法模块</p>
-<p>此块详细描述</p>
-<p>（1）肤色提取</p>
-<p>为了进行肤色提取，我们需要先将RGB565格式转为YCbCr域进行识别。</p>
-<p>YCbCr是通过有序的三元组来表示的，三元由Y(Luminance)、Cb(Chrominance-Blue)、和Cr(Chrominance-Red)组成，其中Y表示颜色的明亮度和浓度，而Cb和Cr则分别表示颜色的蓝色浓度偏移量和红色浓度偏移量。人的肉眼对由YCbCr色彩空间编码的视频中的Y分量更敏感，而Cb和Cr的微小变化不会引起视觉上的不同，根据该原理，通过对Cb和Cr进行子采样来减小图像的数据量，使得图像对存储需求和传输带宽的要求大大降低，从而达到在完成图像压缩的同时也保证了视觉上几乎没有损失的效果，进而使得图像的输出速度更快，存储更加方便。值得一提的是，如果需要得到灰度图像的话，要将采集到的彩色图像转化为YCbCr后，将Y分量分别送给VGA的R、G、B，即此时R、G、B数值上是一致的(其实由于位数原因会不一致，比如RGB565，G是6位而此时RB只有5位)，这样便得到了灰度图，此处我们没有用到灰度图，所以不需要Y分量，但下述算法依旧会一并提及。</p>
-<p>我们配置摄像头采集到的数据是RGB565的格式，官方给出的转化公式是严格的RGB888转为YCbCr888，所以先需要将RGB565转化为RGB888，这个时候我们又遇到了一个有意思的问题，平时像素数据一般RGB565，但很多FPGA开发板支持的VGA不是RGB565的，EGO1就是RGB444的，那么如何将RGB565变为RGB444呢？又如何将RGB565变为RGB888？此处便提到了压缩和量化补偿思想。</p>
-<p>对于压缩，主要是一个思维：取高位。如果是RGB565格式想变成RGB444，那么再FPGA中always块只要如下三句即可：</p>
-<script type="math/tex; mode=display">
-R1<=R[4:1];
-            G1<=G[5:2];                                                                            B1<=B[4:1];</script><p>即分别取了原像素点RGB的高四位作为RGB444。</p>
-<p>  对于量化补偿，是用在扩充位数的时候用的，比如此处需要的RGB888。以RGB565转RGB888为例。   </p>
-<p>16bit RGB565 -&gt; 24bit RGB888的转换（高位补低位）</p>
-<p>16bit RGB565：</p>
-<script type="math/tex; mode=display">
-\\{R4 R3 R2 R1 R0} 
-
-\\{G5 G4 G3 G2 G1 G0}
-
-\\{B4 B3 B2 B1 B0}</script><p>24bit RGB888:</p>
-<script type="math/tex; mode=display">
-\\{ R4 R3 R2 R1 R0 R2 R1 R0}
-
-\\{ G5 G4 G3 G2 G1 G0 G1 G0}
-
-\\{ B4 B3 B2 B1 B0 B2 B1 B0}</script><p>官方给出的RGB888-&gt;YCbCr888转化公式如下：</p>
-<script type="math/tex; mode=display">
-Y=0.229R+0.587G+0.114B
-\\Cb=0.568(B-Y)+128
-\\Cr=0.713(R-Y)+128</script><p>由于FPGA无法实现浮点数运算，所以需要把系数变为整数，我们不妨将Y、Cb和Cr都扩大1024倍，然后所有系数取整，那么变成如下公式：</p>
-<p>Y=306R+601G+116B</p>
-<p>Cb=-176R-347G+523B+131072</p>
-<p>Cr=523R-438G-85B+131072</p>
-<p>这样便可以得到整型的运算，最后得到的结果右移10位即可，但为了时序的科学严谨性，我们不应该一次在always块中算出Y、Cb、Cr，因为一个关系式中涉及到三次乘法和两次加法，越多的运算量就越可能导致时序延时错乱，此处或许不会有问题，但不在一个块中用太复杂的运算式是一种好的习惯，我们应该选择业界普遍使用的流水线做法，将乘法在一个always块里实现，在另一个always块中实现加法。</p>
-<p>在转换为YCBCR后，通过限制CBCR阈值，可以提取出肤色，在FPGA中设定的初始值肤色范围为：</p>
-<script type="math/tex; mode=display">
-77<Cb<127
-\\133<Cr<173</script><p>这是一个经典的人的肤色阈值，但是为了个别人肤色差别需要调节，FPGA上给出了调节按键。最终在该范围内的像素使其为黑色，否则为白色，那么VGA上只显示出一只手。</p>
-<p>(2)腐蚀</p>
-<p>腐蚀是一种消除边界点，使边界向内部收缩的过程，可以用来消除小且无意义的物体。由于在第一步手势提取的可能出现杂波，那么为了消除这些小黑点杂波，我们进行两次腐蚀算法便可以将其消除。</p>
-<p>简单来说，腐蚀操作需要用3×3的结构元素，扫描图像的每一个像素点，用结构元素与其覆盖的二值图像做“与”操作，如果全为1，结果图像的该像素是1，否则为0。结果会使二值图像小一圈，消除像素杂波。算法原理如下：</p>
-<script type="math/tex; mode=display">
-\begin{matrix}
-   P1 &= & P11 & \& & P12 & \& & P13 \\
-   P2 &= & P21 & \& & P22 & \& & P23 \\
-   P3 &= & P31 & \& & P32 & \& & P33 \\
-   P &= & P1 & \& & P2 & \& & P3 \\
-  \end{matrix}\tag{2.4}</script><p>从原理上来说，其是比较简单的，但是FPGA实现时，我们需要考虑如何得到这个3<em>3的矩阵，因为FPGA扫描像素点是一个一个进行的，一行有640个数据，如何得到三行中的三个数据呢？这个时候我们需要用到FPGA中shift ram IP核，可以说这个IP核是为了构建矩阵量身定制，其是一个只有一行的循环移位的IP核，那么我们需要两个这样的IP核，进行循环移位得到3</em>3的矩阵，然后进行腐蚀滤波。</p>
-<p>（3）膨胀</p>
-<p>膨胀与腐蚀效果相反，是将与物体接触的所有背景点合并到该物体中，使边界向外部扩张的过程，由于在腐蚀的时候，是为了消除杂波，但不可避免的减小了有效的手势区域，那么我们如何来恢复被消除的手势区域，那么此时便用到了膨胀算法。</p>
-<p>膨胀算法思维核腐蚀思维类似，都需要构建3*3的矩阵，用3×3的结构元素，扫描图像的每一个像素点，用结构元素与其覆盖的二值图像做“或”操作，如果全为0，结果图像的该像素是0，否则为1。结果会使二值图像扩大一圈。算法原理如下：</p>
-<script type="math/tex; mode=display">
-\begin{matrix}
-   P1 &= & P11 & | & P12 & | & P13 \\
-   P2 &= & P21 & | & P22 & | & P23 \\
-   P3 &= & P31 & | & P32 & | & P33 \\
-   P &= & P1 & | & P2 & | & P3 \\
-  \end{matrix}\tag{2.4}</script><p>在其实现过程中，依旧需要shift ram IP核，然后得到3*3矩阵，然后用流水线法实现膨胀操作，恢复手势区域。</p>
-<p><strong>（4）Sobel边缘化</strong></p>
-<p> 此步我们进行Sobel算子边缘化提取，为什么进行Sobel化呢？Sobel化边缘提取可以提取出手势的边缘而不是整只手，这样是为了提高后续的hu不变矩识别算法的稳定性。</p>
-<p>Sobel边缘检测的核心在于像素矩阵的卷积，卷积对于数字图像处理非常重要，很多图像处理算法都是做卷积来实现的。卷积运算的本质就是对制定的图像区域的像素值进行加权求和的过程，其计算过程为图像区域中的每个像素值分别与卷积模板的每个元素对应相乘，将卷积的结果作求和运算，运算到的和就是卷积运算的结果。</p>
-<p>3×3的窗口M与卷积模板C 的卷积运算如下：</p>
-<script type="math/tex; mode=display">
-M= \left[
- \begin{matrix}
-   M1 & M2 & M3 \\
-   M4 & M5 & M6 \\
-   M7 & M8 & M9
-  \end{matrix}
-  \right] \tag{2.4}\ \ \ \ \ \ \ \
-  C= \left[
- \begin{matrix}
-   C1 & C2 & C3 \\
-   C4 & C5 & C6 \\
-   C7 & C8 & C9
-  \end{matrix}
-  \right]
-  \\M5'=M1*C1+M2*C2+M3*C3+M4*C4+M5*C5+\\M6*C6+M7*C7+M8*C8+M9*C9</script><p>G_x和G_y是Sobel的卷积因子，将这两个因子和原始图像做如下卷积，其中A表示原视图像。</p>
-<script type="math/tex; mode=display">
-G_x=\left[
- \begin{matrix}
-   M1 & M2 & M3 \\
-   M4 & M5 & M6 \\
-   M7 & M8 & M9
-  \end{matrix}
-  \right] *A\tag{2.4}\ \ \ \ \ \ \
-  G_y=\left[
- \begin{matrix}
-   M1 & M2 & M3 \\
-   M4 & M5 & M6 \\
-   M7 & M8 & M9
-  \end{matrix}
-  \right] *A</script><p>得到图像中的每一个点的横向纵向梯度G_x、G_y。最后通过如下公式来计算该点总体梯度的大小。</p>
-<script type="math/tex; mode=display">
-G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该如果算出的G大于设定的阈值，那么认为此处是边缘处，使其为黑色，否则认为不是边缘，使其为白色。</p>
-<p>上述是算法原理，很显然，这里也用到了3*3矩阵，那么又需要shift ram IP核，所以如果需要学习图像滤波等处理，shift ram需要熟练掌握。</p>
-<p><strong>（5）手势识别算法：Hu不变矩</strong></p>
-<p>对于一个提取出来的手势，我们需要有固定且唯一的特征来对其进行记录，且该特征不会受到手势的大小，旋转，平移而变化，且鲁棒性较好，所以此处引入hu不变矩算法，下面进行原理介绍:</p>
-<p>1、普通矩（也叫p+q阶不变矩），和p+q中心矩的定义</p>
-<p>对于像素分布为f(x,y)的图像，其(p+q)阶矩定义为：</p>
-<script type="math/tex; mode=display">
-m_{pq}=\int\int{x^py^qf(x,y)dxdy}\tag{5.1}</script><p>(p+q)阶中心矩定义为：</p>
-<script type="math/tex; mode=display">
-\mu_{pq}=\int\int{(x-x_0)^p(y-y_0)^qf(x,y)dxdy}\tag{5.2}</script><p>其中矩心(x_0,y_0)为：</p>
-<script type="math/tex; mode=display">
-x_0=\frac{m_{10}}{m_{00}}\ \ \ \ \ \ y_0=\frac{m_{01}}{m_{00}}</script><p>上述都是在连续量上引出的，但是FPGA只能存储离散量，得到的是离散的320<em> 240或者640 </em> 480的离散图像，那么下面引入适用于离散图像的hu不变矩：</p>
-<p>对于数字图像，离散化得到，公式如下：</p>
-<script type="math/tex; mode=display">
-m_{pq}=\sum^M_{x=1}\sum^N_{y=1}x^py^qf(x,y)</script><p>式中p、q=0，1，2….</p>
-<p>直接用普通矩或中心矩进行特征表示，不能使特征同时具有平移、旋转和比例不变性，所以我们下面进行归一化使得手势平移、旋转核比例不变性。</p>
-<p>2.归一化中心矩定义</p>
-<p>当图像发生变化时，m_pq也发生变化，而\mu_pq则具有平移不变性但对旋转依然敏感。</p>
-<p>归一化中心矩：</p>
-<script type="math/tex; mode=display">
-y_{pq}=\frac{\mu_{pq}}{\mu^r_{00}}\\
-其中r=\frac{p+q+2}{2},p+q=2,3...</script><p>如果利用归一化中心矩,则特征不仅具有平移不变性，而且还具有比例不变性。</p>
-<p>至此我们得到了最终可以应用的不变矩，为了说明其又平移、寻转、放缩不变性，下面我们进行对各个性质进行证明：</p>
-<p>（1）中心矩对于f(x,y)的平移具有不变性：</p>
-<p>假如新的坐标(x’,y’)</p>
-<script type="math/tex; mode=display">
-x'=x+\alpha\\
-y'=y+\beta</script><p>其中alpha和beta是常数，通过简单的变量代换，可以发现最终的常数会消去，得到f(x,y)和f(x’,y’)的中心矩是相同的。</p>
-<p>（2）中心矩对于缩放具有不变性：</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-   x' \\
-   y'
-  \end{matrix}
-  \right]
-  = 
-  \left[
- \begin{matrix}
-   \alpha & 0\\
-   0 & \alpha  
-  \end{matrix}
-  \right] *
-  \left[
- \begin{matrix}
-   x \\
-   y
-  \end{matrix}
-  \right] \tag{2.4}</script><p>alpha是个常数，(x’,y’)可以看作是(x,y)分别乘以系数alpha得到，对于每一个alpha系数有公式</p>
-<script type="math/tex; mode=display">
-a'_{pq}=\alpha^{p+q}a_{pq}</script><p>因为alpha是个常数，那么变换前后的中心矩有这样的关系：</p>
-<script type="math/tex; mode=display">
-\mu'_{pq}=\alpha^{p+q+2}\mu_{pq}</script><p>最后可以得到：</p>
-<script type="math/tex; mode=display">
-\frac{\mu'_{pq}}{(\mu')^{\frac{p+q}{2}}+1}=\frac{\mu_{pq}}{\mu^{\frac{p+q}{2}}+1}</script><p>式中p+q=2,3…</p>
-<p>这也可以称为相似不变矩性。</p>
-<p>（3）中心矩对于旋转具有不变性：</p>
-<script type="math/tex; mode=display">
-\left[
- \begin{matrix}
-   x' \\
-   y'
-  \end{matrix}
-  \right]
-  = 
-  \left[
- \begin{matrix}
-   cos\theta & sin\theta \\
-   -sin\theta & -cos\theta  
-  \end{matrix}
-  \right] *
-  \left[
- \begin{matrix}
-   x \\
-   y
-  \end{matrix}
-  \right] \tag{2.5}</script><p>旋转矩阵的模是1。</p>
-<script type="math/tex; mode=display">
-J  = 
-  \left[
- \begin{matrix}
-   cos\theta & sin\theta \\
-   -sin\theta & cos\theta  
-  \end{matrix}
-  \right] =
-    \pm1\tag{2.5}</script><p>将(8)和(9)式与公式(2)结合，也可以得到mu’_pq与mu_pq的关系，称为正交不变性。</p>
-<p>HU矩利用二阶和三阶归一化中心矩构造了7个不变矩，他们在连续图像条件下可保持平移、缩放和旋转不变，具体定义如下：</p>
-<script type="math/tex; mode=display">
-I_1=y_{20}+y_{02}\\
-I_2=(y_{20}-y_{02})^2+4y^2_{11}\\
-I_3=(y_{30}-3y_{12})^2+(3y_{21}-y_{03})^2\\
-I_4=(y_{30}+y_{12})^2+(y_{21}+y_{03})^2\\
-I_5=(y_{30}-3y_{12})(y_{30}+y_{12})[(y_{30}+y_{12})^2-3(y_{21}+y_{03})^2]\\
-+(3y_{21}-y_{03})(y_{21}+y_{03})[3(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\
-I_6=(y_{20}-y_{02})[(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\
-+4y_{11}(y_{30}+y_{12})(y_{21}+y_{03})\\
-I_7=(3y_{21}-y_{03})(y_{30}+y_{12})[(y_{30}+y_{12})^2-3(y_{21}+y_{03})^2]\\
-+(3y_{12}-y_{03})(y_{21}+y_{03})[3(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\</script><p>上述共有七个不变矩，如果只需要识别数十个手势的话，只需要实现前两个不变矩即可，在FPGA实现时，需要注意的是，由于算法中有除法运算，需要调用FPAG的除法器IP核，此外，但不得不说，FPGA在处理复杂的算法方面有劣势，一个几十位的除法器延时了二十几个时钟。此外，在上述的特征值中，其特征值数值较小，是比较小的小数，所以过程中最好放大2的20次方左右这样得到整数。</p>
-<p><strong>（6）识别实现</strong></p>
-<p>在识别之前，先用是个reg寄存器存储十个hu不变矩特征值，这十个值可以是自己做的十个不同手势得到的hu不变矩结果，识别的时候，将识别的手势hu结果和存储的十个hu特征值对比，最靠近谁即认为识别的结果就是该手势，当然，也得设置一个阈值，同时还有误差小于这个阈值，防止图片中没有手势的时候都误识别出结果。</p>
-<p><strong>（7）展示</strong></p>
-<p>最终采集的图片格式是320*240的(EGO1中没有DDR，存不下640 * 480的图片)，结果如下：</p>
-<p><a href="https://imgtu.com/i/RjLsDs"><img src="https://z3.ax1x.com/2021/07/09/RjLsDs.png" alt="RjLsDs.png"></a></p>
-<p>下面展示四个手势被处理后的效果：</p>
-<p>手势一：</p>
-<p><a href="https://imgtu.com/i/RjLruj"><img src="https://z3.ax1x.com/2021/07/09/RjLruj.png" alt="RjLruj.png"></a></p>
-<p>手势二：</p>
-<p><a href="https://imgtu.com/i/RjLBvQ"><img src="https://z3.ax1x.com/2021/07/09/RjLBvQ.png" alt="RjLBvQ.png"></a></p>
-<p>手势三：</p>
-<p><a href="https://imgtu.com/i/RjLw8S"><img src="https://z3.ax1x.com/2021/07/09/RjLw8S.png" alt="RjLw8S.png"></a></p>
-<p>手势四：</p>
-<p><a href="https://imgtu.com/i/RjLybn"><img src="https://z3.ax1x.com/2021/07/09/RjLybn.png" alt="RjLybn.png"></a></p>
-<p>经过灰度化二值化膨胀腐蚀边缘化后提取的效果如下(由于摄像头插上板卡的时候斜了90度，所以VGA显示的时候也斜了90度)：</p>
-<p>手势一：</p>
-<p><a href="https://imgtu.com/i/RjLcEq"><img src="https://z3.ax1x.com/2021/07/09/RjLcEq.png" alt="RjLcEq.png"></a></p>
-<p>手势二：</p>
-<p><a href="https://imgtu.com/i/RjLgU0"><img src="https://z3.ax1x.com/2021/07/09/RjLgU0.png" alt="RjLgU0.png"></a></p>
-<p>手势三：</p>
-<p><a href="https://imgtu.com/i/RjL25V"><img src="https://z3.ax1x.com/2021/07/09/RjL25V.png" alt="RjL25V.png"></a></p>
-<p>手势四:</p>
-<p><a href="https://imgtu.com/i/RjLWCT"><img src="https://z3.ax1x.com/2021/07/09/RjLWCT.png" alt="RjLWCT.png"></a></p>
-<p>经过Hu不变矩后便可以得到不同的特征值，结果如下：</p>
-<p>手势一:</p>
-<p><a href="https://imgtu.com/i/RjLh2F"><img src="https://z3.ax1x.com/2021/07/09/RjLh2F.png" alt="RjLh2F.png"></a></p>
-<p>更多的就不放了，会拖慢博客速度，哈哈哈。</p>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>
-
-]]></content>
-      <categories>
-        <category>FPGA</category>
-        <category>图像处理</category>
-      </categories>
-      <tags>
-        <tag>FPGA</tag>
-        <tag>图像处理</tag>
-        <tag>手势识别</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据量化</title>
-    <url>/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/</url>
-    <content><![CDATA[<p>在训练神经网络时候，参数存储是float类型，服务器或者电脑内存都较大，但是对于部署到硬件加速的时候，片上内存则非常珍贵，往往是不够用的，且硬件端需要存储的是整型，所以我们需要对参数进行量化。</p>
-<a id="more"></a>
-<h2 id="量化方法"><a href="#量化方法" class="headerlink" title="量化方法"></a>量化方法</h2><p>对于很多研究已经表明，深度学习的参数用16bit进行量化的时候，精度损失很小(甚至一些情况下可以用10bit/8bit进行量化)。对于参数值x，量化公式如下</p>
-<script type="math/tex; mode=display">
-q(x)=floor(x/scale+zero)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1)</script><p>这里举例介绍一下scale和zero含义，比如神经网络中float32类型的参数值都在[0,2]之间，那么我们需要将其量化为int8的话,就是说我们想把[0,2]内的值缩放到[0,255]，那么原始值在[0,2]之间的x，放缩到[0,255]之间为x’应该符合如下关系：</p>
-<script type="math/tex; mode=display">
-\frac{x}{2}=\frac{x'}{255}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (2)</script><p>分母代表区域界限大小：2=2-0,255=255-0。那么x‘就等于:</p>
-<script type="math/tex; mode=display">
-x'=\frac{x}{\frac{2}{255}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (3)</script><p>那么scale就是2/255,zero是0，所以说scale由原始范围和量化后范围决定。那么zero是用来干嘛的呢？上面是说float32的[0,2]量化为int8，int8是8位的，但是深度学习中参数是正负都有的，所以只有一个sscale一个参数无法确保量化到[0,255]这个固定范围,如果float32是在[-1,1]之间，那么通过上面的式子可以依旧确定scale是2/255，只有一个scale一个参数只能量化到[-127.5,127.5].而zero呢？zero是作为一个偏置，为了使得量化到固定范围，如果我们想量化到[0,255]范围那么zero值为:</p>
-<script type="math/tex; mode=display">
-zero=x'_{max}-\frac{x_{max}}{scale}=127.5</script><p>为什么式(1)要有一个floor进行截断呢，是由于量化后是要进行取整，则简单进行截断即可，此时量化范围为[0,255]。</p>
-<h2 id="解量化"><a href="#解量化" class="headerlink" title="解量化"></a>解量化</h2><p>在数值被量化后，就已经不是本身的值了，所以在每次卷积后需要进行解量化。</p>
-<blockquote class="blockquote-center">
-            <p>值得一提的是，对于回归类问题，是一定要进行解量化的，比如预测下一阶段某一动物的体重。但是对于分类问题，最终是比较相对大小，所以无需进行解量化，但是如果分类时为了不用解量化，记得不能使用zero，因为zero会导致初始参数的正负值和量化后的正负值不同</p>
-
-          </blockquote>
-<p>由于自己做的主要是分类问题，所以都没有用到解量化，不作详解。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>综上，对于分类问题，可以只用一个scale值进行简单的量化，也无需解量化。更多的量化类介绍可以参考如下链接</p>
-<blockquote class="blockquote-center">
-            <p><a href="https://blog.csdn.net/qq_38798425/article/details/107423892">基于FPGA的卷积神经网络实现（五）数据量化（1）</a></p>
-
-          </blockquote>
-<blockquote class="blockquote-center">
-            <p><a href="https://zhuanlan.zhihu.com/p/64744154">神经网络量化简介</a></p>
-
-          </blockquote>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>]]></content>
-      <categories>
-        <category>FPGA</category>
-      </categories>
-      <tags>
-        <tag>FPGA</tag>
-        <tag>CNN</tag>
-        <tag>加速器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>数据集筛选及其xml格式的label修改</title>
-    <url>/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/</url>
-    <content><![CDATA[<p>组委会先发布了一部分的数据，去年星图杯是用于飞机目标追踪的，由于今年的飞机种类和去年几乎一致（多了C919,不过后续的数据信息统计可以发现就几张，先扔掉），所以想先选出飞机的图片和xml的label来，我就写了个文件来选出飞机和对应的修改后的xml，需要考虑的时候，通过xml的objects/object/possibleresult/name来进行判别是否是飞机。由于只想留下飞机，所以需要做如下两点：</p>
-<a id="more"></a>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>1、通过name来看是否是飞机，不是则通过一些方法删除该object</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>2、检测删除完后的objects是否为空，非空说明xml有飞机，保存该xml和对应的tif</strong></td>
-</tr>
-</tbody>
-</table>
-</div>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    把gf2021的数据集中的飞机都选出来，即一张图片中若含有飞机模型的，则选出来，同时需要修改xml文件，将</span></span><br><span class="line"><span class="string">    objects属性中的非飞机的object去掉，由于删除的非annotation直系节点，需要转换一下才能删除。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> scipy.misc <span class="keyword">as</span> misc</span><br><span class="line"><span class="keyword">from</span> xml.dom.minidom <span class="keyword">import</span> Document</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> copy, cv2</span><br><span class="line"><span class="comment"># import imageio</span></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"><span class="keyword">import</span> xml.etree.cElementTree <span class="keyword">as</span> ET</span><br><span class="line"><span class="keyword">from</span> xml.etree.ElementTree <span class="keyword">import</span> ElementTree,Element</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> osgeo <span class="keyword">import</span> gdal, gdalconst</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">choose_plane</span>(<span class="params">image_path, xml_path,image_save_path,xml_save_path</span>):</span></span><br><span class="line">    plane_label = [<span class="string">&quot;Boeing737&quot;</span>,<span class="string">&quot;Boeing747&quot;</span>,<span class="string">&quot;Boeing777&quot;</span>,<span class="string">&quot;C919&quot;</span>,<span class="string">&quot;A220&quot;</span>,<span class="string">&quot;A321&quot;</span>,<span class="string">&quot;A330&quot;</span>,<span class="string">&quot;A350&quot;</span>,<span class="string">&quot;ARJ21&quot;</span>,<span class="string">&quot;other-airplane&quot;</span>]</span><br><span class="line">    <span class="keyword">for</span> count, xml <span class="keyword">in</span> <span class="built_in">enumerate</span>(glob.glob(xml_path + <span class="string">&#x27;/*.xml&#x27;</span>)):<span class="comment">#进行索引，*代表任意匹配，得到可迭代对象</span></span><br><span class="line">        <span class="comment">#flag =0</span></span><br><span class="line">        <span class="comment"># to avoid path error in different development platform</span></span><br><span class="line">        xml = xml.replace(<span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)<span class="comment">#用/替换\\,后面的替换前面的</span></span><br><span class="line">        (_, xml_name) = os.path.split(xml)<span class="comment">#分割。返回路径和文件名。若本身就是一个文件夹路径，则返回路径和空</span></span><br><span class="line">        <span class="comment">#print(xml,xml_name)</span></span><br><span class="line"></span><br><span class="line">        img_name=xml_name.replace(<span class="string">&#x27;.xml&#x27;</span>, <span class="string">&#x27;.tif&#x27;</span>)</span><br><span class="line">        img_path = image_path + <span class="string">&#x27;/&#x27;</span> + img_name</span><br><span class="line">        <span class="comment">#1. 读取xml文件</span></span><br><span class="line">        tree = ElementTree()</span><br><span class="line">        tree.parse(xml)</span><br><span class="line">        root = tree.getroot()</span><br><span class="line"></span><br><span class="line">        <span class="comment">#A. 找到父节点</span></span><br><span class="line">        node_root  = root.findall( <span class="string">&quot;objects&quot;</span>)<span class="comment">#不能直接找object,直接找object，删掉的只是object，但是tree只能删除objects，没有用，所以进行替换</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> objects_list <span class="keyword">in</span> node_root:<span class="comment">#遍历objects,其实只有一个</span></span><br><span class="line">            <span class="keyword">for</span> object_list <span class="keyword">in</span> <span class="built_in">list</span>(objects_list):<span class="comment">#得到object,不加list竟然无法遍历，迷惑</span></span><br><span class="line">                <span class="comment">#print(object_list)</span></span><br><span class="line">                <span class="keyword">if</span> object_list.find(<span class="string">&quot;possibleresult/name&quot;</span>).text <span class="keyword">not</span> <span class="keyword">in</span> plane_label:</span><br><span class="line">                    <span class="comment">#print(&quot;成功移除&quot;)</span></span><br><span class="line">                    objects_list.remove(object_list)</span><br><span class="line">                    <span class="comment">#flag    =   1</span></span><br><span class="line">            <span class="comment">#替换直系节点objects</span></span><br><span class="line">            <span class="keyword">for</span> i,external_node <span class="keyword">in</span> <span class="built_in">enumerate</span>(root):</span><br><span class="line">                <span class="keyword">if</span> external_node.tag == <span class="string">&quot;objects&quot;</span>:<span class="comment">#寻找objects节点</span></span><br><span class="line">                    root[i]=objects_list </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> objects_list:<span class="comment">#判断是否为空,空的list的bool属性为false.非空的为true</span></span><br><span class="line">            <span class="comment">#if flag == 1:</span></span><br><span class="line">            <span class="comment">#    print(xml,object_list.find(&quot;possibleresult/name&quot;).text,objects_list.find(&quot;object/possibleresult/name&quot;).text)</span></span><br><span class="line">            <span class="comment">#存储xml</span></span><br><span class="line">            xml_save=xml_save_path+<span class="string">&quot;/&quot;</span>+xml_name</span><br><span class="line">            tree.write(xml_save, encoding=<span class="string">&quot;utf-8&quot;</span>,xml_declaration=<span class="literal">True</span>)   </span><br><span class="line">            <span class="comment">#存储图片</span></span><br><span class="line">            shutil.copyfile(img_path, image_save_path+<span class="string">&quot;/&quot;</span>+img_name)<span class="comment">#将第一个参数的文件复制到第二个里面            </span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(img_path):</span><br><span class="line">            print(<span class="string">&#x27;&#123;&#125; is not exist!&#x27;</span>.<span class="built_in">format</span>(img_path))</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># view_bar(&#x27;Conversion progress&#x27;, count + 1,</span></span><br><span class="line">        <span class="comment">#          len(glob.glob(xml_path + &#x27;/*.xml&#x27;)))</span></span><br><span class="line"></span><br><span class="line">    print(<span class="string">&#x27;\nStatistics is complete!&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    image_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1/images&quot;</span></span><br><span class="line">    xml_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1/labelXmls&quot;</span></span><br><span class="line"></span><br><span class="line">    image_save_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1_plane/images&quot;</span></span><br><span class="line">    xml_save_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1_plane/labelXmls&quot;</span></span><br><span class="line"></span><br><span class="line">    choose_plane(image_path,xml_path,image_save_path,xml_save_path)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>其主体就是choose_plane,来分析一下choose_plane：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plane_label = [<span class="string">&quot;Boeing737&quot;</span>,<span class="string">&quot;Boeing747&quot;</span>,<span class="string">&quot;Boeing777&quot;</span>,<span class="string">&quot;C919&quot;</span>,<span class="string">&quot;A220&quot;</span>,<span class="string">&quot;A321&quot;</span>,<span class="string">&quot;A330&quot;</span>,<span class="string">&quot;A350&quot;</span>,<span class="string">&quot;ARJ21&quot;</span>,<span class="string">&quot;other-airplane&quot;</span>]</span><br></pre></td></tr></table></figure>
-<p>这一句是用来后续判别xml的objects/object/possibleresult/name的属性值是否是飞机的，只要判断name的属性值是否在该列表中即可。</p>
-<p>然后循环进行读取文件夹下的xml文件，通过通过split找到文件名、文件路径，由此通过replace即可得到对应的image路径。</p>
-<p>然后读取xml文件，代码如下，其中findall用于寻找annotation的直系子节点或者下属节点，也可以传入”objects/object”，其返回的是一个列表，列表中的元素是objects，我们知道objects只有一个，所以其实node_root[0]就是objects，用for循环也可以(本代码是用for来的)。其实我们希望删除的是object，为什么不findall(“objects/object”)呢？因为我们如果寻找object的话，的确可以很好的删除，但是删除了object后，原来的root是没变的，所以需要把删除后的替换进去，如果直接root[3]赋值我们删除后的object的话(root[3]是objects)，objects就变成object了，所以这是不对的。如果我们直接寻找出来的就是objects，那么再往下找object，删除objects中的object，然后用该objects替换root中的objects，就可以完美解决。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">img_name=xml_name.replace(<span class="string">&#x27;.xml&#x27;</span>, <span class="string">&#x27;.tif&#x27;</span>)</span><br><span class="line">img_path = image_path + <span class="string">&#x27;/&#x27;</span> + img_name</span><br><span class="line"><span class="comment">#1. 读取xml文件</span></span><br><span class="line">tree = ElementTree()</span><br><span class="line">tree.parse(xml)</span><br><span class="line">root = tree.getroot()</span><br><span class="line"></span><br><span class="line"><span class="comment">#A. 找到父节点</span></span><br><span class="line">node_root  = root.findall( <span class="string">&quot;objects&quot;</span>)<span class="comment">#不能直接找object,直接找object，删掉的只是object，但是tree只能删除objects，没有用，所以进行替换</span></span><br></pre></td></tr></table></figure>
-<p>上面已经说了如何删除object了，那么删除后，需要对root中的objects进行替换，一般objects是root的第四个属性，就是root[3]，但是也可能不是，所以就用到了下面这个循环了：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#替换直系节点objects</span></span><br><span class="line"><span class="keyword">for</span> i,external_node <span class="keyword">in</span> <span class="built_in">enumerate</span>(root):</span><br><span class="line">    <span class="keyword">if</span> external_node.tag == <span class="string">&quot;objects&quot;</span>:<span class="comment">#寻找objects节点</span></span><br><span class="line">        root[i]=objects_list </span><br></pre></td></tr></table></figure>
-<p>最后需要判断一下删除后的objects是否为空，如果空了，说明没有飞机，如果不是空(不是空的列表的bool值是true)，则存储替换objects后的root和对应的tif，存储的文件夹自行指定;</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> objects_list:<span class="comment">#判断是否为空,空的list的bool属性为false.非空的为true</span></span><br><span class="line">    <span class="comment">#if flag == 1:</span></span><br><span class="line">    <span class="comment">#    print(xml,object_list.find(&quot;possibleresult/name&quot;).text,objects_list.find(&quot;object/possibleresult/name&quot;).text)</span></span><br><span class="line">    <span class="comment">#存储xml</span></span><br><span class="line">    xml_save=xml_save_path+<span class="string">&quot;/&quot;</span>+xml_name</span><br><span class="line">    tree.write(xml_save, encoding=<span class="string">&quot;utf-8&quot;</span>,xml_declaration=<span class="literal">True</span>)   </span><br><span class="line">    <span class="comment">#存储图片</span></span><br><span class="line">    shutil.copyfile(img_path, image_save_path+<span class="string">&quot;/&quot;</span>+img_name)<span class="comment">#将第一个参数的文件复制到第二个里面     </span></span><br></pre></td></tr></table></figure>
-<div>
-    
-        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
-    
-</div>]]></content>
-      <categories>
-        <category>星图杯</category>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>-星图杯 -r3det -python -xml</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>漫谈--记于光华楼前</title>
-    <url>/2021/07/30/%E6%BC%AB%E8%B0%88/</url>
-    <content><![CDATA[<p>来上海有一个多月了，却还没好好转过校园，昨日是烟花过后第一个晴日，奥，倒也不能说是晴天，不过总算是不下雨了，难得一个不下雨也不太热的好天气，而最近自己也感觉有点累了，就出了实验室散散心，转了校园一圈，到了光华楼前的草坪处坐了一会，人不多，零零碎碎的几个情侣，还有几个母亲带着小孩在嬉戏，听说开学的时候会有很多人，那一定会是个很壮观的场景吧。</p>
-<a id="more"></a>
-<p>光华楼很高，一楼的电梯可以到达一到十五层，到十五层以上则需要到十五层再转电梯，看到光华楼总能想到双子楼，总感觉两边各一个就像双子一样。</p>
-<p><a href="https://imgtu.com/i/WqlIbT"><img src="https://z3.ax1x.com/2021/07/29/WqlIbT.jpg" alt="WqlIbT.jpg"></a></p>
-<p><a href="https://imgtu.com/i/WqlqPJ"><img src="https://z3.ax1x.com/2021/07/29/WqlqPJ.jpg" alt="WqlqPJ.jpg"></a></p>
-<p>光华楼前面是个草坪，草坪靠近路那还有一堆小花，特地搜了搜，好像叫孔雀草万寿菊啥的，不是很懂，周围的树上会有小吊牌，估计是学校校训或者校歌里的吧，路上偶尔还会有几个保安叔叔经过，可能是在巡逻或者准备下班回家吧。</p>
-<p><a href="https://imgtu.com/i/Wq1AxI"><img src="https://z3.ax1x.com/2021/07/29/Wq1AxI.jpg" alt="Wq1AxI.jpg"></a></p>
-<p><a href="https://imgtu.com/i/Wq1iPH"><img src="https://z3.ax1x.com/2021/07/29/Wq1iPH.jpg" alt="Wq1iPH.jpg"></a></p>
-<p><a href="https://imgtu.com/i/Wq1FGd"><img src="https://z3.ax1x.com/2021/07/29/Wq1FGd.jpg" alt="Wq1FGd.jpg"></a></p>
-<p><a href="https://imgtu.com/i/Wq19aD"><img src="https://z3.ax1x.com/2021/07/29/Wq19aD.jpg" alt="Wq19aD.jpg"></a></p>
-<p>傍晚光华楼前草坪的风真的很大，台风过后，雨后初晴，云儿飘着，风儿吹着，很舒服，在草地上一坐就坐了一个多小时，不过可惜错过了龙队的奥运会，所幸今天此时此刻知道男女单打金银都已既定我们了。</p>
-<p><a href="https://imgtu.com/i/Wq1pVO"><img src="https://z3.ax1x.com/2021/07/29/Wq1pVO.jpg" alt="Wq1pVO.jpg"></a></p>
-<p><a href="https://imgtu.com/i/WqlzqK"><img src="https://z3.ax1x.com/2021/07/29/WqlzqK.jpg" alt="WqlzqK.jpg"></a></p>
-<p><a href="https://imgtu.com/i/Wq1pVO"><img src="https://z3.ax1x.com/2021/07/29/Wq1pVO.jpg" alt="Wq1pVO.jpg"></a></p>
-<p>之前本科时候买的帽子一直没怎么带，室友说有些奇怪，所有就一直闲置了，现在骑车总是嫌风有点大会吹乱头发，就带了起来，大概看了看，感觉倒也不错。</p>
-<p><a href="https://imgtu.com/i/Wq1kRA"><img src="https://z3.ax1x.com/2021/07/29/Wq1kRA.jpg" alt="Wq1kRA.jpg"></a></p>
-<p>今天又来光华楼这，记录了昨天的东西，发现校外的几座大楼金光闪闪的，还有个楼像个魔仙堡似的，可能是个游乐园。</p>
-<p><a href="https://imgtu.com/i/Wq1ZsP"><img src="https://z3.ax1x.com/2021/07/29/Wq1ZsP.jpg" alt="Wq1ZsP.jpg"></a></p>
-<p>七点四十了，可能猫咪也困了，坐在我旁边椅子上睡着了，时候是不早了，该回实验室了，录毕。—-记于光华楼前草坪座椅上</p>
-<p><a href="https://imgtu.com/i/Wq1eqf"><img src="https://z3.ax1x.com/2021/07/29/Wq1eqf.jpg" alt="Wq1eqf.jpg"></a></p>
-<p><a href="https://imgtu.com/i/Wq1nZ8"><img src="https://z3.ax1x.com/2021/07/29/Wq1nZ8.jpg" alt="Wq1nZ8.jpg"></a></p>
-<p><a href="https://imgtu.com/i/Wq1udS"><img src="https://z3.ax1x.com/2021/07/29/Wq1udS.jpg" alt="Wq1udS.jpg"></a></p>
-]]></content>
-      <categories>
-        <category>光华楼</category>
-        <category>邯郸校区</category>
-      </categories>
-      <tags>
-        <tag>光华楼</tag>
-        <tag>漫谈</tag>
-      </tags>
   </entry>
   <entry>
     <title>深脑云平台服务器使用说明</title>
@@ -801,16 +118,104 @@ zero=x'_{max}-\frac{x_{max}}{scale}=127.5</script><p>为什么式(1)要有一个
       </tags>
   </entry>
   <entry>
-    <title>西瓜书--线性模型</title>
-    <url>/2021/08/04/%E8%A5%BF%E7%93%9C%E4%B9%A6-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[]]></content>
+    <title>xml文件的数据分析</title>
+    <url>/2021/08/18/xml%E6%96%87%E4%BB%B6%E7%9A%84%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<p>上篇得到了飞机的tif和对应的xml文件后(xml文件中的object只留下了飞机)，我们需要对飞机的信息进行分析汇总，此处对每一类飞机主要想统计的信息有如下：</p>
+<a id="more"></a>
+<ul>
+<li>该类别的图片数量</li>
+<li>飞机的最小宽度</li>
+<li>飞机的最小高度</li>
+<li>飞机最小的宽高比</li>
+<li>飞机的最大宽度</li>
+<li>飞机的最大高度</li>
+<li>飞机最大的宽高比</li>
+<li>图片的最小宽度</li>
+<li>图片的最小高度</li>
+<li>图片的最小深度</li>
+<li>图片的最大宽度</li>
+<li>图片的最大高度</li>
+<li>图片的最大深度</li>
+</ul>
+<p>在之前的xml转json格式的博客中，那个read_xml_gtbox_and_label函数中加入如下的信息统计，即多读取一个size，size中三个数分别代表宽度、高度和深度，并将size数据return返回，注意其是字符串格式的。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> child_of_root.tag == <span class="string">&#x27;size&#x27;</span>:</span><br><span class="line">    size = [-<span class="number">1</span>,-<span class="number">1</span>,-<span class="number">1</span>]<span class="comment">#[width,height,depth]</span></span><br><span class="line">    <span class="keyword">for</span> child_item <span class="keyword">in</span> child_of_root:</span><br><span class="line">        <span class="keyword">if</span> child_item.tag == <span class="string">&#x27;width&#x27;</span>: </span><br><span class="line">            size[<span class="number">0</span>] = child_item.text</span><br><span class="line">        <span class="keyword">if</span> child_item.tag == <span class="string">&#x27;height&#x27;</span>: </span><br><span class="line">            size[<span class="number">1</span>] = child_item.text</span><br><span class="line">        <span class="keyword">if</span> child_item.tag == <span class="string">&#x27;depth&#x27;</span>: </span><br><span class="line">            size[<span class="number">2</span>] = child_item.text</span><br></pre></td></tr></table></figure>
+<p>read_xml_gtbox_and_label函数的博客链接如下：</p>
+<blockquote class="blockquote-center">
+            <p><a href="http://gezhilai.com/2021/08/16/xml%E6%A0%BC%E5%BC%8F%E8%BD%ACjson/">xml格式转json</a></p>
+
+          </blockquote>
+<p>然后得到返回后，进行信息统计，统计得到的numpy数组进行保存。飞机的长宽以及长宽比，其实是按照矩形框来的，由于给的数据集是四边形框，我将这个框变成了xy方向上的水平矩形框进行计算高和宽。值得注意的是，飞机的尺寸竟然出现了浮点数，不知道是组委会给的xml文件有问题还是有浮点数是正常的，不过坐标是标记像素的位置的，出现浮点数有点不太正常。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    统计gf2021中目标大小(影响滑动窗口进行切片)，统计飞机的目标大小，统计含括飞机的图片尺寸，把</span></span><br><span class="line"><span class="string">    有飞机的图片另存为，同时另存xml，把xml也修改一下，把非飞机的目标丢弃掉。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> scipy.misc <span class="keyword">as</span> misc</span><br><span class="line"><span class="keyword">from</span> xml.dom.minidom <span class="keyword">import</span> Document</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> copy, cv2</span><br><span class="line"><span class="comment"># import imageio</span></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"><span class="keyword">import</span> xml.etree.cElementTree <span class="keyword">as</span> ET</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> osgeo <span class="keyword">import</span> gdal, gdalconst</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">information_statistics_save</span>(<span class="params">image_path, xml_path</span>):</span></span><br><span class="line">    plane_data = np.zeros((<span class="number">10</span>,<span class="number">13</span>))<span class="comment">#num,min_width,min_height,min_ratio,max_width,max_height,max_ratio。min_pic_width,min_pic_height,min_pic_depth,max_pic_width,max_pic_height,max_pic_depth</span></span><br><span class="line">    initialization=np.array([<span class="number">0</span>,<span class="number">10000</span>,<span class="number">10000</span>,<span class="number">10000</span>,-<span class="number">1</span>,-<span class="number">1</span>,-<span class="number">1</span>,<span class="number">10000</span>,<span class="number">10000</span>,<span class="number">10000</span>,-<span class="number">1</span>,-<span class="number">1</span>,-<span class="number">1</span>])</span><br><span class="line">    plane_data  = plane_data    +   initialization <span class="comment">#初始化，广播机制</span></span><br><span class="line">    plane_label = [<span class="string">&quot;Boeing737&quot;</span>,<span class="string">&quot;Boeing747&quot;</span>,<span class="string">&quot;Boeing777&quot;</span>,<span class="string">&quot;C919&quot;</span>,<span class="string">&quot;A220&quot;</span>,<span class="string">&quot;A321&quot;</span>,<span class="string">&quot;A330&quot;</span>,<span class="string">&quot;A350&quot;</span>,<span class="string">&quot;ARJ21&quot;</span>,<span class="string">&quot;other-airplane&quot;</span>]</span><br><span class="line">    <span class="keyword">for</span> count, xml <span class="keyword">in</span> <span class="built_in">enumerate</span>(glob.glob(xml_path + <span class="string">&#x27;/*.xml&#x27;</span>)):<span class="comment">#进行索引，*代表任意匹配，得到可迭代对象</span></span><br><span class="line">        <span class="comment"># to avoid path error in different development platform</span></span><br><span class="line">        xml = xml.replace(<span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)<span class="comment">#用/替换\\,后面的替换前面的</span></span><br><span class="line">        (_, xml_name) = os.path.split(xml)<span class="comment">#分割。返回路径和文件名。若本身就是一个文件夹路径，则返回路径和空</span></span><br><span class="line">        <span class="comment">#print(xml)</span></span><br><span class="line">        img_name, box , size, difficult_list, tmp_score_list = read_xml_gtbox_and_label(xml)</span><br><span class="line">        img_name=xml_name.replace(<span class="string">&#x27;.xml&#x27;</span>, <span class="string">&#x27;.tif&#x27;</span>)</span><br><span class="line">        img_path = image_path + <span class="string">&#x27;/&#x27;</span> + img_name</span><br><span class="line"></span><br><span class="line">        size = np.float32(size)</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">for</span> box_one_object <span class="keyword">in</span> box:</span><br><span class="line">            <span class="keyword">if</span> box_one_object[<span class="number">8</span>] <span class="keyword">in</span> plane_label:</span><br><span class="line">                index_label=plane_label.index(box_one_object[<span class="number">8</span>])</span><br><span class="line">                <span class="comment">#print(index_label)</span></span><br><span class="line">                plane_data[index_label,<span class="number">0</span>]=plane_data[index_label,<span class="number">0</span>]+<span class="number">1</span><span class="comment">#该类型飞机数量加1</span></span><br><span class="line">                box_float=np.float32(box_one_object[<span class="number">0</span>:<span class="number">8</span>])<span class="comment">#float只能对单个数使用，数组类的用np.float</span></span><br><span class="line">                x_box=box_float[[<span class="number">0</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>]]</span><br><span class="line">                y_box=box_float[[<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>]]</span><br><span class="line">                <span class="comment">#print(x_box,y_box)</span></span><br><span class="line">                width = np.<span class="built_in">max</span>(x_box)-np.<span class="built_in">min</span>(x_box)</span><br><span class="line">                height = np.<span class="built_in">max</span>(y_box)-np.<span class="built_in">min</span>(y_box)</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">int</span>(width*<span class="number">100</span>) ==<span class="number">758</span>:</span><br><span class="line">                    print(xml)</span><br><span class="line">                <span class="keyword">if</span> width &lt; plane_data[index_label,<span class="number">1</span>]:</span><br><span class="line">                    plane_data[index_label,<span class="number">1</span>]=width</span><br><span class="line">                <span class="keyword">if</span> height &lt; plane_data[index_label,<span class="number">2</span>]:                    </span><br><span class="line">                    plane_data[index_label,<span class="number">2</span>]=height </span><br><span class="line">                <span class="keyword">if</span> width/height &lt; plane_data[index_label,<span class="number">3</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">3</span>]=width/height   </span><br><span class="line">                <span class="keyword">if</span> width &gt; plane_data[index_label,<span class="number">4</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">4</span>]=width </span><br><span class="line">                <span class="keyword">if</span> height &gt; plane_data[index_label,<span class="number">5</span>]:</span><br><span class="line">                    plane_data[index_label,<span class="number">5</span>]=height</span><br><span class="line">                <span class="keyword">if</span> width/height &gt; plane_data[index_label,<span class="number">6</span>]:                    </span><br><span class="line">                    plane_data[index_label,<span class="number">6</span>]=width/height </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">0</span>] &lt; plane_data[index_label,<span class="number">7</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">7</span>]=size[<span class="number">0</span>]   </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">1</span>] &lt; plane_data[index_label,<span class="number">8</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">8</span>]=size[<span class="number">1</span>]                       </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">2</span>] &lt; plane_data[index_label,<span class="number">9</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">9</span>]=size[<span class="number">2</span>]   </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">0</span>] &gt; plane_data[index_label,<span class="number">10</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">10</span>]=size[<span class="number">0</span>]   </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">1</span>] &gt; plane_data[index_label,<span class="number">11</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">11</span>]=size[<span class="number">1</span>]                       </span><br><span class="line">                <span class="keyword">if</span> size[<span class="number">2</span>] &gt; plane_data[index_label,<span class="number">12</span>]:               </span><br><span class="line">                    plane_data[index_label,<span class="number">12</span>]=size[<span class="number">2</span>] </span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                print(<span class="string">&quot;出现错误&quot;</span>) </span><br><span class="line">            </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(img_path):</span><br><span class="line">            print(<span class="string">&#x27;&#123;&#125; is not exist!&#x27;</span>.<span class="built_in">format</span>(img_path))</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="comment"># view_bar(&#x27;Conversion progress&#x27;, count + 1,</span></span><br><span class="line">        <span class="comment">#          len(glob.glob(xml_path + &#x27;/*.xml&#x27;)))</span></span><br><span class="line">    print(plane_data)</span><br><span class="line">    np.save(<span class="string">&quot;plane_data.npy&quot;</span>,plane_data)</span><br><span class="line">    <span class="comment">#b = np.load(&quot;filename.npy&quot;)</span></span><br><span class="line">    print(<span class="string">&#x27;\nStatistics is complete!&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> plane_data</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    image_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1_plane/images&quot;</span></span><br><span class="line">    xml_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1_plane/labelXmls&quot;</span></span><br><span class="line"></span><br><span class="line">    information_statistics_save(image_path,xml_path)</span><br></pre></td></tr></table></figure>
+]]></content>
+  </entry>
+  <entry>
+    <title>数据集筛选及其xml格式的label修改</title>
+    <url>/2021/08/18/%E6%95%B0%E6%8D%AE%E9%9B%86%E7%AD%9B%E9%80%89%E5%8F%8A%E5%85%B6xml%E6%A0%BC%E5%BC%8F%E7%9A%84label%E4%BF%AE%E6%94%B9/</url>
+    <content><![CDATA[<p>组委会先发布了一部分的数据，去年星图杯是用于飞机目标追踪的，由于今年的飞机种类和去年几乎一致（多了C919,不过后续的数据信息统计可以发现就几张，先扔掉），所以想先选出飞机的图片和xml的label来，我就写了个文件来选出飞机和对应的修改后的xml，需要考虑的时候，通过xml的objects/object/possibleresult/name来进行判别是否是飞机。由于只想留下飞机，所以需要做如下两点：</p>
+<a id="more"></a>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>1、通过name来看是否是飞机，不是则通过一些方法删除该object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>2、检测删除完后的objects是否为空，非空说明xml有飞机，保存该xml和对应的tif</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    把gf2021的数据集中的飞机都选出来，即一张图片中若含有飞机模型的，则选出来，同时需要修改xml文件，将</span></span><br><span class="line"><span class="string">    objects属性中的非飞机的object去掉，由于删除的非annotation直系节点，需要转换一下才能删除。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> scipy.misc <span class="keyword">as</span> misc</span><br><span class="line"><span class="keyword">from</span> xml.dom.minidom <span class="keyword">import</span> Document</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> copy, cv2</span><br><span class="line"><span class="comment"># import imageio</span></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"><span class="keyword">import</span> xml.etree.cElementTree <span class="keyword">as</span> ET</span><br><span class="line"><span class="keyword">from</span> xml.etree.ElementTree <span class="keyword">import</span> ElementTree,Element</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">from</span> osgeo <span class="keyword">import</span> gdal, gdalconst</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">choose_plane</span>(<span class="params">image_path, xml_path,image_save_path,xml_save_path</span>):</span></span><br><span class="line">    plane_label = [<span class="string">&quot;Boeing737&quot;</span>,<span class="string">&quot;Boeing747&quot;</span>,<span class="string">&quot;Boeing777&quot;</span>,<span class="string">&quot;C919&quot;</span>,<span class="string">&quot;A220&quot;</span>,<span class="string">&quot;A321&quot;</span>,<span class="string">&quot;A330&quot;</span>,<span class="string">&quot;A350&quot;</span>,<span class="string">&quot;ARJ21&quot;</span>,<span class="string">&quot;other-airplane&quot;</span>]</span><br><span class="line">    <span class="keyword">for</span> count, xml <span class="keyword">in</span> <span class="built_in">enumerate</span>(glob.glob(xml_path + <span class="string">&#x27;/*.xml&#x27;</span>)):<span class="comment">#进行索引，*代表任意匹配，得到可迭代对象</span></span><br><span class="line">        <span class="comment">#flag =0</span></span><br><span class="line">        <span class="comment"># to avoid path error in different development platform</span></span><br><span class="line">        xml = xml.replace(<span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)<span class="comment">#用/替换\\,后面的替换前面的</span></span><br><span class="line">        (_, xml_name) = os.path.split(xml)<span class="comment">#分割。返回路径和文件名。若本身就是一个文件夹路径，则返回路径和空</span></span><br><span class="line">        <span class="comment">#print(xml,xml_name)</span></span><br><span class="line"></span><br><span class="line">        img_name=xml_name.replace(<span class="string">&#x27;.xml&#x27;</span>, <span class="string">&#x27;.tif&#x27;</span>)</span><br><span class="line">        img_path = image_path + <span class="string">&#x27;/&#x27;</span> + img_name</span><br><span class="line">        <span class="comment">#1. 读取xml文件</span></span><br><span class="line">        tree = ElementTree()</span><br><span class="line">        tree.parse(xml)</span><br><span class="line">        root = tree.getroot()</span><br><span class="line"></span><br><span class="line">        <span class="comment">#A. 找到父节点</span></span><br><span class="line">        node_root  = root.findall( <span class="string">&quot;objects&quot;</span>)<span class="comment">#不能直接找object,直接找object，删掉的只是object，但是tree只能删除objects，没有用，所以进行替换</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> objects_list <span class="keyword">in</span> node_root:<span class="comment">#遍历objects,其实只有一个</span></span><br><span class="line">            <span class="keyword">for</span> object_list <span class="keyword">in</span> <span class="built_in">list</span>(objects_list):<span class="comment">#得到object,不加list竟然无法遍历，迷惑</span></span><br><span class="line">                <span class="comment">#print(object_list)</span></span><br><span class="line">                <span class="keyword">if</span> object_list.find(<span class="string">&quot;possibleresult/name&quot;</span>).text <span class="keyword">not</span> <span class="keyword">in</span> plane_label:</span><br><span class="line">                    <span class="comment">#print(&quot;成功移除&quot;)</span></span><br><span class="line">                    objects_list.remove(object_list)</span><br><span class="line">                    <span class="comment">#flag    =   1</span></span><br><span class="line">            <span class="comment">#替换直系节点objects</span></span><br><span class="line">            <span class="keyword">for</span> i,external_node <span class="keyword">in</span> <span class="built_in">enumerate</span>(root):</span><br><span class="line">                <span class="keyword">if</span> external_node.tag == <span class="string">&quot;objects&quot;</span>:<span class="comment">#寻找objects节点</span></span><br><span class="line">                    root[i]=objects_list </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> objects_list:<span class="comment">#判断是否为空,空的list的bool属性为false.非空的为true</span></span><br><span class="line">            <span class="comment">#if flag == 1:</span></span><br><span class="line">            <span class="comment">#    print(xml,object_list.find(&quot;possibleresult/name&quot;).text,objects_list.find(&quot;object/possibleresult/name&quot;).text)</span></span><br><span class="line">            <span class="comment">#存储xml</span></span><br><span class="line">            xml_save=xml_save_path+<span class="string">&quot;/&quot;</span>+xml_name</span><br><span class="line">            tree.write(xml_save, encoding=<span class="string">&quot;utf-8&quot;</span>,xml_declaration=<span class="literal">True</span>)   </span><br><span class="line">            <span class="comment">#存储图片</span></span><br><span class="line">            shutil.copyfile(img_path, image_save_path+<span class="string">&quot;/&quot;</span>+img_name)<span class="comment">#将第一个参数的文件复制到第二个里面            </span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(img_path):</span><br><span class="line">            print(<span class="string">&#x27;&#123;&#125; is not exist!&#x27;</span>.<span class="built_in">format</span>(img_path))</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># view_bar(&#x27;Conversion progress&#x27;, count + 1,</span></span><br><span class="line">        <span class="comment">#          len(glob.glob(xml_path + &#x27;/*.xml&#x27;)))</span></span><br><span class="line"></span><br><span class="line">    print(<span class="string">&#x27;\nStatistics is complete!&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    image_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1/images&quot;</span></span><br><span class="line">    xml_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1/labelXmls&quot;</span></span><br><span class="line"></span><br><span class="line">    image_save_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1_plane/images&quot;</span></span><br><span class="line">    xml_save_path=<span class="string">r&quot;/emwuser/gzl/gf2021/data/FAIR1M/train/part1_plane/labelXmls&quot;</span></span><br><span class="line"></span><br><span class="line">    choose_plane(image_path,xml_path,image_save_path,xml_save_path)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>其主体就是choose_plane,来分析一下choose_plane：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plane_label = [<span class="string">&quot;Boeing737&quot;</span>,<span class="string">&quot;Boeing747&quot;</span>,<span class="string">&quot;Boeing777&quot;</span>,<span class="string">&quot;C919&quot;</span>,<span class="string">&quot;A220&quot;</span>,<span class="string">&quot;A321&quot;</span>,<span class="string">&quot;A330&quot;</span>,<span class="string">&quot;A350&quot;</span>,<span class="string">&quot;ARJ21&quot;</span>,<span class="string">&quot;other-airplane&quot;</span>]</span><br></pre></td></tr></table></figure>
+<p>这一句是用来后续判别xml的objects/object/possibleresult/name的属性值是否是飞机的，只要判断name的属性值是否在该列表中即可。</p>
+<p>然后循环进行读取文件夹下的xml文件，通过通过split找到文件名、文件路径，由此通过replace即可得到对应的image路径。</p>
+<p>然后读取xml文件，代码如下，其中findall用于寻找annotation的直系子节点或者下属节点，也可以传入”objects/object”，其返回的是一个列表，列表中的元素是objects，我们知道objects只有一个，所以其实node_root[0]就是objects，用for循环也可以(本代码是用for来的)。其实我们希望删除的是object，为什么不findall(“objects/object”)呢？因为我们如果寻找object的话，的确可以很好的删除，但是删除了object后，原来的root是没变的，所以需要把删除后的替换进去，如果直接root[3]赋值我们删除后的object的话(root[3]是objects)，objects就变成object了，所以这是不对的。如果我们直接寻找出来的就是objects，那么再往下找object，删除objects中的object，然后用该objects替换root中的objects，就可以完美解决。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">img_name=xml_name.replace(<span class="string">&#x27;.xml&#x27;</span>, <span class="string">&#x27;.tif&#x27;</span>)</span><br><span class="line">img_path = image_path + <span class="string">&#x27;/&#x27;</span> + img_name</span><br><span class="line"><span class="comment">#1. 读取xml文件</span></span><br><span class="line">tree = ElementTree()</span><br><span class="line">tree.parse(xml)</span><br><span class="line">root = tree.getroot()</span><br><span class="line"></span><br><span class="line"><span class="comment">#A. 找到父节点</span></span><br><span class="line">node_root  = root.findall( <span class="string">&quot;objects&quot;</span>)<span class="comment">#不能直接找object,直接找object，删掉的只是object，但是tree只能删除objects，没有用，所以进行替换</span></span><br></pre></td></tr></table></figure>
+<p>上面已经说了如何删除object了，那么删除后，需要对root中的objects进行替换，一般objects是root的第四个属性，就是root[3]，但是也可能不是，所以就用到了下面这个循环了：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#替换直系节点objects</span></span><br><span class="line"><span class="keyword">for</span> i,external_node <span class="keyword">in</span> <span class="built_in">enumerate</span>(root):</span><br><span class="line">    <span class="keyword">if</span> external_node.tag == <span class="string">&quot;objects&quot;</span>:<span class="comment">#寻找objects节点</span></span><br><span class="line">        root[i]=objects_list </span><br></pre></td></tr></table></figure>
+<p>最后需要判断一下删除后的objects是否为空，如果空了，说明没有飞机，如果不是空(不是空的列表的bool值是true)，则存储替换objects后的root和对应的tif，存储的文件夹自行指定;</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> objects_list:<span class="comment">#判断是否为空,空的list的bool属性为false.非空的为true</span></span><br><span class="line">    <span class="comment">#if flag == 1:</span></span><br><span class="line">    <span class="comment">#    print(xml,object_list.find(&quot;possibleresult/name&quot;).text,objects_list.find(&quot;object/possibleresult/name&quot;).text)</span></span><br><span class="line">    <span class="comment">#存储xml</span></span><br><span class="line">    xml_save=xml_save_path+<span class="string">&quot;/&quot;</span>+xml_name</span><br><span class="line">    tree.write(xml_save, encoding=<span class="string">&quot;utf-8&quot;</span>,xml_declaration=<span class="literal">True</span>)   </span><br><span class="line">    <span class="comment">#存储图片</span></span><br><span class="line">    shutil.copyfile(img_path, image_save_path+<span class="string">&quot;/&quot;</span>+img_name)<span class="comment">#将第一个参数的文件复制到第二个里面     </span></span><br></pre></td></tr></table></figure>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>]]></content>
       <categories>
-        <category>西瓜书</category>
+        <category>星图杯</category>
+        <category>Python</category>
       </categories>
       <tags>
-        <tag>西瓜书</tag>
-        <tag>线性模型</tag>
+        <tag>-星图杯 -r3det -python -xml</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>python常用语法汇总--不断更新中</title>
+    <url>/2021/08/17/python%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%B1%87%E6%80%BB/</url>
+    <content><![CDATA[<p>之前也总结过一个，faster rcnn时候总结的，详见链接如下：</p>
+<a id="more"></a>
+<h2 id="R3det"><a href="#R3det" class="headerlink" title="R3det"></a>R3det</h2><h3 id="字符串类："><a href="#字符串类：" class="headerlink" title="字符串类："></a>字符串类：</h3><p>path前面加r含义</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">path=<span class="string">r&quot;C:\data\a.csv&quot;</span></span><br><span class="line">path=path.replace(<span class="string">&quot;\\&quot;</span>,<span class="string">&quot;/&quot;</span>)</span><br><span class="line">a=pd.read_csv(path)</span><br></pre></td></tr></table></figure>
+<p>字符串是否在字符串中：</p>
+<p>“tif” in “0.tif”的结果是True</p>
+<p>strip</p>
+<p>os.path.split</p>
+<h3 id="列表类："><a href="#列表类：" class="headerlink" title="列表类："></a>列表类：</h3><p>判断是否在列表中，并获取下标，例子如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">animal = <span class="string">&quot;dog&quot;</span></span><br><span class="line">animals= [<span class="string">&quot;cat&quot;</span>,<span class="string">&quot;dog&quot;</span>,<span class="string">&quot;pig&quot;</span>]</span><br><span class="line"><span class="keyword">if</span> animal <span class="keyword">in</span> animals:</span><br><span class="line">    index=animals.index(animal)</span><br><span class="line">    print(index)</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>列表之前说过，其乘法和加法是区别于np的，其实拼接的意思，如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">b=[<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">print(a+b)</span><br><span class="line">print(a*<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="np数组："><a href="#np数组：" class="headerlink" title="np数组："></a>np数组：</h3><p>保存/读取数组的方法如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">np.save(<span class="string">&quot;filename.npy&quot;</span>,a)<span class="comment">#保存数组a，保存为的文件名是filename.npy</span></span><br><span class="line">b = np.load(<span class="string">&quot;filename.npy&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>float可以对单个数来，对[“123”,”234”]的，应该用np.float32()进行,例子如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">digit=[<span class="string">&quot;123&quot;</span>,<span class="string">&quot;456&quot;</span>,<span class="string">&quot;22&quot;</span>]</span><br><span class="line">digit_float=np.float32(digit)</span><br><span class="line">print(digit_float)</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="number">123.</span> <span class="number">456.</span>  <span class="number">22.</span>]</span><br></pre></td></tr></table></figure>]]></content>
   </entry>
   <entry>
     <title>xml格式转json</title>
@@ -866,166 +271,6 @@ zero=x'_{max}-\frac{x_{max}}{scale}=127.5</script><p>为什么式(1)要有一个
         <tag>xml</tag>
         <tag>json</tag>
         <tag>os库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>基于FPGA的无人机目标跟踪系统实现</title>
-    <url>/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/</url>
-    <content><![CDATA[<p>这是第三届全国大学生集成电路创新创业大赛中科芯杯的赛题，当时没有找到合适的队友，就选择了一个人参赛，所以队名还起了名字叫一个人的风景，当时准确率是华东赛区本科生组第一名，可惜华东赛区只有三个队伍能够晋级总决赛，那三个队伍是研究生队伍，我是第四，赛区赛就比较倒霉呀，他们三个队伍总决赛的时候分别是杯赛第一名、第二和第四名，这就很坑了。。。</p>
-<a id="more"></a>
-<p>大概说一下赛题流程，中科芯提供了一个上位机，该上位机的功能是将PC端视频路径加载到上位机中，上位机将该视频流以HDMI格式从PC端的HDMI发送出去，FPGA端进行HDMI数据接收，然后进行处理，上位机在发送HDMI视频流的时候，同时会通过串口发送视频第一帧的无人机坐标，包含左上角坐标、w和h，而FPGA则通过第一帧的无人机信息进行追踪后续所有帧的无人机位置，将追踪得到的左上角坐标进行发送返回。由于串口是无握手通信协议，所以还需要设计链路层的通信协议。下面进行详细说明</p>
-<h2 id="一、设计概述"><a href="#一、设计概述" class="headerlink" title="一、设计概述"></a>一、设计概述</h2><h3 id="1-1、硬件选取"><a href="#1-1、硬件选取" class="headerlink" title="1.1、硬件选取"></a>1.1、硬件选取</h3><p>项目设计是基于XLINX ARTIX-7 系列的 FPGA 开发平台（型号：XC7A35T-2FGG484I），用到USB转TTL模块、HDMI接口、USB接口线.</p>
-<h3 id="1-2、项目说明"><a href="#1-2、项目说明" class="headerlink" title="1.2、项目说明"></a>1.2、项目说明</h3><h4 id="1-项目内容"><a href="#1-项目内容" class="headerlink" title="1.项目内容"></a>1.项目内容</h4><p>（一）、针对中科芯提供的旋翼无人机机动测试视频设计基于FPGA的目标跟踪器，实现对视频中无人机目标的稳定连续跟踪，目标跟踪算法必须完全使用FPGA实现。</p>
-<p>（二）、各阶段中科芯均提供若干段比测视频，每段视频均给出目标尺寸w*h和第一帧初始位置坐标x1,y1，用于提供跟踪算法初始化信息。跟踪器测试系统如下图所示，测试设备将受试视频经HDMI接口发送至FPGA开发板，并通过串口接收其跟踪坐标结果。选择将个人计算机作为测试设备，通过下载主办方提供的上位机软件实现上述功能。基于FPGA设计的跟踪器须对每段视频分别进行测试，结果以跟踪结果输出坐标精确度为准。FPGA应选择带HDMI接口芯片的Virtex5、6、7或 Artix-7 系列开发平台进行实现。</p>
-<p><a href="https://imgtu.com/i/W5kaVg"><img src="https://z3.ax1x.com/2021/07/27/W5kaVg.png" alt="W5kaVg.png"></a></p>
-<p>​                                                            图1 输入输出接口配置</p>
-<p>（三）、考虑到程移植便利性，建议采用以下输入输出接口配置：参赛队跟踪器图像输入采用标准HDMI接口，目标初始位置坐标采用RS422异步串口输入，跟踪位置坐标采用同一串口输出。在此介绍一下串口的设置和链路层通信协议：</p>
-<p>串口通信物理层协议：波特率：9600；数据位位数：8位；校验位：无；停止位：有</p>
-<p>链路层通信协议：帧内字节数：8字节；校验码：LRC累加和校验码；位置坐标数据高位在前、高字节在前</p>
-<p>例： 目标初始位置坐标（255，511），长宽均为20 ，则PC发送帧为 AA 00 FF 01     FF 14 14 2F，发送帧的意义如下图：</p>
-<p><a href="https://imgtu.com/i/W5Z40K"><img src="https://z3.ax1x.com/2021/07/27/W5Z40K.png" alt="W5Z40K.png"></a></p>
-<p>跟踪结果位置坐标(255,511)，则FPGA发送帧为 55 00 FF 01 FF 00 00 AC，返回帧的意义如下：</p>
-<p><a href="https://imgtu.com/i/W5Zhm6"><img src="https://z3.ax1x.com/2021/07/27/W5Zhm6.png" alt="W5Zhm6.png"></a></p>
-<h4 id="2-项目指标"><a href="#2-项目指标" class="headerlink" title="2.项目指标"></a>2.项目指标</h4><p>（一）、提供的测试和比赛用视频均为彩色，8bit位深，分辨率为720P@25FPS，视频格式为AVI，视频中无人机目标大小&gt;20*20pixel，时长约30秒。赛题跟踪难度见官网发布的受测视频。</p>
-<p>​                                                                    视频中目标左上角初始位置坐标(x,y)，目标尺寸(w,h)</p>
-<p>​                                                                    视频1为564,305,132,48；视频2为720,312,66,30  </p>
-<p>​                                                                    视频3为820,241,110,44；视频4为592,325,40,20</p>
-<p>（二）、 跟踪器在受试过程中禁止人工干预，但允许跟踪器具备自动参数调整和跟踪丢失后的目标自动重捕功能。</p>
-<p>（三）、 比赛结果按各跟踪精度性能指标进行排名。精度指标衡量方法基于VOT挑战赛的无监督（unsupervised）模式，以全部受测的N帧图像内，算法跟踪结果波门与实际波门平均重合率AO（Average Overlap）描述。</p>
-<script type="math/tex; mode=display">
-AO=\frac{1}{N}\sum^N_{i=1}\frac{S_i}{S}</script><p>其中，S_i表示跟踪结果波门与真实波门重叠面积，S=w*h即目标面积由组织方给,其实就是ground truth的面积。若目标跟踪丢失，则跟踪器在当前帧得分为0。因此，应谨慎设计算法，确保连续跟踪，并视需求加入丢失后重捕机制（在本次设计的算法中，是可以通过阈值来推断是否追踪丢失的）。最终性能将以多段比赛视频测试AO指标累加结果为准，排名则依据AO指标从高到低排列。</p>
-<p><strong>3.总结</strong></p>
-<p>项目设计中，通过上位机发送视频流数据给FPGA，FPGA通过HDMI端口接收数据，进行定位追踪视频中的无人机，通过串口发送给上位机，同时为了显示更加明了，将定位结果通过输出的HDMI接口发送给显示屏，显示屏也同时显示追踪结果.</p>
-<h2 id="二、系统组成及算法讲解"><a href="#二、系统组成及算法讲解" class="headerlink" title="二、系统组成及算法讲解"></a>二、系统组成及算法讲解</h2><h3 id="2-1-系统介绍"><a href="#2-1-系统介绍" class="headerlink" title="2.1 系统介绍"></a>2.1 系统介绍</h3><p>上位机将视频流发送给FPGA，FPGA对视频进行解码转为VGA时序信号和像素信息RGB888，得到RGB888后，将其转到YCBCR色域，然后对其进行灰度化处理，灰度化处理后将灰度像素传送给二值化模块，通过阈值设定对其进行二值化，二值化输出信息传送给sobel边缘提取模块，进行边缘提取，至此图像预处理结束，将预处理输出结果送给追踪模块，追踪模块将生成多个待检测目标窗口，然后与初始帧的无人机目标对比，选出最优窗口作为当前帧的无人机位置。系统框图如图2。<a href="https://imgtu.com/i/W5eBjI"><img src="https://z3.ax1x.com/2021/07/27/W5eBjI.png" alt="W5eBjI.png"></a></p>
-<h3 id="2-2、HDMI-VGA"><a href="#2-2、HDMI-VGA" class="headerlink" title="2.2、HDMI-VGA"></a>2.2、HDMI-VGA</h3><p>待追踪视频由PC端上位机发送，通过扩展显示屏，把电脑布局与缩放调为100%，扩展屏设置为60hz，HDMI与FPGA连接后，FPGA被PC端识别为扩展屏，并向其发送视频流，FPGA接收到HDMI类型的视频流，由于使用的黑金的alinx7035系列FGPA没有硬核解码器解码HDMI视频，所以通过软核进行解码并将其转换成VGA信号，此软核为github开源IP。</p>
-<h3 id="2-3、算法讲解及其仿真结果展示"><a href="#2-3、算法讲解及其仿真结果展示" class="headerlink" title="2.3、算法讲解及其仿真结果展示"></a>2.3、算法讲解及其仿真结果展示</h3><h4 id="2-3-1、图像处理算法模块"><a href="#2-3-1、图像处理算法模块" class="headerlink" title="2.3.1、图像处理算法模块"></a>2.3.1、图像处理算法模块</h4><p>（1）灰度化</p>
-<p>将彩色图像转化为灰度的方法有两种，一个是令 RGB 三个分量的数值相等，输出后便可以得到灰度图像，另一种是转化为 YCbCr 格式，将 Y 分量提取出来，YCbCr 格式中的 Y 分量表示的是图像的亮度和浓度所以只输出 Y 分量，得到的图像就是灰度图像了。我们在这里选择第二种方法实现。</p>
-<p>YCbCr是通过有序的三元组来表示的，三元由Y(Luminance)、Cb(Chrominance-Blue)、和Cr(Chrominance-Red)组成，其中Y表示颜色的明亮度和浓度，而Cb和Cr则分别表示颜色的蓝色浓度偏移量和红色浓度偏移量。人的肉眼对由YCbCr色彩空间编码的视频中的Y分量更敏感，而Cb和Cr的微小变化不会引起视觉上的不同。为了得到灰度图像，要将采集到的彩色图像转化为YCbCr后，将Y分量分别送给R、G、B，即此时R、G、B数值上是一致的，这样便得到了灰度图。灰度化效果如图3和图4。</p>
-<p><a href="https://imgtu.com/i/W5m5Je"><img src="https://z3.ax1x.com/2021/07/27/W5m5Je.png" alt="W5m5Je.png"></a></p>
-<p><a href="https://imgtu.com/i/W5nkwV"><img src="https://z3.ax1x.com/2021/07/27/W5nkwV.png" alt="W5nkwV.png"></a></p>
-<p>FPGA开发板通过HDMI采集到的数据是RGB888的格式，官方给出的转化公式是严格的RGB888转为YCbCr888。</p>
-<p>官方给出的RGB888-&gt;YCbCr888转化公式如下：</p>
-<script type="math/tex; mode=display">
-Y=0.229R+0.587G+0.114B
-\\Cb=0.568(B-Y)+128
-\\Cr=0.713(R-Y)+128</script><p>由于FPGA无法实现浮点数运算，所以需要把系数变为整数，我们不妨将Y、Cb和Cr都扩大1024倍，然后所有系数取整，那么变成如下公式：</p>
-<script type="math/tex; mode=display">
-Y=306R+601G+116B
-\\Cb=-176R-347G+523B+131072
-\\Cr=523R-438G-85B+131072</script><p>这样便可以得到整型的运算，最后得到的结果右移10位即可，但为了时序的科学严谨性，我们不应该一次在always块中算出Y、Cb、Cr，因为一个关系式中涉及到三次乘法和两次加法，越多的运算量就越可能导致时序延时错乱，此处或许不会有问题，但不在一个块中用太复杂的运算式是一种好的习惯，我们应该选择业界普遍使用的流水线做法，将乘法在一个always块里实现，在另一个always块中实现加法。</p>
-<p>（2）二值化</p>
-<p> 在灰度化后，进行二值化操作，二值化操作即是设定一个阈值，当灰度值大于该阈值是赋值为1，小于该值是赋值为0，二值化效果如图5和图6。阈值确定较为经典的算法是大津算法（OTSU），大津算法可以使得前景与背景图像的类间方差最大，它被认为是图像分割中阈值选取的最佳算法，计算简单，不受图像亮度和对比度的影响，但其需要一帧数据得到阈值确定，即追踪会造成一帧延迟，所以此处未使用大津算法而是使用的是测试的相对较好的固定阈值，在后续完善中可以考虑运用一帧的部分数据求大津阈值，使其不造成一帧的延迟。</p>
-<p>原图和二值化图片如下：</p>
-<p><a href="https://imgtu.com/i/W5Qlge"><img src="https://z3.ax1x.com/2021/07/27/W5Qlge.png" alt="W5Qlge.png"></a></p>
-<p><a href="https://imgtu.com/i/W5Q0gg"><img src="https://z3.ax1x.com/2021/07/27/W5Q0gg.png" alt="W5Q0gg.png"></a></p>
-<p>（4）、Sobel边缘化</p>
-<p>二值化会使得前景和背景相区分，但是目标所处地位可能和背景相交换，为了在这种结果发生时依旧可以进行正常追踪，此步我们进行Sobel算子边缘化提取，从而提高后续的追踪算法的稳定性。</p>
-<p>Sobel边缘检测的核心在于像素矩阵的卷积，卷积对于数字图像处理非常重要，很多图像处理算法都是做卷积来实现的。卷积运算的本质就是对制定的图像区域的像素值进行加权求和的过程，其计算过程为图像区域中的每个像素值分别与卷积模板的每个元素对应相乘，将卷积的结果作求和运算，运算到的和就是卷积运算的结果。</p>
-<p>3×3的窗口M与卷积模板C 的卷积运算如下：</p>
-<script type="math/tex; mode=display">
-M= \left[
- \begin{matrix}
-   M1 & M2 & M3 \\
-   M4 & M5 & M6 \\
-   M7 & M8 & M9
-  \end{matrix}
-  \right] \ \ \ \ \ \ \ \
-  C= \left[
- \begin{matrix}
-   C1 & C2 & C3 \\
-   C4 & C5 & C6 \\
-   C7 & C8 & C9
-  \end{matrix}
-  \right]
-  \\M5'=M1*C1+M2*C2+M3*C3+M4*C4+M5*C5+\\M6*C6+M7*C7+M8*C8+M9*C9</script><p>G_x和G_y是图像边缘梯度，将两个因子和原始图像做如下卷积得到边缘梯度，其中A表示原视图像。</p>
-<script type="math/tex; mode=display">
-G_x=\left[
- \begin{matrix}
-   -1 & 0 & +1 \\
-   -2 & 0 & +2 \\
-   -1 & 0 & +1
-  \end{matrix}
-  \right] *A\ \ \ \ \ \ \
-  G_y=\left[
- \begin{matrix}
-   -1 & -2 & -1 \\
-   0  & 0  & 0 \\
-   +1 & +2 & +1
-  \end{matrix}
-  \right] *A</script><p>得到图像中的每一个点的横向纵向梯度G_x、G_y。最后通过如下公式来计算该点总体梯度的大小。</p>
-<script type="math/tex; mode=display">
-G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该如果算出的G大于设定的阈值，那么认为此处是边缘处，使其为黑色，否则认为不是边缘，使其为白色。</p>
-<p>上述是算法原理，很显然，这里用到了3<em>3矩阵，对于matlab来说，获取是比较简单的，但是FPGA实现时，我们需要考虑如何得到这个3</em>3的矩阵，因为FPGA扫描像素点是一个一个进行的。在 FPGA 中生成 3x3 矩阵有以下三种方法：</p>
-<p>（1） 通过 2 个或者 3 个 RAM 的存储来实现 3X3 像素窗口；</p>
-<p>（2） 通过 2 个或者 3 个 FIFO 的存储来实现 3X3 像素窗口；</p>
-<p>（3） 通过 2 行或者 3 行 Shift_RAM 的存储来实现 3X3 像素窗口；</p>
-<p>在此我们选用shift ram进行获取矩阵,shift ram是一个移位存储ram,这个 IP 支持一个时钟周期移位一个或多个 bit 的数据，位宽是可以设置的。下面图7和图8是 shift_ram 的移位示意图及仿真图:</p>
-<p><a href="https://imgtu.com/i/W56U3D"><img src="https://z3.ax1x.com/2021/07/27/W56U3D.png" alt="W56U3D.png"></a></p>
-<p><a href="https://imgtu.com/i/W56sEt"><img src="https://z3.ax1x.com/2021/07/27/W56sEt.png" alt="W56sEt.png"></a></p>
-<p>如上图顺序可以容易看出，shift_ram 的工作方式是移位存储，后一个数据将前一个数据往前推，当填满一行的时候，跳到下一行再继续移位存储，相应的第一行的数据填满之后，会填上矩阵的第一行的数据，操作是同时的，如果进行均值滤波的话显然这样目标像素会是 0，以此类推，第二行移位存储完成，刚开始第一行的每一个像素点是目标像素，但是第三行还没有数据，所以第一行的目标像素滤波后显然是不准确的，等到把第三行数据填满后，进行原本第二行的滤波，这时目标像素周围均有数据，所以均值滤波会使图像的边缘不清楚。这是将每一行的宽度设置成 3，如果将宽度设置为 640,800 等分辨率的宽度，那么生成 3x3 矩阵就十分方便。同样的还可以生成 5x5、7x7 等矩阵用于图像处理的算法研究。</p>
-<p>Xilinx Vivado 有自己的 Shift_RAM IP Core，不过这里只能缓存出来一行数据，我们这里需要多个 Shift_RAM IP Core。此外720p视频流一行有像素1280个数据，考虑到shift ram深度不能大于1024，所以我们用两个640深度的shift ram组成一个1280深度的shift ram，那么我们需要四个这样的IP核，进行循环移位得到3*3的矩阵，然后进行sobel边缘提取。边缘提取结果如图9和图10</p>
-<p><a href="https://imgtu.com/i/W56bCT"><img src="https://z3.ax1x.com/2021/07/27/W56bCT.md.png" alt="W56bCT.md.png"></a></p>
-<p><a href="https://imgtu.com/i/W56xbR"><img src="https://z3.ax1x.com/2021/07/27/W56xbR.png" alt="W56xbR.png"></a></p>
-<p>（4）追踪算法</p>
-<p>  在得到边缘化的数据后，将第一帧的目标数据进行保存，在后续的帧数据传来时，我们选择开窗操作，根据上一帧的定位结果，我们在此帧附近进行开窗，窗口不能太小，否则会丢失目标，在此处，我们选用的是上一帧结果往四周扩展40个像素点进行开窗，在此窗口内，从窗口左上角进行平移获取与目标大小一致的待检测矩阵，获得待检测矩阵后，为了防止周围背景的影响导致误判，需要将待检测矩阵与目标矩阵进行相与操作，相与操作后，对该二值矩阵进行简单求和，得到的结果与目标矩阵和进行对比，当结果最相近时，该待检测矩阵即是该帧的目标位置。下述描述FPGA对该算法的实现的主要模块</p>
-<p>1、矩阵生成模块：</p>
-<p>在1280*720的图片中，我们由上一帧定位结果判断下一帧的范围，即进行开窗，在此窗口内进行进行追踪定位，我们选取的窗口是212<em>128的窗口，在此窗口内，不断生成132\</em>48的待检测矩阵(无人机大小小于132*48时，进行w和h扩充为132*48).如下图</p>
-<p><a href="https://imgtu.com/i/W5cuIP"><img src="https://z3.ax1x.com/2021/07/27/W5cuIP.md.png" alt="W5cuIP.md.png"></a></p>
-<p>黄色边框代表一帧大小，红色框是选取的开窗大小，黑色框是需生成的待检测矩阵，待检测矩阵就是一个待检测的无人机目标.</p>
-<p>由于1280*720图片过大，仿真长度过大，所以验证的时候是使用的一帧6*4，开窗大小是4*4，位于一帧中间位置，生成待检测矩阵是3*3.仿真图如图</p>
-<p><a href="https://imgtu.com/i/W5c2Ix"><img src="https://z3.ax1x.com/2021/07/27/W5c2Ix.png" alt="W5c2Ix.png"></a></p>
-<p>如上图仿真图所示，post_martix_clken代表矩阵有效信号，martix_p1共三bit，代表矩阵第一行的3个数据，martix_p2和martix_p3分别代表第二行和第三行，x和y代表此时矩阵左上角在窗口中的坐标(窗口左上角坐标记为(1,1))，sobel_data代表窗内信号，per_martix_clken代表sobel_data有效。仿真输入的窗口信号第一行的四个数据是：1010；第二行是：0101；第三行是：1010；第四行是0101。在进行仿真时，在4*4的窗口内，可以生成4个完整的矩阵，从仿真中可见共四个clk内有效。在四个使能有效时，对应的3*3矩阵是完全正确的，对应的(x,y)坐标是(1,1)，(1,2)，(2,1)，(2,2)与矩阵符合.</p>
-<p>2、sum_h的仿真：如下图</p>
-<p><a href="https://imgtu.com/i/W5g1Fx"><img src="https://z3.ax1x.com/2021/07/27/W5g1Fx.png" alt="W5g1Fx.png"></a></p>
-<p>per_martix1_clken是输入数据的有效信号,如上图,在天蓝色处有两个clk的有效时钟,对应的输入是132’habc3d2e1f0和132’h167cccee55ff,对应的二进制分别是：1010101111000011110100101110000111110000和101100111110011001100 1110111001010101111111 11,含有1的个数分别是21和30.post_martix1_clken是输出结果的有效信号,如上图,在post_martix1_clken为1的时候，说明输出有效,此时输出是0x15和0x1e,十进制就是21和30.可以看出,求1个数的流水线处理模块结果正确.</p>
-<p>3、上述模块是对待检测窗口行求和,下述sum模块是对返回的48行值进行累和sum模块的仿真：如下图</p>
-<p><a href="https://imgtu.com/i/W5gW0s"><img src="https://z3.ax1x.com/2021/07/27/W5gW0s.png" alt="W5gW0s.png"></a></p>
-<p>如图上图,per_martix1_clken是输入数据有效信号,sum代表待检测窗的累和,post_sum_clken代表输出累和数据的有效信号，如上图，仿真是给予的48行数据分别都是132’d1和132’d3,可以知道一行数据经过sum_h模块输出后分别是1和2，则48行累和分别是48和96，如上图仿真所示，在输出有效信号为1时，对应的结果分别是0x30和0x60即48和96，可以看出sum模块的流水线处理是没有问题的。</p>
-<p>4、比较输出模块：如图</p>
-<p>在比较模块中，sum是sum模块流水线输出的待检测窗口值，sum0是初始帧目标值，将两者对比，x和y是与sum对应的此时在大窗口中的坐标，x_current_frame和y_current_frame是此时帧定位的窗口坐标，若sum越接近sum0，则更新当前帧的坐标x_current_frame和y_current_frame为x和y，仿真图如上，设定的sum0是100，流水线输入sum值是0x2c，0x96,0x46,0x2h和0x5c，最终x_current_frame和y_current_frame更新为1和5，正常输出。</p>
-<p>上述即是追踪算法的大致思想，适合FPGA的逻辑实现，其追踪性能很好，下面我们看一下追踪效果.</p>
-<h2 id="三、追踪情况及性能参数"><a href="#三、追踪情况及性能参数" class="headerlink" title="三、追踪情况及性能参数"></a>三、追踪情况及性能参数</h2><h3 id="3-1、matlab追踪视频展示"><a href="#3-1、matlab追踪视频展示" class="headerlink" title="3.1、matlab追踪视频展示"></a>3.1、matlab追踪视频展示</h3><p>视频一追踪演示：<a href="https://www.bilibili.com/video/BV1mz4y197h1">视频一追踪演示</a></p>
-<p>视频二追踪演示：<a href="https://www.bilibili.com/video/BV15i4y1x74k">视频二追踪演示</a></p>
-<p>视频三追踪演示：<a href="https://www.bilibili.com/video/BV1yV411r7tn">视频三追踪演示</a></p>
-<p>视频四追踪演示：<a href="https://www.bilibili.com/video/BV1pa4y1v7h5">视频四追踪演示</a></p>
-<h3 id="3-2、matlab追踪AO值展示-四个AO值图展示如下图"><a href="#3-2、matlab追踪AO值展示-四个AO值图展示如下图" class="headerlink" title="3.2、matlab追踪AO值展示:四个AO值图展示如下图"></a>3.2、matlab追踪AO值展示:四个AO值图展示如下图</h3><p><a href="https://imgtu.com/i/W5Rdit"><img src="https://z3.ax1x.com/2021/07/27/W5Rdit.png" alt="W5Rdit.png"></a></p>
-<p><a href="https://imgtu.com/i/W5Rssg"><img src="https://z3.ax1x.com/2021/07/27/W5Rssg.png" alt="W5Rssg.png"></a></p>
-<p><a href="https://imgtu.com/i/W5RIQU"><img src="https://z3.ax1x.com/2021/07/27/W5RIQU.png" alt="W5RIQU.png"></a></p>
-<p><a href="https://imgtu.com/i/W5ROF1"><img src="https://z3.ax1x.com/2021/07/27/W5ROF1.png" alt="W5ROF1.png"></a></p>
-<p>四个视频追踪的平均AO值如下：</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th></th>
-<th>视频一</th>
-<th>视频二</th>
-<th>视频三</th>
-<th>视频四</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>平均AO值</td>
-<td>99.45%</td>
-<td>98.18%</td>
-<td>99.20%</td>
-<td>99.04%</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>从结果上看，全程没有追丢的情况发生，平均AO值全部达到98%以上。</p>
-<p>3.3、FPGA板级验证：板级验证图如下图</p>
-<p><a href="https://imgtu.com/i/W5W4AA"><img src="https://z3.ax1x.com/2021/07/27/W5W4AA.png" alt="W5W4AA.png"></a></p>
-<p><a href="https://imgtu.com/i/W5WIht"><img src="https://z3.ax1x.com/2021/07/27/W5WIht.png" alt="W5WIht.png"></a></p>
-<p>至此差不多结束了，具体上位机软件等可以从集创赛官网找，往届题目应该会有保存。</p>
-]]></content>
-      <categories>
-        <category>FPGA</category>
-      </categories>
-      <tags>
-        <tag>FPGA</tag>
       </tags>
   </entry>
   <entry>
@@ -1219,6 +464,260 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
       <tags>
         <tag>tensorflow</tag>
         <tag>r3det</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>tensorflow中的参数更新机制详解</title>
+    <url>/2021/08/05/tensorflow%E4%B8%AD%E7%9A%84%E5%8F%82%E6%95%B0%E6%9B%B4%E6%96%B0%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<p>之前用的都是torch，tf倒是没怎么用过，最近由于种种原因，需要学一学tensorflow，不过tf中的大多数函数类方法都无法自动进行int—&gt;float类型强制转换，还得自行cast转换，着实麻烦。深度学习的核心所在就是梯度下降，各种优化器都是基于导数的梯度下降来的，所以自动求导更新就是至关重要的，这一节就来讲一讲tensorflow中的参数更新机制。</p>
+<a id="more"></a>
+<p>tf和torch中一样，各类参数都是以tensor即张量类型进行存储，由于模型中并不是所有的量都需要计算梯度，所以tf中会用tf.Variable(x)将tensor标记为可训练即可求导的变量。其实如果直接从少量参数和少量代码来看，似乎引入Variable意义不大，我们可以直接对需要求导的参数进行求导，得到梯度后，进行w=w-r*grad进行更新即可(w代表需要训练的参数，r为学习率，grad代表参数)，但是神经网络模型中参数巨量，这样操作会导致参数混乱，而且需要我们自己更新参数，远没有模块化的便利，所以我们希望的模块化，以函数或者方法的形式，可以反复的复用，极大的提高便捷性，所以才会出现一系列函数和方法来辅助简便化参数自动更新。</p>
+<p>值得注意的是，如果搜过以前的很多博客，应该知道图变量Variable没法自动数据流更新，也就是说你赋值过后，对图变量进行一些运算后，其数据流并没有运转起来(可以理解为没有进行运算)，需要如下才能使得数据流运转起来进行计算：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = tf.Variable(<span class="number">3</span>, name=<span class="string">&#x27;x&#x27;</span>)</span><br><span class="line">y = x * <span class="number">5</span></span><br><span class="line">sess = tf.InteractiveSession()</span><br><span class="line">sess.run(tf.global_variables_initializer())</span><br><span class="line">sess.run(y)</span><br></pre></td></tr></table></figure>
+<p>也就是使用了交互接口，然后运行初始化，在运行y在能得到x*5后操作，显得特别臃肿，但在现在的tensorflow2.0版本中，终于取消了这种颇为愚昧的操作，直接简单的像np一样运算操作就好了,即有了自动更新机制。(网上大多数以前的博客都没更新，其实已经不需要使用run来操作了)，我们可以看一下1.0版本时候的操作，那个时候tf中的数据流定义和运算是分开的(定义一个操作和执行这个操作是分开的)，</p>
+<p>在通过tf.Variable对tensor标记后，我们可以通过tf.GradientTape()对这些可训练参数进行导数计算，然后将这些计算得到的梯度信息都存在磁盘里(“Tape”),磁盘名可以自取。用法如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.GradientTape(persistent=<span class="literal">True</span>,watch_accessed_variables=<span class="literal">True</span>) <span class="keyword">as</span> www:</span><br><span class="line">    a2=tf.<span class="built_in">pow</span>(a,<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p>其中tf.GradientTape有两个参数，含义入下：</p>
+<script type="math/tex; mode=display">
+persistent: 布尔值，用来指定新创建的gradient tape是否是可持续性的。默认是False，意味着只能够调用一次gradient（）函数。
+\\watch\_accessed\_variables: 布尔值，表明这个gradien tap是不是会自动追踪任何能被训练（trainable）的变量。默认是True。要是为False的话，意味着你需要手动去指定你想追踪的那些变量,手动追踪用watch。</script><p>上述的代码中，如果a是可训练参数，那么tf.GrandientTape就会自动计算a的所有操作步骤的梯度，(通过这些所有操作步骤的梯度，链式法则就可以知道各个操作之间的导数关系)。</p>
+<p>而 with A as B是什么意思呢?其实样式和for很类似，是控制流语句，for是不断遍历可迭代对象，将数据取出来(通过__next__ 操作的)，而with是把 A中的返回送给B，不过B可以接收A的任何返回（可以是方法类等等，取决自己如何用），在with下的语句执行完毕后，还会执行魔法函数__exit__（应该是在该退出函数时候将所有结果保存在了Tape中）,具体功能其实和try except是很像的，具体分析链接如下：</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/qiqicos/article/details/79200089">python中with…as的用法</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/frank_ljiang/article/details/106281919">with在python中的用法和含义</a></p>
+
+          </blockquote>
+<p>下面贴一个具体例子：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">a=tf.constant([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],shape=(<span class="number">2</span>,<span class="number">3</span>),dtype=tf.float32)</span><br><span class="line">b=tf.Variable(a)</span><br><span class="line"><span class="keyword">with</span> tf.GradientTape(persistent=<span class="literal">True</span>,watch_accessed_variables=<span class="literal">True</span>) <span class="keyword">as</span> www:</span><br><span class="line">    www.watch(a)</span><br><span class="line">    a2=tf.<span class="built_in">pow</span>(a,<span class="number">3</span>)</span><br><span class="line">    b2=tf.exp(b)</span><br><span class="line">grad_a=www.gradient(a2,a)</span><br><span class="line">grad_b=www.gradient(b2,b)</span><br><span class="line">print(grad_a,grad_b)</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tf.Tensor(</span><br><span class="line">[[  <span class="number">3.</span>  <span class="number">12.</span>  <span class="number">27.</span>]</span><br><span class="line"> [ <span class="number">48.</span>  <span class="number">75.</span> <span class="number">108.</span>]], shape=(<span class="number">2</span>, <span class="number">3</span>), dtype=float32) tf.Tensor(</span><br><span class="line">[[  <span class="number">2.7182817</span>   <span class="number">7.389056</span>   <span class="number">20.085537</span> ]</span><br><span class="line"> [ <span class="number">54.59815</span>   <span class="number">148.41316</span>   <span class="number">403.4288</span>   ]], shape=(<span class="number">2</span>, <span class="number">3</span>), dtype=float32)</span><br></pre></td></tr></table></figure>
+<p>上述将tf.GradientTape的两个属性设为True,是可以连续使用gradient和自动纪录可训练参数的导数，而由于tensor类型不是可训练参数，所以需要手动指定watch来纪录其操作是的导数计算，如果tf.GradientTape的第二个参数设定为False，即使是可训练参数也需要手动进行指定。而www.gradient(A,B)就是从磁盘中提取出A关于B的导数。</p>
+<p>本文参考链接如下：</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/Forrest97/article/details/105913952">with tf.GradientTape() as tape 梯度带 Tensorflow自动求导API</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/xierhacker/article/details/53174558?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-3.control&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-3.control">TensorFlow学习（四）：梯度带(GradientTape)，优化器(Optimizer)和损失函数(losses)</a></p>
+
+          </blockquote>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>]]></content>
+      <tags>
+        <tag>-深度学习 -tensorflow</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>西瓜书--线性模型</title>
+    <url>/2021/08/04/%E8%A5%BF%E7%93%9C%E4%B9%A6-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>西瓜书</category>
+      </categories>
+      <tags>
+        <tag>西瓜书</tag>
+        <tag>线性模型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>漫谈--记于光华楼前</title>
+    <url>/2021/07/30/%E6%BC%AB%E8%B0%88/</url>
+    <content><![CDATA[<p>来上海有一个多月了，却还没好好转过校园，昨日是烟花过后第一个晴日，奥，倒也不能说是晴天，不过总算是不下雨了，难得一个不下雨也不太热的好天气，而最近自己也感觉有点累了，就出了实验室散散心，转了校园一圈，到了光华楼前的草坪处坐了一会，人不多，零零碎碎的几个情侣，还有几个母亲带着小孩在嬉戏，听说开学的时候会有很多人，那一定会是个很壮观的场景吧。</p>
+<a id="more"></a>
+<p>光华楼很高，一楼的电梯可以到达一到十五层，到十五层以上则需要到十五层再转电梯，看到光华楼总能想到双子楼，总感觉两边各一个就像双子一样。</p>
+<p><a href="https://imgtu.com/i/WqlIbT"><img src="https://z3.ax1x.com/2021/07/29/WqlIbT.jpg" alt="WqlIbT.jpg"></a></p>
+<p><a href="https://imgtu.com/i/WqlqPJ"><img src="https://z3.ax1x.com/2021/07/29/WqlqPJ.jpg" alt="WqlqPJ.jpg"></a></p>
+<p>光华楼前面是个草坪，草坪靠近路那还有一堆小花，特地搜了搜，好像叫孔雀草万寿菊啥的，不是很懂，周围的树上会有小吊牌，估计是学校校训或者校歌里的吧，路上偶尔还会有几个保安叔叔经过，可能是在巡逻或者准备下班回家吧。</p>
+<p><a href="https://imgtu.com/i/Wq1AxI"><img src="https://z3.ax1x.com/2021/07/29/Wq1AxI.jpg" alt="Wq1AxI.jpg"></a></p>
+<p><a href="https://imgtu.com/i/Wq1iPH"><img src="https://z3.ax1x.com/2021/07/29/Wq1iPH.jpg" alt="Wq1iPH.jpg"></a></p>
+<p><a href="https://imgtu.com/i/Wq1FGd"><img src="https://z3.ax1x.com/2021/07/29/Wq1FGd.jpg" alt="Wq1FGd.jpg"></a></p>
+<p><a href="https://imgtu.com/i/Wq19aD"><img src="https://z3.ax1x.com/2021/07/29/Wq19aD.jpg" alt="Wq19aD.jpg"></a></p>
+<p>傍晚光华楼前草坪的风真的很大，台风过后，雨后初晴，云儿飘着，风儿吹着，很舒服，在草地上一坐就坐了一个多小时，不过可惜错过了龙队的奥运会，所幸今天此时此刻知道男女单打金银都已既定我们了。</p>
+<p><a href="https://imgtu.com/i/Wq1pVO"><img src="https://z3.ax1x.com/2021/07/29/Wq1pVO.jpg" alt="Wq1pVO.jpg"></a></p>
+<p><a href="https://imgtu.com/i/WqlzqK"><img src="https://z3.ax1x.com/2021/07/29/WqlzqK.jpg" alt="WqlzqK.jpg"></a></p>
+<p><a href="https://imgtu.com/i/Wq1pVO"><img src="https://z3.ax1x.com/2021/07/29/Wq1pVO.jpg" alt="Wq1pVO.jpg"></a></p>
+<p>之前本科时候买的帽子一直没怎么带，室友说有些奇怪，所有就一直闲置了，现在骑车总是嫌风有点大会吹乱头发，就带了起来，大概看了看，感觉倒也不错。</p>
+<p><a href="https://imgtu.com/i/Wq1kRA"><img src="https://z3.ax1x.com/2021/07/29/Wq1kRA.jpg" alt="Wq1kRA.jpg"></a></p>
+<p>今天又来光华楼这，记录了昨天的东西，发现校外的几座大楼金光闪闪的，还有个楼像个魔仙堡似的，可能是个游乐园。</p>
+<p><a href="https://imgtu.com/i/Wq1ZsP"><img src="https://z3.ax1x.com/2021/07/29/Wq1ZsP.jpg" alt="Wq1ZsP.jpg"></a></p>
+<p>七点四十了，可能猫咪也困了，坐在我旁边椅子上睡着了，时候是不早了，该回实验室了，录毕。—-记于光华楼前草坪座椅上</p>
+<p><a href="https://imgtu.com/i/Wq1eqf"><img src="https://z3.ax1x.com/2021/07/29/Wq1eqf.jpg" alt="Wq1eqf.jpg"></a></p>
+<p><a href="https://imgtu.com/i/Wq1nZ8"><img src="https://z3.ax1x.com/2021/07/29/Wq1nZ8.jpg" alt="Wq1nZ8.jpg"></a></p>
+<p><a href="https://imgtu.com/i/Wq1udS"><img src="https://z3.ax1x.com/2021/07/29/Wq1udS.jpg" alt="Wq1udS.jpg"></a></p>
+]]></content>
+      <categories>
+        <category>光华楼</category>
+        <category>邯郸校区</category>
+      </categories>
+      <tags>
+        <tag>光华楼</tag>
+        <tag>漫谈</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于FPGA的无人机目标跟踪系统实现</title>
+    <url>/2021/07/26/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%97%A0%E4%BA%BA%E6%9C%BA%E7%9B%AE%E6%A0%87%E8%B7%9F%E8%B8%AA%E7%B3%BB%E7%BB%9F%E5%AE%9E%E7%8E%B0/</url>
+    <content><![CDATA[<p>这是第三届全国大学生集成电路创新创业大赛中科芯杯的赛题，当时没有找到合适的队友，就选择了一个人参赛，所以队名还起了名字叫一个人的风景，当时准确率是华东赛区本科生组第一名，可惜华东赛区只有三个队伍能够晋级总决赛，那三个队伍是研究生队伍，我是第四，赛区赛就比较倒霉呀，他们三个队伍总决赛的时候分别是杯赛第一名、第二和第四名，这就很坑了。。。</p>
+<a id="more"></a>
+<p>大概说一下赛题流程，中科芯提供了一个上位机，该上位机的功能是将PC端视频路径加载到上位机中，上位机将该视频流以HDMI格式从PC端的HDMI发送出去，FPGA端进行HDMI数据接收，然后进行处理，上位机在发送HDMI视频流的时候，同时会通过串口发送视频第一帧的无人机坐标，包含左上角坐标、w和h，而FPGA则通过第一帧的无人机信息进行追踪后续所有帧的无人机位置，将追踪得到的左上角坐标进行发送返回。由于串口是无握手通信协议，所以还需要设计链路层的通信协议。下面进行详细说明</p>
+<h2 id="一、设计概述"><a href="#一、设计概述" class="headerlink" title="一、设计概述"></a>一、设计概述</h2><h3 id="1-1、硬件选取"><a href="#1-1、硬件选取" class="headerlink" title="1.1、硬件选取"></a>1.1、硬件选取</h3><p>项目设计是基于XLINX ARTIX-7 系列的 FPGA 开发平台（型号：XC7A35T-2FGG484I），用到USB转TTL模块、HDMI接口、USB接口线.</p>
+<h3 id="1-2、项目说明"><a href="#1-2、项目说明" class="headerlink" title="1.2、项目说明"></a>1.2、项目说明</h3><h4 id="1-项目内容"><a href="#1-项目内容" class="headerlink" title="1.项目内容"></a>1.项目内容</h4><p>（一）、针对中科芯提供的旋翼无人机机动测试视频设计基于FPGA的目标跟踪器，实现对视频中无人机目标的稳定连续跟踪，目标跟踪算法必须完全使用FPGA实现。</p>
+<p>（二）、各阶段中科芯均提供若干段比测视频，每段视频均给出目标尺寸w*h和第一帧初始位置坐标x1,y1，用于提供跟踪算法初始化信息。跟踪器测试系统如下图所示，测试设备将受试视频经HDMI接口发送至FPGA开发板，并通过串口接收其跟踪坐标结果。选择将个人计算机作为测试设备，通过下载主办方提供的上位机软件实现上述功能。基于FPGA设计的跟踪器须对每段视频分别进行测试，结果以跟踪结果输出坐标精确度为准。FPGA应选择带HDMI接口芯片的Virtex5、6、7或 Artix-7 系列开发平台进行实现。</p>
+<p><a href="https://imgtu.com/i/W5kaVg"><img src="https://z3.ax1x.com/2021/07/27/W5kaVg.png" alt="W5kaVg.png"></a></p>
+<p>​                                                            图1 输入输出接口配置</p>
+<p>（三）、考虑到程移植便利性，建议采用以下输入输出接口配置：参赛队跟踪器图像输入采用标准HDMI接口，目标初始位置坐标采用RS422异步串口输入，跟踪位置坐标采用同一串口输出。在此介绍一下串口的设置和链路层通信协议：</p>
+<p>串口通信物理层协议：波特率：9600；数据位位数：8位；校验位：无；停止位：有</p>
+<p>链路层通信协议：帧内字节数：8字节；校验码：LRC累加和校验码；位置坐标数据高位在前、高字节在前</p>
+<p>例： 目标初始位置坐标（255，511），长宽均为20 ，则PC发送帧为 AA 00 FF 01     FF 14 14 2F，发送帧的意义如下图：</p>
+<p><a href="https://imgtu.com/i/W5Z40K"><img src="https://z3.ax1x.com/2021/07/27/W5Z40K.png" alt="W5Z40K.png"></a></p>
+<p>跟踪结果位置坐标(255,511)，则FPGA发送帧为 55 00 FF 01 FF 00 00 AC，返回帧的意义如下：</p>
+<p><a href="https://imgtu.com/i/W5Zhm6"><img src="https://z3.ax1x.com/2021/07/27/W5Zhm6.png" alt="W5Zhm6.png"></a></p>
+<h4 id="2-项目指标"><a href="#2-项目指标" class="headerlink" title="2.项目指标"></a>2.项目指标</h4><p>（一）、提供的测试和比赛用视频均为彩色，8bit位深，分辨率为720P@25FPS，视频格式为AVI，视频中无人机目标大小&gt;20*20pixel，时长约30秒。赛题跟踪难度见官网发布的受测视频。</p>
+<p>​                                                                    视频中目标左上角初始位置坐标(x,y)，目标尺寸(w,h)</p>
+<p>​                                                                    视频1为564,305,132,48；视频2为720,312,66,30  </p>
+<p>​                                                                    视频3为820,241,110,44；视频4为592,325,40,20</p>
+<p>（二）、 跟踪器在受试过程中禁止人工干预，但允许跟踪器具备自动参数调整和跟踪丢失后的目标自动重捕功能。</p>
+<p>（三）、 比赛结果按各跟踪精度性能指标进行排名。精度指标衡量方法基于VOT挑战赛的无监督（unsupervised）模式，以全部受测的N帧图像内，算法跟踪结果波门与实际波门平均重合率AO（Average Overlap）描述。</p>
+<script type="math/tex; mode=display">
+AO=\frac{1}{N}\sum^N_{i=1}\frac{S_i}{S}</script><p>其中，S_i表示跟踪结果波门与真实波门重叠面积，S=w*h即目标面积由组织方给,其实就是ground truth的面积。若目标跟踪丢失，则跟踪器在当前帧得分为0。因此，应谨慎设计算法，确保连续跟踪，并视需求加入丢失后重捕机制（在本次设计的算法中，是可以通过阈值来推断是否追踪丢失的）。最终性能将以多段比赛视频测试AO指标累加结果为准，排名则依据AO指标从高到低排列。</p>
+<p><strong>3.总结</strong></p>
+<p>项目设计中，通过上位机发送视频流数据给FPGA，FPGA通过HDMI端口接收数据，进行定位追踪视频中的无人机，通过串口发送给上位机，同时为了显示更加明了，将定位结果通过输出的HDMI接口发送给显示屏，显示屏也同时显示追踪结果.</p>
+<h2 id="二、系统组成及算法讲解"><a href="#二、系统组成及算法讲解" class="headerlink" title="二、系统组成及算法讲解"></a>二、系统组成及算法讲解</h2><h3 id="2-1-系统介绍"><a href="#2-1-系统介绍" class="headerlink" title="2.1 系统介绍"></a>2.1 系统介绍</h3><p>上位机将视频流发送给FPGA，FPGA对视频进行解码转为VGA时序信号和像素信息RGB888，得到RGB888后，将其转到YCBCR色域，然后对其进行灰度化处理，灰度化处理后将灰度像素传送给二值化模块，通过阈值设定对其进行二值化，二值化输出信息传送给sobel边缘提取模块，进行边缘提取，至此图像预处理结束，将预处理输出结果送给追踪模块，追踪模块将生成多个待检测目标窗口，然后与初始帧的无人机目标对比，选出最优窗口作为当前帧的无人机位置。系统框图如图2。<a href="https://imgtu.com/i/W5eBjI"><img src="https://z3.ax1x.com/2021/07/27/W5eBjI.png" alt="W5eBjI.png"></a></p>
+<h3 id="2-2、HDMI-VGA"><a href="#2-2、HDMI-VGA" class="headerlink" title="2.2、HDMI-VGA"></a>2.2、HDMI-VGA</h3><p>待追踪视频由PC端上位机发送，通过扩展显示屏，把电脑布局与缩放调为100%，扩展屏设置为60hz，HDMI与FPGA连接后，FPGA被PC端识别为扩展屏，并向其发送视频流，FPGA接收到HDMI类型的视频流，由于使用的黑金的alinx7035系列FGPA没有硬核解码器解码HDMI视频，所以通过软核进行解码并将其转换成VGA信号，此软核为github开源IP。</p>
+<h3 id="2-3、算法讲解及其仿真结果展示"><a href="#2-3、算法讲解及其仿真结果展示" class="headerlink" title="2.3、算法讲解及其仿真结果展示"></a>2.3、算法讲解及其仿真结果展示</h3><h4 id="2-3-1、图像处理算法模块"><a href="#2-3-1、图像处理算法模块" class="headerlink" title="2.3.1、图像处理算法模块"></a>2.3.1、图像处理算法模块</h4><p>（1）灰度化</p>
+<p>将彩色图像转化为灰度的方法有两种，一个是令 RGB 三个分量的数值相等，输出后便可以得到灰度图像，另一种是转化为 YCbCr 格式，将 Y 分量提取出来，YCbCr 格式中的 Y 分量表示的是图像的亮度和浓度所以只输出 Y 分量，得到的图像就是灰度图像了。我们在这里选择第二种方法实现。</p>
+<p>YCbCr是通过有序的三元组来表示的，三元由Y(Luminance)、Cb(Chrominance-Blue)、和Cr(Chrominance-Red)组成，其中Y表示颜色的明亮度和浓度，而Cb和Cr则分别表示颜色的蓝色浓度偏移量和红色浓度偏移量。人的肉眼对由YCbCr色彩空间编码的视频中的Y分量更敏感，而Cb和Cr的微小变化不会引起视觉上的不同。为了得到灰度图像，要将采集到的彩色图像转化为YCbCr后，将Y分量分别送给R、G、B，即此时R、G、B数值上是一致的，这样便得到了灰度图。灰度化效果如图3和图4。</p>
+<p><a href="https://imgtu.com/i/W5m5Je"><img src="https://z3.ax1x.com/2021/07/27/W5m5Je.png" alt="W5m5Je.png"></a></p>
+<p><a href="https://imgtu.com/i/W5nkwV"><img src="https://z3.ax1x.com/2021/07/27/W5nkwV.png" alt="W5nkwV.png"></a></p>
+<p>FPGA开发板通过HDMI采集到的数据是RGB888的格式，官方给出的转化公式是严格的RGB888转为YCbCr888。</p>
+<p>官方给出的RGB888-&gt;YCbCr888转化公式如下：</p>
+<script type="math/tex; mode=display">
+Y=0.229R+0.587G+0.114B
+\\Cb=0.568(B-Y)+128
+\\Cr=0.713(R-Y)+128</script><p>由于FPGA无法实现浮点数运算，所以需要把系数变为整数，我们不妨将Y、Cb和Cr都扩大1024倍，然后所有系数取整，那么变成如下公式：</p>
+<script type="math/tex; mode=display">
+Y=306R+601G+116B
+\\Cb=-176R-347G+523B+131072
+\\Cr=523R-438G-85B+131072</script><p>这样便可以得到整型的运算，最后得到的结果右移10位即可，但为了时序的科学严谨性，我们不应该一次在always块中算出Y、Cb、Cr，因为一个关系式中涉及到三次乘法和两次加法，越多的运算量就越可能导致时序延时错乱，此处或许不会有问题，但不在一个块中用太复杂的运算式是一种好的习惯，我们应该选择业界普遍使用的流水线做法，将乘法在一个always块里实现，在另一个always块中实现加法。</p>
+<p>（2）二值化</p>
+<p> 在灰度化后，进行二值化操作，二值化操作即是设定一个阈值，当灰度值大于该阈值是赋值为1，小于该值是赋值为0，二值化效果如图5和图6。阈值确定较为经典的算法是大津算法（OTSU），大津算法可以使得前景与背景图像的类间方差最大，它被认为是图像分割中阈值选取的最佳算法，计算简单，不受图像亮度和对比度的影响，但其需要一帧数据得到阈值确定，即追踪会造成一帧延迟，所以此处未使用大津算法而是使用的是测试的相对较好的固定阈值，在后续完善中可以考虑运用一帧的部分数据求大津阈值，使其不造成一帧的延迟。</p>
+<p>原图和二值化图片如下：</p>
+<p><a href="https://imgtu.com/i/W5Qlge"><img src="https://z3.ax1x.com/2021/07/27/W5Qlge.png" alt="W5Qlge.png"></a></p>
+<p><a href="https://imgtu.com/i/W5Q0gg"><img src="https://z3.ax1x.com/2021/07/27/W5Q0gg.png" alt="W5Q0gg.png"></a></p>
+<p>（4）、Sobel边缘化</p>
+<p>二值化会使得前景和背景相区分，但是目标所处地位可能和背景相交换，为了在这种结果发生时依旧可以进行正常追踪，此步我们进行Sobel算子边缘化提取，从而提高后续的追踪算法的稳定性。</p>
+<p>Sobel边缘检测的核心在于像素矩阵的卷积，卷积对于数字图像处理非常重要，很多图像处理算法都是做卷积来实现的。卷积运算的本质就是对制定的图像区域的像素值进行加权求和的过程，其计算过程为图像区域中的每个像素值分别与卷积模板的每个元素对应相乘，将卷积的结果作求和运算，运算到的和就是卷积运算的结果。</p>
+<p>3×3的窗口M与卷积模板C 的卷积运算如下：</p>
+<script type="math/tex; mode=display">
+M= \left[
+ \begin{matrix}
+   M1 & M2 & M3 \\
+   M4 & M5 & M6 \\
+   M7 & M8 & M9
+  \end{matrix}
+  \right] \ \ \ \ \ \ \ \
+  C= \left[
+ \begin{matrix}
+   C1 & C2 & C3 \\
+   C4 & C5 & C6 \\
+   C7 & C8 & C9
+  \end{matrix}
+  \right]
+  \\M5'=M1*C1+M2*C2+M3*C3+M4*C4+M5*C5+\\M6*C6+M7*C7+M8*C8+M9*C9</script><p>G_x和G_y是图像边缘梯度，将两个因子和原始图像做如下卷积得到边缘梯度，其中A表示原视图像。</p>
+<script type="math/tex; mode=display">
+G_x=\left[
+ \begin{matrix}
+   -1 & 0 & +1 \\
+   -2 & 0 & +2 \\
+   -1 & 0 & +1
+  \end{matrix}
+  \right] *A\ \ \ \ \ \ \
+  G_y=\left[
+ \begin{matrix}
+   -1 & -2 & -1 \\
+   0  & 0  & 0 \\
+   +1 & +2 & +1
+  \end{matrix}
+  \right] *A</script><p>得到图像中的每一个点的横向纵向梯度G_x、G_y。最后通过如下公式来计算该点总体梯度的大小。</p>
+<script type="math/tex; mode=display">
+G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该如果算出的G大于设定的阈值，那么认为此处是边缘处，使其为黑色，否则认为不是边缘，使其为白色。</p>
+<p>上述是算法原理，很显然，这里用到了3<em>3矩阵，对于matlab来说，获取是比较简单的，但是FPGA实现时，我们需要考虑如何得到这个3</em>3的矩阵，因为FPGA扫描像素点是一个一个进行的。在 FPGA 中生成 3x3 矩阵有以下三种方法：</p>
+<p>（1） 通过 2 个或者 3 个 RAM 的存储来实现 3X3 像素窗口；</p>
+<p>（2） 通过 2 个或者 3 个 FIFO 的存储来实现 3X3 像素窗口；</p>
+<p>（3） 通过 2 行或者 3 行 Shift_RAM 的存储来实现 3X3 像素窗口；</p>
+<p>在此我们选用shift ram进行获取矩阵,shift ram是一个移位存储ram,这个 IP 支持一个时钟周期移位一个或多个 bit 的数据，位宽是可以设置的。下面图7和图8是 shift_ram 的移位示意图及仿真图:</p>
+<p><a href="https://imgtu.com/i/W56U3D"><img src="https://z3.ax1x.com/2021/07/27/W56U3D.png" alt="W56U3D.png"></a></p>
+<p><a href="https://imgtu.com/i/W56sEt"><img src="https://z3.ax1x.com/2021/07/27/W56sEt.png" alt="W56sEt.png"></a></p>
+<p>如上图顺序可以容易看出，shift_ram 的工作方式是移位存储，后一个数据将前一个数据往前推，当填满一行的时候，跳到下一行再继续移位存储，相应的第一行的数据填满之后，会填上矩阵的第一行的数据，操作是同时的，如果进行均值滤波的话显然这样目标像素会是 0，以此类推，第二行移位存储完成，刚开始第一行的每一个像素点是目标像素，但是第三行还没有数据，所以第一行的目标像素滤波后显然是不准确的，等到把第三行数据填满后，进行原本第二行的滤波，这时目标像素周围均有数据，所以均值滤波会使图像的边缘不清楚。这是将每一行的宽度设置成 3，如果将宽度设置为 640,800 等分辨率的宽度，那么生成 3x3 矩阵就十分方便。同样的还可以生成 5x5、7x7 等矩阵用于图像处理的算法研究。</p>
+<p>Xilinx Vivado 有自己的 Shift_RAM IP Core，不过这里只能缓存出来一行数据，我们这里需要多个 Shift_RAM IP Core。此外720p视频流一行有像素1280个数据，考虑到shift ram深度不能大于1024，所以我们用两个640深度的shift ram组成一个1280深度的shift ram，那么我们需要四个这样的IP核，进行循环移位得到3*3的矩阵，然后进行sobel边缘提取。边缘提取结果如图9和图10</p>
+<p><a href="https://imgtu.com/i/W56bCT"><img src="https://z3.ax1x.com/2021/07/27/W56bCT.md.png" alt="W56bCT.md.png"></a></p>
+<p><a href="https://imgtu.com/i/W56xbR"><img src="https://z3.ax1x.com/2021/07/27/W56xbR.png" alt="W56xbR.png"></a></p>
+<p>（4）追踪算法</p>
+<p>  在得到边缘化的数据后，将第一帧的目标数据进行保存，在后续的帧数据传来时，我们选择开窗操作，根据上一帧的定位结果，我们在此帧附近进行开窗，窗口不能太小，否则会丢失目标，在此处，我们选用的是上一帧结果往四周扩展40个像素点进行开窗，在此窗口内，从窗口左上角进行平移获取与目标大小一致的待检测矩阵，获得待检测矩阵后，为了防止周围背景的影响导致误判，需要将待检测矩阵与目标矩阵进行相与操作，相与操作后，对该二值矩阵进行简单求和，得到的结果与目标矩阵和进行对比，当结果最相近时，该待检测矩阵即是该帧的目标位置。下述描述FPGA对该算法的实现的主要模块</p>
+<p>1、矩阵生成模块：</p>
+<p>在1280*720的图片中，我们由上一帧定位结果判断下一帧的范围，即进行开窗，在此窗口内进行进行追踪定位，我们选取的窗口是212<em>128的窗口，在此窗口内，不断生成132\</em>48的待检测矩阵(无人机大小小于132*48时，进行w和h扩充为132*48).如下图</p>
+<p><a href="https://imgtu.com/i/W5cuIP"><img src="https://z3.ax1x.com/2021/07/27/W5cuIP.md.png" alt="W5cuIP.md.png"></a></p>
+<p>黄色边框代表一帧大小，红色框是选取的开窗大小，黑色框是需生成的待检测矩阵，待检测矩阵就是一个待检测的无人机目标.</p>
+<p>由于1280*720图片过大，仿真长度过大，所以验证的时候是使用的一帧6*4，开窗大小是4*4，位于一帧中间位置，生成待检测矩阵是3*3.仿真图如图</p>
+<p><a href="https://imgtu.com/i/W5c2Ix"><img src="https://z3.ax1x.com/2021/07/27/W5c2Ix.png" alt="W5c2Ix.png"></a></p>
+<p>如上图仿真图所示，post_martix_clken代表矩阵有效信号，martix_p1共三bit，代表矩阵第一行的3个数据，martix_p2和martix_p3分别代表第二行和第三行，x和y代表此时矩阵左上角在窗口中的坐标(窗口左上角坐标记为(1,1))，sobel_data代表窗内信号，per_martix_clken代表sobel_data有效。仿真输入的窗口信号第一行的四个数据是：1010；第二行是：0101；第三行是：1010；第四行是0101。在进行仿真时，在4*4的窗口内，可以生成4个完整的矩阵，从仿真中可见共四个clk内有效。在四个使能有效时，对应的3*3矩阵是完全正确的，对应的(x,y)坐标是(1,1)，(1,2)，(2,1)，(2,2)与矩阵符合.</p>
+<p>2、sum_h的仿真：如下图</p>
+<p><a href="https://imgtu.com/i/W5g1Fx"><img src="https://z3.ax1x.com/2021/07/27/W5g1Fx.png" alt="W5g1Fx.png"></a></p>
+<p>per_martix1_clken是输入数据的有效信号,如上图,在天蓝色处有两个clk的有效时钟,对应的输入是132’habc3d2e1f0和132’h167cccee55ff,对应的二进制分别是：1010101111000011110100101110000111110000和101100111110011001100 1110111001010101111111 11,含有1的个数分别是21和30.post_martix1_clken是输出结果的有效信号,如上图,在post_martix1_clken为1的时候，说明输出有效,此时输出是0x15和0x1e,十进制就是21和30.可以看出,求1个数的流水线处理模块结果正确.</p>
+<p>3、上述模块是对待检测窗口行求和,下述sum模块是对返回的48行值进行累和sum模块的仿真：如下图</p>
+<p><a href="https://imgtu.com/i/W5gW0s"><img src="https://z3.ax1x.com/2021/07/27/W5gW0s.png" alt="W5gW0s.png"></a></p>
+<p>如图上图,per_martix1_clken是输入数据有效信号,sum代表待检测窗的累和,post_sum_clken代表输出累和数据的有效信号，如上图，仿真是给予的48行数据分别都是132’d1和132’d3,可以知道一行数据经过sum_h模块输出后分别是1和2，则48行累和分别是48和96，如上图仿真所示，在输出有效信号为1时，对应的结果分别是0x30和0x60即48和96，可以看出sum模块的流水线处理是没有问题的。</p>
+<p>4、比较输出模块：如图</p>
+<p>在比较模块中，sum是sum模块流水线输出的待检测窗口值，sum0是初始帧目标值，将两者对比，x和y是与sum对应的此时在大窗口中的坐标，x_current_frame和y_current_frame是此时帧定位的窗口坐标，若sum越接近sum0，则更新当前帧的坐标x_current_frame和y_current_frame为x和y，仿真图如上，设定的sum0是100，流水线输入sum值是0x2c，0x96,0x46,0x2h和0x5c，最终x_current_frame和y_current_frame更新为1和5，正常输出。</p>
+<p>上述即是追踪算法的大致思想，适合FPGA的逻辑实现，其追踪性能很好，下面我们看一下追踪效果.</p>
+<h2 id="三、追踪情况及性能参数"><a href="#三、追踪情况及性能参数" class="headerlink" title="三、追踪情况及性能参数"></a>三、追踪情况及性能参数</h2><h3 id="3-1、matlab追踪视频展示"><a href="#3-1、matlab追踪视频展示" class="headerlink" title="3.1、matlab追踪视频展示"></a>3.1、matlab追踪视频展示</h3><p>视频一追踪演示：<a href="https://www.bilibili.com/video/BV1mz4y197h1">视频一追踪演示</a></p>
+<p>视频二追踪演示：<a href="https://www.bilibili.com/video/BV15i4y1x74k">视频二追踪演示</a></p>
+<p>视频三追踪演示：<a href="https://www.bilibili.com/video/BV1yV411r7tn">视频三追踪演示</a></p>
+<p>视频四追踪演示：<a href="https://www.bilibili.com/video/BV1pa4y1v7h5">视频四追踪演示</a></p>
+<h3 id="3-2、matlab追踪AO值展示-四个AO值图展示如下图"><a href="#3-2、matlab追踪AO值展示-四个AO值图展示如下图" class="headerlink" title="3.2、matlab追踪AO值展示:四个AO值图展示如下图"></a>3.2、matlab追踪AO值展示:四个AO值图展示如下图</h3><p><a href="https://imgtu.com/i/W5Rdit"><img src="https://z3.ax1x.com/2021/07/27/W5Rdit.png" alt="W5Rdit.png"></a></p>
+<p><a href="https://imgtu.com/i/W5Rssg"><img src="https://z3.ax1x.com/2021/07/27/W5Rssg.png" alt="W5Rssg.png"></a></p>
+<p><a href="https://imgtu.com/i/W5RIQU"><img src="https://z3.ax1x.com/2021/07/27/W5RIQU.png" alt="W5RIQU.png"></a></p>
+<p><a href="https://imgtu.com/i/W5ROF1"><img src="https://z3.ax1x.com/2021/07/27/W5ROF1.png" alt="W5ROF1.png"></a></p>
+<p>四个视频追踪的平均AO值如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>视频一</th>
+<th>视频二</th>
+<th>视频三</th>
+<th>视频四</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>平均AO值</td>
+<td>99.45%</td>
+<td>98.18%</td>
+<td>99.20%</td>
+<td>99.04%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>从结果上看，全程没有追丢的情况发生，平均AO值全部达到98%以上。</p>
+<p>3.3、FPGA板级验证：板级验证图如下图</p>
+<p><a href="https://imgtu.com/i/W5W4AA"><img src="https://z3.ax1x.com/2021/07/27/W5W4AA.png" alt="W5W4AA.png"></a></p>
+<p><a href="https://imgtu.com/i/W5WIht"><img src="https://z3.ax1x.com/2021/07/27/W5WIht.png" alt="W5WIht.png"></a></p>
+<p>至此差不多结束了，具体上位机软件等可以从集创赛官网找，往届题目应该会有保存。</p>
+]]></content>
+      <categories>
+        <category>FPGA</category>
+      </categories>
+      <tags>
+        <tag>FPGA</tag>
       </tags>
   </entry>
   <entry>
@@ -1498,8 +997,11 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
 <p>105、array[0,…]的三个省略号代表所有维度</p>
 <p>106、range(start,end,stride)</p>
 <p>只写一个数，默认start为0，stride为1</p>
+<p><strong>107、图像存储问题</strong></p>
+<p><strong>用minist数据集的时候，读入的图片都是1*32*32的，直接变成32<em>32的话，然后imshow(),或者imshow(img,cmap=’gray_r’)都是没有问题的，minist的像素数据很奇特，其中有负数，如果直接将该32\</em>32的数据保存，得到的是一个近乎全黑的图(测试了一下，那些保存的时候都是简单的进行取整，然后保存，然而minist的数据很多负数，其他正数也很小，也就3这样，255才是白色，3可以认为是黑色了)，但是为什么imshow却没问题呢，应该是imshow显示的时候，将负数默认为0了，然后最大值缩放到255，其他等比例放大(或者是总体加上了一个正数，使得最小的负数加上后恰好为0，然后等比例放缩)，所以观测没问题，但是那些PIL等等函数保存成jpg却成了黑图的原因(PIL这些图看来是保存的时候简单取整，读入的时候却会自动缩放为0-255)。那么我们保存的时候，先将负数变为0，然后等比例放大。img*(img&gt;0))*255/np.max(img),这样即可，值得注意的是，np中的sum和max无论输入多少维度的，得到的只有一个值。</strong></p>
 <p>注：array都代表np变量，即np.array();tensor都代表tensor变量，即torch.Tensor</p>
 <p>np里面习惯用axis，比如array.max函数，split（array,下标的list or 等分，dim）函数。split没有array.split格式。np中有很多都没有array.函数的格式，比如array.append(array)就不可以，得np.append(array1,array2)，而list却是可以的。</p>
+<p><strong>np中的sum和max无论输入多少维度的，得到的只有一个值。</strong></p>
 <p>而torch中喜欢用dim</p>
 <p>函数+？可以得到函数介绍，比如torch.stack?，记得函数后面不要加括号。</p>
 <p>verilog中负数不能比较大小，坑爹呀</p>
@@ -1580,6 +1082,507 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
         <tag>CNN</tag>
         <tag>深度学习</tag>
         <tag>目标追踪</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python之魔法函数</title>
+    <url>/2021/07/20/Python%E4%B9%8B%E9%AD%94%E6%B3%95%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<p>Python是一个很类似于matlab的语言，都是一种高层解释型语言，区别于C、C++，C、C++则是编译通过后才执行(说明语法都没有错误)，Python执行之前不需要编译链接，直接是一行行执行，将除了缩进的语言都执行一遍，为了防止在读入包/模块时候出现代码执行，出现了__name__的魔法函数，也是Python的一种内置属性，除了__name__，在读faster rcnn的torch源码时候，也会频繁遇到__call__()、 __ len__()、__ init__() 、__ getitem__()等一类魔法函数，特地去搜了搜，网上讲的很好，链接如下:</p>
+<a id="more"></a>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.zhihu.com/question/49136398">if <strong>name</strong> == ‘<strong>main</strong>‘ 如何正确理解? - 知乎 (zhihu.com)</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://zhuanlan.zhihu.com/p/344951719">Python：实例讲解Python中的魔法函数（高级语法） - 知乎 (zhihu.com)</a></p>
+
+          </blockquote>
+<p>由于上述链接讲的都很完备，下面只进行简单的总结一下。                            </p>
+<h3 id="name"><a href="#name" class="headerlink" title="__name__"></a>__name__</h3><p>大概说一下__name__吧，其本质就是Python的一个内置属性，当自己作为主文件执行时，__name__是”__main__“,而当作为模块时，则__name__就是模块名，自己也特地测试了一个，图如下，其中Write_coe是我将Python参数存储为FPGA的RAM文件格式写的自定义模块函数。</p>
+<p><a href="https://imgtu.com/i/WYpEdg"><img src="https://z3.ax1x.com/2021/07/19/WYpEdg.png" alt="WYpEdg.png"></a></p>
+<h2 id="魔法函数"><a href="#魔法函数" class="headerlink" title="魔法函数"></a>魔法函数</h2><p>魔法函数是类中的可重写的方法，有助于更灵活方便的使用类。</p>
+<h3 id="1、字符串表示：-str-和-repr-的区别"><a href="#1、字符串表示：-str-和-repr-的区别" class="headerlink" title="1、字符串表示：__str__和__repr__的区别"></a>1、<strong>字符串表示：</strong>__str__和__repr__的区别</h3><p>在Python类中，这两个方法的区别主要如下：</p>
+<p>print类的时候，首先找__str__方法，若__str__方法未进行重写，则调用__repr__(或者可以说__str__未重写的时候，初始定义和__repr__一样的)</p>
+<p>而在交互式窗口直接打实例化类的时候，则调用__repr__方法，其本质就是打印一个str字符串：类名+object at+内存地址。当然__repr__也可以重写。</p>
+<h3 id="2、集合、序列相关："><a href="#2、集合、序列相关：" class="headerlink" title="2、集合、序列相关："></a>2、集合、序列相关：</h3><h4 id="2-1、-len"><a href="#2-1、-len" class="headerlink" title="2.1、__len__"></a>2.1、__len__</h4><p>在使用len(某个class)  ，而len的函数本质是将该class作为参数传入，然后调用的是类自身的__len__方法。</p>
+<h4 id="2-2、-getitem"><a href="#2-2、-getitem" class="headerlink" title="2.2、__getitem__"></a>2.2、__getitem__</h4><div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>]]></content>
+      <categories>
+        <category>Python</category>
+        <category>魔法函数</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+        <tag>魔法函数</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于FPGA的手势识别系统设计</title>
+    <url>/2021/07/09/%E5%9F%BA%E4%BA%8EFPGA%E7%9A%84%E6%89%8B%E5%8A%BF%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/</url>
+    <content><![CDATA[<p>​        之前做图像处理的时候，也没有涉及过太多的深度学习，所以都是用传统算法做的，这个是本科期间做的大创（感谢陈老师帮该项目申请成了省级大创），其实不能说做的多好，因为真的发现图像处理领域很多传统算法被深度学习吊锤，而且现在FPGA加速器有崛起的势头，但是我们还是要惊羡于那些数学家的美妙构思（数学真是最美妙的学科），不多扯了，进入正题。</p>
+<a id="more"></a>
+<p>注:这里没有提到待卷积窗口的生成(3*3 or 5*5的)，大家可以参考这篇文章</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.cnblogs.com/ninghechuan/p/6789399.html">深刻认识shift_ram IP core</a></p>
+
+          </blockquote>
+<p>以后有时间会在加速器设计里讲如何生成待卷积窗口，最近有点忙。。。</p>
+<p>2.1 系统介绍<br>该项目通过FPGA驱动摄像头ov7725,通过配置寄存器使得ov7725采集到RGB565格式的数据，由于摄像头工作频率和FPGA工作频率不匹配，所以先存入ram中然后再由FPGA读出摄像头数据，为了进行图像分割，去掉除了手势以外的其他部分，我们对其进行了色域转换，将RGB565格式转为YCBCR格式，通过控制CBCR域值进行提取肤色。然后，滤除图像中的杂波,我们进行分别进行了两次腐蚀操作和两次膨胀操作，为了提高后续识别算法的鲁棒性，我们对其进行了sobel算子边缘化提取，最后，我们通过hu不变矩算法进行识别手势。其系统框图如下<a href="https://imgtu.com/i/RjL0gg"><img src="https://z3.ax1x.com/2021/07/09/RjL0gg.png" alt="RjL0gg.png"></a></p>
+<p>2.3图像处理算法模块</p>
+<p>此块详细描述</p>
+<p>（1）肤色提取</p>
+<p>为了进行肤色提取，我们需要先将RGB565格式转为YCbCr域进行识别。</p>
+<p>YCbCr是通过有序的三元组来表示的，三元由Y(Luminance)、Cb(Chrominance-Blue)、和Cr(Chrominance-Red)组成，其中Y表示颜色的明亮度和浓度，而Cb和Cr则分别表示颜色的蓝色浓度偏移量和红色浓度偏移量。人的肉眼对由YCbCr色彩空间编码的视频中的Y分量更敏感，而Cb和Cr的微小变化不会引起视觉上的不同，根据该原理，通过对Cb和Cr进行子采样来减小图像的数据量，使得图像对存储需求和传输带宽的要求大大降低，从而达到在完成图像压缩的同时也保证了视觉上几乎没有损失的效果，进而使得图像的输出速度更快，存储更加方便。值得一提的是，如果需要得到灰度图像的话，要将采集到的彩色图像转化为YCbCr后，将Y分量分别送给VGA的R、G、B，即此时R、G、B数值上是一致的(其实由于位数原因会不一致，比如RGB565，G是6位而此时RB只有5位)，这样便得到了灰度图，此处我们没有用到灰度图，所以不需要Y分量，但下述算法依旧会一并提及。</p>
+<p>我们配置摄像头采集到的数据是RGB565的格式，官方给出的转化公式是严格的RGB888转为YCbCr888，所以先需要将RGB565转化为RGB888，这个时候我们又遇到了一个有意思的问题，平时像素数据一般RGB565，但很多FPGA开发板支持的VGA不是RGB565的，EGO1就是RGB444的，那么如何将RGB565变为RGB444呢？又如何将RGB565变为RGB888？此处便提到了压缩和量化补偿思想。</p>
+<p>对于压缩，主要是一个思维：取高位。如果是RGB565格式想变成RGB444，那么再FPGA中always块只要如下三句即可：</p>
+<script type="math/tex; mode=display">
+R1<=R[4:1];
+            G1<=G[5:2];                                                                            B1<=B[4:1];</script><p>即分别取了原像素点RGB的高四位作为RGB444。</p>
+<p>  对于量化补偿，是用在扩充位数的时候用的，比如此处需要的RGB888。以RGB565转RGB888为例。   </p>
+<p>16bit RGB565 -&gt; 24bit RGB888的转换（高位补低位）</p>
+<p>16bit RGB565：</p>
+<script type="math/tex; mode=display">
+\\{R4 R3 R2 R1 R0} 
+
+\\{G5 G4 G3 G2 G1 G0}
+
+\\{B4 B3 B2 B1 B0}</script><p>24bit RGB888:</p>
+<script type="math/tex; mode=display">
+\\{ R4 R3 R2 R1 R0 R2 R1 R0}
+
+\\{ G5 G4 G3 G2 G1 G0 G1 G0}
+
+\\{ B4 B3 B2 B1 B0 B2 B1 B0}</script><p>官方给出的RGB888-&gt;YCbCr888转化公式如下：</p>
+<script type="math/tex; mode=display">
+Y=0.229R+0.587G+0.114B
+\\Cb=0.568(B-Y)+128
+\\Cr=0.713(R-Y)+128</script><p>由于FPGA无法实现浮点数运算，所以需要把系数变为整数，我们不妨将Y、Cb和Cr都扩大1024倍，然后所有系数取整，那么变成如下公式：</p>
+<p>Y=306R+601G+116B</p>
+<p>Cb=-176R-347G+523B+131072</p>
+<p>Cr=523R-438G-85B+131072</p>
+<p>这样便可以得到整型的运算，最后得到的结果右移10位即可，但为了时序的科学严谨性，我们不应该一次在always块中算出Y、Cb、Cr，因为一个关系式中涉及到三次乘法和两次加法，越多的运算量就越可能导致时序延时错乱，此处或许不会有问题，但不在一个块中用太复杂的运算式是一种好的习惯，我们应该选择业界普遍使用的流水线做法，将乘法在一个always块里实现，在另一个always块中实现加法。</p>
+<p>在转换为YCBCR后，通过限制CBCR阈值，可以提取出肤色，在FPGA中设定的初始值肤色范围为：</p>
+<script type="math/tex; mode=display">
+77<Cb<127
+\\133<Cr<173</script><p>这是一个经典的人的肤色阈值，但是为了个别人肤色差别需要调节，FPGA上给出了调节按键。最终在该范围内的像素使其为黑色，否则为白色，那么VGA上只显示出一只手。</p>
+<p>(2)腐蚀</p>
+<p>腐蚀是一种消除边界点，使边界向内部收缩的过程，可以用来消除小且无意义的物体。由于在第一步手势提取的可能出现杂波，那么为了消除这些小黑点杂波，我们进行两次腐蚀算法便可以将其消除。</p>
+<p>简单来说，腐蚀操作需要用3×3的结构元素，扫描图像的每一个像素点，用结构元素与其覆盖的二值图像做“与”操作，如果全为1，结果图像的该像素是1，否则为0。结果会使二值图像小一圈，消除像素杂波。算法原理如下：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+   P1 &= & P11 & \& & P12 & \& & P13 \\
+   P2 &= & P21 & \& & P22 & \& & P23 \\
+   P3 &= & P31 & \& & P32 & \& & P33 \\
+   P &= & P1 & \& & P2 & \& & P3 \\
+  \end{matrix}\tag{2.4}</script><p>从原理上来说，其是比较简单的，但是FPGA实现时，我们需要考虑如何得到这个3<em>3的矩阵，因为FPGA扫描像素点是一个一个进行的，一行有640个数据，如何得到三行中的三个数据呢？这个时候我们需要用到FPGA中shift ram IP核，可以说这个IP核是为了构建矩阵量身定制，其是一个只有一行的循环移位的IP核，那么我们需要两个这样的IP核，进行循环移位得到3</em>3的矩阵，然后进行腐蚀滤波。</p>
+<p>（3）膨胀</p>
+<p>膨胀与腐蚀效果相反，是将与物体接触的所有背景点合并到该物体中，使边界向外部扩张的过程，由于在腐蚀的时候，是为了消除杂波，但不可避免的减小了有效的手势区域，那么我们如何来恢复被消除的手势区域，那么此时便用到了膨胀算法。</p>
+<p>膨胀算法思维核腐蚀思维类似，都需要构建3*3的矩阵，用3×3的结构元素，扫描图像的每一个像素点，用结构元素与其覆盖的二值图像做“或”操作，如果全为0，结果图像的该像素是0，否则为1。结果会使二值图像扩大一圈。算法原理如下：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+   P1 &= & P11 & | & P12 & | & P13 \\
+   P2 &= & P21 & | & P22 & | & P23 \\
+   P3 &= & P31 & | & P32 & | & P33 \\
+   P &= & P1 & | & P2 & | & P3 \\
+  \end{matrix}\tag{2.4}</script><p>在其实现过程中，依旧需要shift ram IP核，然后得到3*3矩阵，然后用流水线法实现膨胀操作，恢复手势区域。</p>
+<p><strong>（4）Sobel边缘化</strong></p>
+<p> 此步我们进行Sobel算子边缘化提取，为什么进行Sobel化呢？Sobel化边缘提取可以提取出手势的边缘而不是整只手，这样是为了提高后续的hu不变矩识别算法的稳定性。</p>
+<p>Sobel边缘检测的核心在于像素矩阵的卷积，卷积对于数字图像处理非常重要，很多图像处理算法都是做卷积来实现的。卷积运算的本质就是对制定的图像区域的像素值进行加权求和的过程，其计算过程为图像区域中的每个像素值分别与卷积模板的每个元素对应相乘，将卷积的结果作求和运算，运算到的和就是卷积运算的结果。</p>
+<p>3×3的窗口M与卷积模板C 的卷积运算如下：</p>
+<script type="math/tex; mode=display">
+M= \left[
+ \begin{matrix}
+   M1 & M2 & M3 \\
+   M4 & M5 & M6 \\
+   M7 & M8 & M9
+  \end{matrix}
+  \right] \tag{2.4}\ \ \ \ \ \ \ \
+  C= \left[
+ \begin{matrix}
+   C1 & C2 & C3 \\
+   C4 & C5 & C6 \\
+   C7 & C8 & C9
+  \end{matrix}
+  \right]
+  \\M5'=M1*C1+M2*C2+M3*C3+M4*C4+M5*C5+\\M6*C6+M7*C7+M8*C8+M9*C9</script><p>G_x和G_y是Sobel的卷积因子，将这两个因子和原始图像做如下卷积，其中A表示原视图像。</p>
+<script type="math/tex; mode=display">
+G_x=\left[
+ \begin{matrix}
+   M1 & M2 & M3 \\
+   M4 & M5 & M6 \\
+   M7 & M8 & M9
+  \end{matrix}
+  \right] *A\tag{2.4}\ \ \ \ \ \ \
+  G_y=\left[
+ \begin{matrix}
+   M1 & M2 & M3 \\
+   M4 & M5 & M6 \\
+   M7 & M8 & M9
+  \end{matrix}
+  \right] *A</script><p>得到图像中的每一个点的横向纵向梯度G_x、G_y。最后通过如下公式来计算该点总体梯度的大小。</p>
+<script type="math/tex; mode=display">
+G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该如果算出的G大于设定的阈值，那么认为此处是边缘处，使其为黑色，否则认为不是边缘，使其为白色。</p>
+<p>上述是算法原理，很显然，这里也用到了3*3矩阵，那么又需要shift ram IP核，所以如果需要学习图像滤波等处理，shift ram需要熟练掌握。</p>
+<p><strong>（5）手势识别算法：Hu不变矩</strong></p>
+<p>对于一个提取出来的手势，我们需要有固定且唯一的特征来对其进行记录，且该特征不会受到手势的大小，旋转，平移而变化，且鲁棒性较好，所以此处引入hu不变矩算法，下面进行原理介绍:</p>
+<p>1、普通矩（也叫p+q阶不变矩），和p+q中心矩的定义</p>
+<p>对于像素分布为f(x,y)的图像，其(p+q)阶矩定义为：</p>
+<script type="math/tex; mode=display">
+m_{pq}=\int\int{x^py^qf(x,y)dxdy}\tag{5.1}</script><p>(p+q)阶中心矩定义为：</p>
+<script type="math/tex; mode=display">
+\mu_{pq}=\int\int{(x-x_0)^p(y-y_0)^qf(x,y)dxdy}\tag{5.2}</script><p>其中矩心(x_0,y_0)为：</p>
+<script type="math/tex; mode=display">
+x_0=\frac{m_{10}}{m_{00}}\ \ \ \ \ \ y_0=\frac{m_{01}}{m_{00}}</script><p>上述都是在连续量上引出的，但是FPGA只能存储离散量，得到的是离散的320<em> 240或者640 </em> 480的离散图像，那么下面引入适用于离散图像的hu不变矩：</p>
+<p>对于数字图像，离散化得到，公式如下：</p>
+<script type="math/tex; mode=display">
+m_{pq}=\sum^M_{x=1}\sum^N_{y=1}x^py^qf(x,y)</script><p>式中p、q=0，1，2….</p>
+<p>直接用普通矩或中心矩进行特征表示，不能使特征同时具有平移、旋转和比例不变性，所以我们下面进行归一化使得手势平移、旋转核比例不变性。</p>
+<p>2.归一化中心矩定义</p>
+<p>当图像发生变化时，m_pq也发生变化，而\mu_pq则具有平移不变性但对旋转依然敏感。</p>
+<p>归一化中心矩：</p>
+<script type="math/tex; mode=display">
+y_{pq}=\frac{\mu_{pq}}{\mu^r_{00}}\\
+其中r=\frac{p+q+2}{2},p+q=2,3...</script><p>如果利用归一化中心矩,则特征不仅具有平移不变性，而且还具有比例不变性。</p>
+<p>至此我们得到了最终可以应用的不变矩，为了说明其又平移、寻转、放缩不变性，下面我们进行对各个性质进行证明：</p>
+<p>（1）中心矩对于f(x,y)的平移具有不变性：</p>
+<p>假如新的坐标(x’,y’)</p>
+<script type="math/tex; mode=display">
+x'=x+\alpha\\
+y'=y+\beta</script><p>其中alpha和beta是常数，通过简单的变量代换，可以发现最终的常数会消去，得到f(x,y)和f(x’,y’)的中心矩是相同的。</p>
+<p>（2）中心矩对于缩放具有不变性：</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+   x' \\
+   y'
+  \end{matrix}
+  \right]
+  = 
+  \left[
+ \begin{matrix}
+   \alpha & 0\\
+   0 & \alpha  
+  \end{matrix}
+  \right] *
+  \left[
+ \begin{matrix}
+   x \\
+   y
+  \end{matrix}
+  \right] \tag{2.4}</script><p>alpha是个常数，(x’,y’)可以看作是(x,y)分别乘以系数alpha得到，对于每一个alpha系数有公式</p>
+<script type="math/tex; mode=display">
+a'_{pq}=\alpha^{p+q}a_{pq}</script><p>因为alpha是个常数，那么变换前后的中心矩有这样的关系：</p>
+<script type="math/tex; mode=display">
+\mu'_{pq}=\alpha^{p+q+2}\mu_{pq}</script><p>最后可以得到：</p>
+<script type="math/tex; mode=display">
+\frac{\mu'_{pq}}{(\mu')^{\frac{p+q}{2}}+1}=\frac{\mu_{pq}}{\mu^{\frac{p+q}{2}}+1}</script><p>式中p+q=2,3…</p>
+<p>这也可以称为相似不变矩性。</p>
+<p>（3）中心矩对于旋转具有不变性：</p>
+<script type="math/tex; mode=display">
+\left[
+ \begin{matrix}
+   x' \\
+   y'
+  \end{matrix}
+  \right]
+  = 
+  \left[
+ \begin{matrix}
+   cos\theta & sin\theta \\
+   -sin\theta & -cos\theta  
+  \end{matrix}
+  \right] *
+  \left[
+ \begin{matrix}
+   x \\
+   y
+  \end{matrix}
+  \right] \tag{2.5}</script><p>旋转矩阵的模是1。</p>
+<script type="math/tex; mode=display">
+J  = 
+  \left[
+ \begin{matrix}
+   cos\theta & sin\theta \\
+   -sin\theta & cos\theta  
+  \end{matrix}
+  \right] =
+    \pm1\tag{2.5}</script><p>将(8)和(9)式与公式(2)结合，也可以得到mu’_pq与mu_pq的关系，称为正交不变性。</p>
+<p>HU矩利用二阶和三阶归一化中心矩构造了7个不变矩，他们在连续图像条件下可保持平移、缩放和旋转不变，具体定义如下：</p>
+<script type="math/tex; mode=display">
+I_1=y_{20}+y_{02}\\
+I_2=(y_{20}-y_{02})^2+4y^2_{11}\\
+I_3=(y_{30}-3y_{12})^2+(3y_{21}-y_{03})^2\\
+I_4=(y_{30}+y_{12})^2+(y_{21}+y_{03})^2\\
+I_5=(y_{30}-3y_{12})(y_{30}+y_{12})[(y_{30}+y_{12})^2-3(y_{21}+y_{03})^2]\\
++(3y_{21}-y_{03})(y_{21}+y_{03})[3(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\
+I_6=(y_{20}-y_{02})[(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\
++4y_{11}(y_{30}+y_{12})(y_{21}+y_{03})\\
+I_7=(3y_{21}-y_{03})(y_{30}+y_{12})[(y_{30}+y_{12})^2-3(y_{21}+y_{03})^2]\\
++(3y_{12}-y_{03})(y_{21}+y_{03})[3(y_{30}+y_{12})^2-(y_{21}+y_{03})^2]\\</script><p>上述共有七个不变矩，如果只需要识别数十个手势的话，只需要实现前两个不变矩即可，在FPGA实现时，需要注意的是，由于算法中有除法运算，需要调用FPAG的除法器IP核，此外，但不得不说，FPGA在处理复杂的算法方面有劣势，一个几十位的除法器延时了二十几个时钟。此外，在上述的特征值中，其特征值数值较小，是比较小的小数，所以过程中最好放大2的20次方左右这样得到整数。</p>
+<p><strong>（6）识别实现</strong></p>
+<p>在识别之前，先用是个reg寄存器存储十个hu不变矩特征值，这十个值可以是自己做的十个不同手势得到的hu不变矩结果，识别的时候，将识别的手势hu结果和存储的十个hu特征值对比，最靠近谁即认为识别的结果就是该手势，当然，也得设置一个阈值，同时还有误差小于这个阈值，防止图片中没有手势的时候都误识别出结果。</p>
+<p><strong>（7）展示</strong></p>
+<p>最终采集的图片格式是320*240的(EGO1中没有DDR，存不下640 * 480的图片)，结果如下：</p>
+<p><a href="https://imgtu.com/i/RjLsDs"><img src="https://z3.ax1x.com/2021/07/09/RjLsDs.png" alt="RjLsDs.png"></a></p>
+<p>下面展示四个手势被处理后的效果：</p>
+<p>手势一：</p>
+<p><a href="https://imgtu.com/i/RjLruj"><img src="https://z3.ax1x.com/2021/07/09/RjLruj.png" alt="RjLruj.png"></a></p>
+<p>手势二：</p>
+<p><a href="https://imgtu.com/i/RjLBvQ"><img src="https://z3.ax1x.com/2021/07/09/RjLBvQ.png" alt="RjLBvQ.png"></a></p>
+<p>手势三：</p>
+<p><a href="https://imgtu.com/i/RjLw8S"><img src="https://z3.ax1x.com/2021/07/09/RjLw8S.png" alt="RjLw8S.png"></a></p>
+<p>手势四：</p>
+<p><a href="https://imgtu.com/i/RjLybn"><img src="https://z3.ax1x.com/2021/07/09/RjLybn.png" alt="RjLybn.png"></a></p>
+<p>经过灰度化二值化膨胀腐蚀边缘化后提取的效果如下(由于摄像头插上板卡的时候斜了90度，所以VGA显示的时候也斜了90度)：</p>
+<p>手势一：</p>
+<p><a href="https://imgtu.com/i/RjLcEq"><img src="https://z3.ax1x.com/2021/07/09/RjLcEq.png" alt="RjLcEq.png"></a></p>
+<p>手势二：</p>
+<p><a href="https://imgtu.com/i/RjLgU0"><img src="https://z3.ax1x.com/2021/07/09/RjLgU0.png" alt="RjLgU0.png"></a></p>
+<p>手势三：</p>
+<p><a href="https://imgtu.com/i/RjL25V"><img src="https://z3.ax1x.com/2021/07/09/RjL25V.png" alt="RjL25V.png"></a></p>
+<p>手势四:</p>
+<p><a href="https://imgtu.com/i/RjLWCT"><img src="https://z3.ax1x.com/2021/07/09/RjLWCT.png" alt="RjLWCT.png"></a></p>
+<p>经过Hu不变矩后便可以得到不同的特征值，结果如下：</p>
+<p>手势一:</p>
+<p><a href="https://imgtu.com/i/RjLh2F"><img src="https://z3.ax1x.com/2021/07/09/RjLh2F.png" alt="RjLh2F.png"></a></p>
+<p>更多的就不放了，会拖慢博客速度，哈哈哈。</p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>
+
+]]></content>
+      <categories>
+        <category>FPGA</category>
+        <category>图像处理</category>
+      </categories>
+      <tags>
+        <tag>FPGA</tag>
+        <tag>图像处理</tag>
+        <tag>手势识别</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>jupyter lab实现跨文件的函数调用</title>
+    <url>/2021/04/10/jupyter%20lab%E5%AE%9E%E7%8E%B0%E8%B7%A8%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8/</url>
+    <content><![CDATA[<p>在python各类编译器中，jupyter notebook真的是非常非常棒的调试工具，但是jupyter notebook在大工程方面却是逊于pycharm的，其虽然调试很方便，但是却不是像pycharm一样打开一整个文件夹，所以其团队又开发了jupyter lab来弥补缺陷，而jupyter lab的代码补齐真的又一言难尽，由于jupyter lab本身并不是完善，用了kite工具辅助代码补齐，即使操作完全没问题，kite也可能不工作，工作了也发现kite速度真的超慢又浪费CPU</p>
+<a id="more"></a>
+<p>算了，毕竟jupyter lab已经是一大进步了，平时我们写代码，模块化是非常重要的，所以经常会分文件进行写函数，然后跨文件调用，python中跨文件调用很简单，如果想在文件A中调用文件B中的max函数，如下即可：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment"># 待引用的py文件B路径加到了搜索列表里</span></span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) </span><br><span class="line"><span class="keyword">import</span> B</span><br><span class="line">B.<span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
+<p>或者如下</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="comment"># 待引用的py文件路径加到了搜索列表里</span></span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) </span><br><span class="line">form B <span class="keyword">import</span> <span class="built_in">max</span></span><br><span class="line"><span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
+<p>A和B若是在同一路径下，可以无需添加路径。</p>
+<p>但上述的方法是用来py文件跨文件调用的，而jupyter中的文件不是py而是ipynb文件，那么上述这个方法就没法在jupyter中用了，官方给出了一个解决方法，先在jupyter中建立一个文件，写入如下代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># In[ ]:</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io, os,sys,types</span><br><span class="line"><span class="keyword">from</span> IPython <span class="keyword">import</span> get_ipython</span><br><span class="line"><span class="keyword">from</span> nbformat <span class="keyword">import</span> read</span><br><span class="line"><span class="keyword">from</span> IPython.core.interactiveshell <span class="keyword">import</span> InteractiveShell</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotebookFinder</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Module finder that locates Jupyter Notebooks&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.loaders = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">find_module</span>(<span class="params">self, fullname, path=<span class="literal">None</span></span>):</span></span><br><span class="line">        nb_path = find_notebook(fullname, path)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> nb_path:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        key = path</span><br><span class="line">        <span class="keyword">if</span> path:</span><br><span class="line">            <span class="comment"># lists aren&#x27;t hashable</span></span><br><span class="line">            key = os.path.sep.join(path)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">not</span> <span class="keyword">in</span> self.loaders:</span><br><span class="line">            self.loaders[key] = NotebookLoader(path)</span><br><span class="line">        <span class="keyword">return</span> self.loaders[key]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_notebook</span>(<span class="params">fullname, path=<span class="literal">None</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;find a notebook, given its fully qualified name and an optional path</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    This turns &quot;foo.bar&quot; into &quot;foo/bar.ipynb&quot;</span></span><br><span class="line"><span class="string">    and tries turning &quot;Foo_Bar&quot; into &quot;Foo Bar&quot; if Foo_Bar</span></span><br><span class="line"><span class="string">    does not exist.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    name = fullname.rsplit(<span class="string">&#x27;.&#x27;</span>, <span class="number">1</span>)[-<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> path:</span><br><span class="line">        path = [<span class="string">&#x27;&#x27;</span>]</span><br><span class="line">    <span class="keyword">for</span> d <span class="keyword">in</span> path:</span><br><span class="line">        nb_path = os.path.join(d, name + <span class="string">&quot;.ipynb&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(nb_path):</span><br><span class="line">            <span class="keyword">return</span> nb_path</span><br><span class="line">        <span class="comment"># let import Notebook_Name find &quot;Notebook Name.ipynb&quot;</span></span><br><span class="line">        nb_path = nb_path.replace(<span class="string">&quot;_&quot;</span>, <span class="string">&quot; &quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> os.path.isfile(nb_path):</span><br><span class="line">            <span class="keyword">return</span> nb_path</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NotebookLoader</span>(<span class="params"><span class="built_in">object</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Module Loader for Jupyter Notebooks&quot;&quot;&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, path=<span class="literal">None</span></span>):</span></span><br><span class="line">        self.shell = InteractiveShell.instance()</span><br><span class="line">        self.path = path</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">load_module</span>(<span class="params">self, fullname</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;import a notebook as a module&quot;&quot;&quot;</span></span><br><span class="line">        path = find_notebook(fullname, self.path)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span> (<span class="string">&quot;importing Jupyter notebook from %s&quot;</span> % path)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># load the notebook object</span></span><br><span class="line">        <span class="keyword">with</span> io.<span class="built_in">open</span>(path, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            nb = read(f, <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment"># create the module and add it to sys.modules</span></span><br><span class="line">        <span class="comment"># if name in sys.modules:</span></span><br><span class="line">        <span class="comment">#    return sys.modules[name]</span></span><br><span class="line">        mod = types.ModuleType(fullname)</span><br><span class="line">        mod.__file__ = path</span><br><span class="line">        mod.__loader__ = self</span><br><span class="line">        mod.__dict__[<span class="string">&#x27;get_ipython&#x27;</span>] = get_ipython</span><br><span class="line">        sys.modules[fullname] = mod</span><br><span class="line"></span><br><span class="line">        <span class="comment"># extra work to ensure that magics that would affect the user_ns</span></span><br><span class="line">        <span class="comment"># actually affect the notebook module&#x27;s ns</span></span><br><span class="line">        save_user_ns = self.shell.user_ns</span><br><span class="line">        self.shell.user_ns = mod.__dict__</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">          <span class="keyword">for</span> cell <span class="keyword">in</span> nb.cells:</span><br><span class="line">            <span class="keyword">if</span> cell.cell_type == <span class="string">&#x27;code&#x27;</span>:</span><br><span class="line">                <span class="comment"># transform the input to executable Python</span></span><br><span class="line">                code = self.shell.input_transformer_manager.transform_cell(cell.source)</span><br><span class="line">                <span class="comment"># run the code in themodule</span></span><br><span class="line">                exec(code, mod.__dict__)</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            self.shell.user_ns = save_user_ns</span><br><span class="line">        <span class="keyword">return</span> mod</span><br><span class="line">sys.meta_path.append(NotebookFinder())</span><br></pre></td></tr></table></figure>
+<p>上述代码中try后的for在写入文件中的时候，编译器可能会提醒for的缩进有问题，会进行标红，不用管，缩进是没问题的。</p>
+<p>然后我们给这个文件另存为后缀为py的文件，在jupyter notebook中进行如下另存为。</p>
+<p>千万不要直接rename，直接rename是有问题的，所以不要直接rename。另存为py文件后，把这个文件放到和文件A同一个路径下，那么我们就可以如下在文件A中调用B中的函数了：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> 文件名 <span class="comment">#刚刚另存为py的那个文件名</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.append(<span class="string">r&quot;D:\python\test&quot;</span>) <span class="comment"># 待引用的py文件B路径加到了搜索列表里</span></span><br><span class="line"><span class="keyword">import</span> B</span><br><span class="line">B.<span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
+<p>如果这时候提醒你另存为的那个文件找不到，那么就需要看看你的另存为py的那个文件名名字是否是<strong>大写字母开头</strong>，如果是小写开头也可能出问题(真的就巨坑)。</p>
+<p>然后在运行就不会提醒说找不到那个py文件了。但是有可能有如下这样报错</p>
+<p>说B文件中没有这个函数，这个一般是新建文件的时候在不同虚拟环境下创建的问题，如果是jupyter lab，如下修改即可</p>
+<p>如果是notebook，在命令行中修改。</p>
+<p>最后运行完全没问题，如果我们继续在B中写其他函数，或者修改原来的max函数，在A中运行却得不到想要的结果，这个就是A中对B进行了缓存导致的，所以需要shut down这个kernel（即文件A），然后再打开运行即可。</p>
+<p>深深体会到jupyter为什么在大工程方面被pycharm锤了，文件调用以及打开文件夹等功能真的需要改进，但不得不说jupyter 调试超棒</p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>]]></content>
+      <categories>
+        <category>jupyter</category>
+      </categories>
+      <tags>
+        <tag>jupyter</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一个有意思的面试题</title>
+    <url>/2021/03/27/%E4%B8%80%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98/</url>
+    <content><![CDATA[<p>前两天室友面试深信服的时候，遇到了个有意思的题目，要求用c或者c++求解如下题目：用户输入一个可以包含加减乘除的数学表达式，你给这个表达式加上任意多的括号，使得这个表达式结果最大。</p>
+<a id="more"></a>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>来看一下这个题目，比如用户输入了如下表达式</p>
+<script type="math/tex; mode=display">
+1+2*3+5\tag{1.1}</script><p>那么我们随便加些括号</p>
+<script type="math/tex; mode=display">
+(1+2)*(3+5)\tag{1.2}</script><p>显然加上括号后比初始的结果要大，我们需要做的就是加些括号使得原始表达式最大。</p>
+<p>如果需要比较结果，第一想到的就是枚举出所有的可能性，由于括号个数和位置都是不定的，我们如何编程来找出加上括号的所有可能情况呢？</p>
+<p>我们知道一个左括号必然对应一个右括号，且用括号括住一个数是无意义的，比如((3))*2这种的括号就是无意义的，所以就是说一个括号括住至少两个数才是有意义的。看一下式(1.1)，那么我们就可以知道，1的左侧最多有三个有意义的左括号，因为1的右边只有三个数，三个左括号对应三个右括号，1的右侧最多有0个有意义的右括号，因为1左边没有其他数了，同理2的左侧有意义的括号数为2,2的右侧为1,3的左侧为1，右侧为2,5的左侧为0，右侧为3。</p>
+<p>我们定义1、2、3、5的左右侧有意义括号数为a0、a1、b0、b1、c0、c1、d0、d1(这里为了方便大家看，定义的很多变量，真正写代码的时候当然是用数组啦)，那么这些量符合如下约束：</p>
+<script type="math/tex; mode=display">
+a0+b0+c0+d0=a1+b1+c1+d1
+\\a0+b0+c0+d0    <=    3
+\\a0<=3\ \ \ \ \ a1<=0
+\\b0<=2\ \ \ \ \ b1<=1
+\\c0<=1\ \ \ \ \ c1<=2
+\\d0<=0\ \ \ \ \ d1<=3\tag{1.3}
+\\其都属于自然数</script><p>那么我们通过求解出符合条件的值即可知道如何添加括号。</p>
+<h2 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h2><p>显然式(1.3)应该是属于一个整型规划问题，那么lingo、matlab、R、python等等甚至可以通过函数或者可视化工具求解，C则需要自己实现整型规划问题的算法，如何求解整型规划问题网上教程很多，在此不做详解。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上述提出的解法只是自己个人的一点分析，里面得到的括号添加方式是可能有重复的，如((1+2*3+5))最外面的两个括号和一个括号、无括号的情况下是一样的，所以此法并非最优解法，欢迎大家可以提出更好的解法。</p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>]]></content>
+      <categories>
+        <category>优化</category>
+        <category>趣味题目</category>
+      </categories>
+      <tags>
+        <tag>博客搭建</tag>
+        <tag>整型规划</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据量化</title>
+    <url>/2021/03/16/%E6%95%B0%E6%8D%AE%E9%87%8F%E5%8C%96/</url>
+    <content><![CDATA[<p>在训练神经网络时候，参数存储是float类型，服务器或者电脑内存都较大，但是对于部署到硬件加速的时候，片上内存则非常珍贵，往往是不够用的，且硬件端需要存储的是整型，所以我们需要对参数进行量化。</p>
+<a id="more"></a>
+<h2 id="量化方法"><a href="#量化方法" class="headerlink" title="量化方法"></a>量化方法</h2><p>对于很多研究已经表明，深度学习的参数用16bit进行量化的时候，精度损失很小(甚至一些情况下可以用10bit/8bit进行量化)。对于参数值x，量化公式如下</p>
+<script type="math/tex; mode=display">
+q(x)=floor(x/scale+zero)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (1)</script><p>这里举例介绍一下scale和zero含义，比如神经网络中float32类型的参数值都在[0,2]之间，那么我们需要将其量化为int8的话,就是说我们想把[0,2]内的值缩放到[0,255]，那么原始值在[0,2]之间的x，放缩到[0,255]之间为x’应该符合如下关系：</p>
+<script type="math/tex; mode=display">
+\frac{x}{2}=\frac{x'}{255}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (2)</script><p>分母代表区域界限大小：2=2-0,255=255-0。那么x‘就等于:</p>
+<script type="math/tex; mode=display">
+x'=\frac{x}{\frac{2}{255}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (3)</script><p>那么scale就是2/255,zero是0，所以说scale由原始范围和量化后范围决定。那么zero是用来干嘛的呢？上面是说float32的[0,2]量化为int8，int8是8位的，但是深度学习中参数是正负都有的，所以只有一个sscale一个参数无法确保量化到[0,255]这个固定范围,如果float32是在[-1,1]之间，那么通过上面的式子可以依旧确定scale是2/255，只有一个scale一个参数只能量化到[-127.5,127.5].而zero呢？zero是作为一个偏置，为了使得量化到固定范围，如果我们想量化到[0,255]范围那么zero值为:</p>
+<script type="math/tex; mode=display">
+zero=x'_{max}-\frac{x_{max}}{scale}=127.5</script><p>为什么式(1)要有一个floor进行截断呢，是由于量化后是要进行取整，则简单进行截断即可，此时量化范围为[0,255]。</p>
+<h2 id="解量化"><a href="#解量化" class="headerlink" title="解量化"></a>解量化</h2><p>在数值被量化后，就已经不是本身的值了，所以在每次卷积后需要进行解量化。</p>
+<blockquote class="blockquote-center">
+            <p>值得一提的是，对于回归类问题，是一定要进行解量化的，比如预测下一阶段某一动物的体重。但是对于分类问题，最终是比较相对大小，所以无需进行解量化，但是如果分类时为了不用解量化，记得不能使用zero，因为zero会导致初始参数的正负值和量化后的正负值不同</p>
+
+          </blockquote>
+<p>由于自己做的主要是分类问题，所以都没有用到解量化，不作详解。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>综上，对于分类问题，可以只用一个scale值进行简单的量化，也无需解量化。更多的量化类介绍可以参考如下链接</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/qq_38798425/article/details/107423892">基于FPGA的卷积神经网络实现（五）数据量化（1）</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://zhuanlan.zhihu.com/p/64744154">神经网络量化简介</a></p>
+
+          </blockquote>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>]]></content>
+      <categories>
+        <category>FPGA</category>
+      </categories>
+      <tags>
+        <tag>FPGA</tag>
+        <tag>CNN</tag>
+        <tag>加速器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>latex转word</title>
+    <url>/2021/01/24/latex%E8%BD%ACword/</url>
+    <content><![CDATA[<p>现在写论文几乎都是在用latex，但是在latex中，只能生成pdf，无法生成word会给我们造成不便，网上有Tex2word等方法，但那些方法是很多年前的，用过发现也不太好用甚至不能用。所以就找到了pandoc这个很棒的工具，它可以将文档在 Markdown、LaTeX、reStructuredText、HTML、Word docx 等多种标记格式之间相互转换，并支持输出 PDF、EPUB、HTML 幻灯片等多种格式。</p>
+<a id="more"></a>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>对于已经安装了anaconda的，pandoc已经被集成到anaconda中了，可以直接使用，如果没有anaconda的，可以在<a href="https://pandoc.org/installing.html">pandoc</a>官网下载。首先在cmd命令窗口中，将路径转到latex目录下，使用方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd D:\latex\latex_example1</span><br></pre></td></tr></table></figure>
+<p>将上述路径改为自己文件所在路径即可。</p>
+<p>然后输入如下命令，其中example.tex改为你需要转换的tex文件，example.doc是输出的doc文件名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex -o example.doc</span><br></pre></td></tr></table></figure>
+<p>除了可以进行tex到word的转换，还可以在Markdown、latex、HTML、Word等之间转换，后缀名变成相应的格式即可。更多可以参考下述：</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.jianshu.com/p/6ba04f669d0b">Pandoc 安装与使用</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://segmentfault.com/a/1190000021698926">Pandoc——Pandoc安装、使用、快速上手</a></p>
+
+          </blockquote>
+<h2 id="更新1"><a href="#更新1" class="headerlink" title="更新1"></a>更新1</h2><p>论文里面一般有很多张图片，但是上述命令无法转换图片，看了网上的用resource命令然后出现一堆错误，其实pandoc —help就发现他们的命令用的是错误的，不明白为什么那么多人在说什么版本问题。。。</p>
+<p>命令如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex --resource-path&#x3D;图片文件夹路径 -o example.doc</span><br></pre></td></tr></table></figure>
+<p>如相对路径如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex --resource-path&#x3D;Img -o example.doc</span><br></pre></td></tr></table></figure>
+<p>也可以用绝对路径</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc example.tex --resource-path&#x3D;D:\tex\Img -o example.doc</span><br></pre></td></tr></table></figure>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>latex</category>
+      </categories>
+      <tags>
+        <tag>latex</tag>
+        <tag>word</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客搭建和规划</title>
+    <url>/2021/01/19/hello-world/</url>
+    <content><![CDATA[<p>欢迎来到<a href="http://gezhilai.com/">我的博客</a>! 这是我的第一篇博客. 受到疫情影响，今年都无法留校，但早早的回家也不能荒废了时间，就参考了一些文章搭建了这个博客，一是为了记下自己学习的过程，二也是可以和大家分享知识。下面主要说一说博客搭建参考的文章和未来博客准备发的东西。</p>
+<a id="more"></a>
+<h2 id="博客搭建"><a href="#博客搭建" class="headerlink" title="博客搭建"></a>博客搭建</h2><h3 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h3><p>搭建过程中，参考了如下几篇文章</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.jianshu.com/p/39562a0d8eb6">可能是最详细的 Hexo + GitHub Pages 搭建博客的教程</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a href="https://zhuanlan.zhihu.com/p/26625249">GitHub+Hexo 搭建个人网站详细教程</a></p>
+
+          </blockquote>
+<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>在后续优化中，强烈推荐下面这个博主</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://tding.top/">小丁的个人博客</a></p>
+
+          </blockquote>
+<p>如果具体操作还有些问题，可以顺带看一下下面的视频，</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://www.bilibili.com/video/BV16W411t7mq?p=21">使用Hexo博客搭建的个人博客，使用Next主题来进行优化改造</a></p>
+
+          </blockquote>
+<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><p>1、公式无法显示问题参考如下博客，</p>
+<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/weixin_44489823/article/details/105028860">hexo next主题解决无法显示数学公式</a></p>
+
+          </blockquote>
+<p>其中mathjax开启可以在markdown顶部写如下命令进行开启显示数学公式</p>
+<blockquote class="blockquote-center">
+            <p>mathjax: true #显示数学公式</p>
+
+          </blockquote>
+<p>2、更新博客后，登录网站后发现没有新内容，是由于浏览器缓存功能导致，在浏览器设置—隐私中清除一下缓存或者等待几分钟即可</p>
+<h2 id="博客规划"><a href="#博客规划" class="headerlink" title="博客规划"></a>博客规划</h2><p>在后续中，主要会写一写以前做过和学过的东西，包括FPGA、FPGA图像处理、深度学习、机器学习以及西瓜书、花书和凸优化等书的学习分享。当然必然不会仅限于此，但自己也不知道以后还会学些什么，所以暂且写这些吧，假期期间会把上述几本书仔细读一读。</p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>搭建</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>博客搭建</tag>
       </tags>
   </entry>
 </search>
