@@ -882,6 +882,7 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">print(torch.Tensor(np.append(np.array(a),np.array(b))))</span><br><span class="line">print(torch.Tensor([list(a),list(b)]).reshape(-1))</span><br></pre></td></tr></table></figure>
 <p>结果如下,<strong>可以看出通过append或者reshape都可以实现，但是torch中好像没有append函数，所以就先用np作为中介了。</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tensor([1., 2., 3., 1., 2., 3.])</span><br><span class="line">tensor([1., 2., 3., 1., 2., 3.])</span><br></pre></td></tr></table></figure>
+<p>在torch中有cat，numpy中自然有对应的函数，其就是<strong>np.concatenate((a,b),axis = 1)</strong>,功能和torch.cat一致，与stack的区别仅在于没有扩充维度罢了。</p>
 <p>3.3、split函数</p>
 <p>第二个参数是表明其在第几个维度上分割，第一个元素代表分割的步长，函数返回的是元组类型，元组中元素是tensor类型。比如faster rcnn中，a的shape代表[batch_size,所有预测特征层anchors总数]，为了把每个预测特征层分开，就可以如下操作，假设第一个预测特征层anchor总数为3，第二个预测特征层anchors是2；此法适合之前拼接时候记住个数的，然后在分割开。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import torch</span><br><span class="line">a&#x3D;torch.tensor([[1,2,3,4,5],[6,7,8,9,10]])</span><br><span class="line">b&#x3D;[3,2]</span><br><span class="line">c&#x3D;a.split(b,1)</span><br><span class="line">print(a,&quot;\n&quot;,c)</span><br></pre></td></tr></table></figure>
