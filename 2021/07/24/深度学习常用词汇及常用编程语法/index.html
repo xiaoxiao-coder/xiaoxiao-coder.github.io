@@ -32,7 +32,7 @@
 <meta property="og:description" content="之前说要更新一下本科期间做的一些东西，然后再讲解一下加速器如何在FPGA上搭建，结果太忙了。。。。木得时间，后面有时间慢慢补上。 最近读了faster rcnn和yolo的源码，里面用到的一些函数自己不常用或者用法新奇或者有时候自己忘掉的，而且最先读faster rcnn，two-stage的源码的确比较复杂，原理很快看懂，读源码花了几天才搞明白，写篇博客不断更新记录一下遇到的一些函数和用法，防止">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-07-23T19:52:32.000Z">
-<meta property="article:modified_time" content="2021-11-10T13:48:39.727Z">
+<meta property="article:modified_time" content="2021-11-10T14:59:06.200Z">
 <meta property="article:author" content="Apers">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="CNN">
@@ -273,7 +273,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-11-10 13:48:39" itemprop="dateModified" datetime="2021-11-10T13:48:39Z">2021-11-10</time>
+                <time title="修改时间：2021-11-10 14:59:06" itemprop="dateModified" datetime="2021-11-10T14:59:06Z">2021-11-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -501,7 +501,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(torch.Tensor(np.append(np.array(a),np.array(b))))</span><br><span class="line">print(torch.Tensor([list(a),list(b)]).reshape(-1))</span><br></pre></td></tr></table></figure>
 <p>结果如下,<strong>可以看出通过append或者reshape都可以实现，但是torch中好像没有append函数，所以就先用np作为中介了。</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tensor([1., 2., 3., 1., 2., 3.])</span><br><span class="line">tensor([1., 2., 3., 1., 2., 3.])</span><br></pre></td></tr></table></figure>
-<p>在torch中有cat，numpy中自然有对应的函数，其就是<strong>np.concatenate((a,b),axis = 1)</strong>,功能和torch.cat一致，与stack的区别仅在于没有扩充维度罢了。</p>
+<p>在torch中有cat，numpy中自然有对应的函数，其就是<strong>np.concatenate((a,b),axis = 1)</strong>,功能和torch.cat一致，与stack的区别仅在于没有扩充维度罢了。最典型的维度变换，cifar-10读进来的图片是batch*3*32*32,即一个数据有3072个点，前1024个为r，后1024个为g，最后1024个为b，所以读入后需要reshape(32,32,3),不能是reshape(3,32,32)，因为numpy的reshape是按顺序来的，这样就错了。reshape(32,32,3)后，我们希望可以imshow观测，imshow需要的格式是(32,32,3)这个3代表rgb，所以我们在得到a=img.reshape(3,32,32)后，先进行a0=a[0,:,:],a1=a[1,:,:],a1=a[2,:,:],拆开3个通道，再b0=a0.reshape(32,32,1),b1=a1.reshape(32,32,1),b2=a2.reshape(32,32,1),之所以多弄一个维度是为了后续拼接，然后np.concatenate((b0,b1,b2),axis=2)即可得到(32,32,3)的形状。</p>
 <p>3.3、split函数</p>
 <p>第二个参数是表明其在第几个维度上分割，第一个元素代表分割的步长，函数返回的是元组类型，元组中元素是tensor类型。比如faster rcnn中，a的shape代表[batch_size,所有预测特征层anchors总数]，为了把每个预测特征层分开，就可以如下操作，假设第一个预测特征层anchor总数为3，第二个预测特征层anchors是2；此法适合之前拼接时候记住个数的，然后在分割开。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import torch</span><br><span class="line">a&#x3D;torch.tensor([[1,2,3,4,5],[6,7,8,9,10]])</span><br><span class="line">b&#x3D;[3,2]</span><br><span class="line">c&#x3D;a.split(b,1)</span><br><span class="line">print(a,&quot;\n&quot;,c)</span><br></pre></td></tr></table></figure>
@@ -1148,7 +1148,7 @@ if(canvas.getContext){
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:24</span>
+    <span title="站点阅读时长">1:25</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
