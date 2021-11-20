@@ -32,7 +32,7 @@
 <meta property="og:description" content="之前说要更新一下本科期间做的一些东西，然后再讲解一下加速器如何在FPGA上搭建，结果太忙了。。。。木得时间，后面有时间慢慢补上。 最近读了faster rcnn和yolo的源码，里面用到的一些函数自己不常用或者用法新奇或者有时候自己忘掉的，而且最先读faster rcnn，two-stage的源码的确比较复杂，原理很快看懂，读源码花了几天才搞明白，写篇博客不断更新记录一下遇到的一些函数和用法，防止">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-07-23T19:52:32.000Z">
-<meta property="article:modified_time" content="2021-11-10T15:34:08.753Z">
+<meta property="article:modified_time" content="2021-11-20T09:27:43.446Z">
 <meta property="article:author" content="Apers">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="CNN">
@@ -273,7 +273,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-11-10 15:34:08" itemprop="dateModified" datetime="2021-11-10T15:34:08Z">2021-11-10</time>
+                <time title="修改时间：2021-11-20 09:27:43" itemprop="dateModified" datetime="2021-11-20T09:27:43Z">2021-11-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -323,14 +323,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>22k</span>
+              <span>26k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>20 分钟</span>
+              <span>24 分钟</span>
             </span>
 
         </div>
@@ -654,6 +654,49 @@
             <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.jianshu.com/p/88c52724b016">conda激活环境失败</a></p>
 
           </blockquote>
+<h2 id="批量安装包"><a href="#批量安装包" class="headerlink" title="批量安装包"></a>批量安装包</h2><p>如果我们在git上需要下载一个代码，使用git clone即可把代码下载到服务器端。有些人会提供批量安装的包的txt文件，所以此时cd到该txt文件路径下:</p>
+<p>进行如下即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -r a.txt</span><br></pre></td></tr></table></figure>
+<h2 id="RuntimeError-CUDA-error-no-kernel-image-is-available-for-execution-on-the-device报错"><a href="#RuntimeError-CUDA-error-no-kernel-image-is-available-for-execution-on-the-device报错" class="headerlink" title="RuntimeError: CUDA error: no kernel image is available for execution on the device报错"></a>RuntimeError: CUDA error: no kernel image is available for execution on the device报错</h2><p>torch运行时候出现了该错误，此时是由于torch的版本和cuda驱动的版本不兼容，导致torch无法使用cuda，从而无法使用GPU报错。以个人理解，torch之所以要和cuda匹配，是因为torch中一些语法使用了GPU时候，用来cuda语法编程，从而要和安装的cuda平台相匹配。(就像你用python2.0的编程，却用3.0的解释器，会出错，当然，也可能没有出错，毕竟每一代还是有很多内容相同)，这里报错时候使用的torch是1.8.1，cuda是10.1的，网上没有查到1.8.1的对应版本，出问题了，我们将torch卸载进行重装。</p>
+<p>1、首先如下命令，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvidia-smi</span><br></pre></td></tr></table></figure>
+<p>结果第一行如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NVIDIA-SMI 455.23.04    Driver Version: 455.23.04    CUDA Version: 11.1   </span><br></pre></td></tr></table></figure>
+<p>可以看出，该服务器的RTX3090的最高支持驱动是11.1。</p>
+<p>2、查看如今的CUDA驱动版本</p>
+<p>可以使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc -V</span><br></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat &#x2F;usr&#x2F;local&#x2F;cuda&#x2F;version.txt</span><br></pre></td></tr></table></figure>
+<p>查看当前的CUDA驱动版本。</p>
+<p>CUDA驱动略低于最高支持驱动是可以的。当然低太多就凉了。</p>
+<p>3、知道如上结果，就可以按照第2步的CUDA驱动版本安装对应的torch了，其中安装的时候torch、torchvision、torchaudio、cudatoolkit需要对应。</p>
+<p>这里需要说明一下cudatoolkit，cat /usr/local/cuda/version.txt得到的结果是平时我们所说的CUDA版本，其是在CUDA Toolkit工具包中，所以该CUDA版本也是CUDA Toolkit工具包的版本。</p>
+<p>但是装了Anaconda之后Anaconda也会提供一个cudatoolkit工具包，同样包含了CUDA的运行API，可以用来替代官方CUDA的CUDA Toolkit。这也就是为什么有时候我们通过nvcc-V查看的cuda版本很低(比如7.5)，但是能成功运行cuda9.0的pytorch的原因。因为在安装完anaconda后，运行pytorch代码就会使用anaconda的cudatoolkit，而忽视官方的CUDA Toolkit，所以我们只需要根据anaconda的cudatoolkit包的版本来安装相应的pytorch即可。</p>
+<p>查看cudatoolkit直接</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda list</span><br></pre></td></tr></table></figure>
+<p>即可看到cudatoolkit版本，Wheel(即pip安装)的形式，可以看到torch版本是1.7.0+cu11.0的样式，其cu11.0就是anaconda的cudatoolkit，如果是conda安装的，那么可以直接看到cudatoolkit是作为一个库独立存在，可以看到其版本。</p>
+<p>由此可知，我们完全可以在anaconda中相对应的cudatoolkit，具体的torch版本对应的torchvision、torchaudio和可选的cudatoolkit版本可以在如下官网查看。</p>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/pytorch/vision">torch、torchvision、python的版本对应</a></p>
+
+          </blockquote>
+<blockquote class="blockquote-center">
+            <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://pytorch.org/get-started/previous-versions/">各个torch版本下及其对应的torchvision、cudatoolkit的安装命令</a></p>
+
+          </blockquote>
+<p>由于由第一步知道，cuda最高支持驱动为11.0，那么我们就选用11.0cudatoolkit下的某个toch版本，</p>
+<p>在此选用了1.7.0，对应的torchvison可以查上面两个链接，使用wheel安装，命令如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install torch&#x3D;&#x3D;1.7.0+cu110 torchvision&#x3D;&#x3D;0.8.0+cu110 torchaudio&#x3D;&#x3D;0.7.0 -f https:&#x2F;&#x2F;download.pytorch.org&#x2F;whl&#x2F;torch_stable.html</span><br></pre></td></tr></table></figure>
+<p>即安装的cudatoolkit是11.0的，torchvision是其对应版本。</p>
+<p>至此安装后即可正常运行。</p>
+<p><strong>注:有的时候命令行操作python  a.py可以，但是vscode端运行不可以，是不是因为调用了CUDATOOLKIT，而不是anaconda中的cudatoolkit，导致版本不兼容?</strong></p>
+<h2 id="命令行运行py文件"><a href="#命令行运行py文件" class="headerlink" title="命令行运行py文件"></a>命令行运行py文件</h2><p>正常如果不需要配置什么内容的话，直接如下即可运行:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python a.py</span><br></pre></td></tr></table></figure>
+<p>但如果有如下这一类的配置文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">def get_parser():</span><br><span class="line">    &quot;&quot;&quot;Get default arguments.&quot;&quot;&quot;</span><br><span class="line">    parser &#x3D; configargparse.ArgumentParser(</span><br><span class="line">        description&#x3D;&quot;Transfer learning config parser&quot;,</span><br><span class="line">        config_file_parser_class&#x3D;configargparse.YAMLConfigFileParser,</span><br><span class="line">        formatter_class&#x3D;configargparse.ArgumentDefaultsHelpFormatter,</span><br><span class="line">    )</span><br><span class="line">    # general configuration</span><br><span class="line">    parser.add(&quot;--config&quot;, is_config_file&#x3D;True, help&#x3D;&quot;config file path&quot;)</span><br><span class="line">    parser.add(&quot;--seed&quot;, type&#x3D;int, default&#x3D;0)</span><br><span class="line">    parser.add_argument(&#39;--num_workers&#39;, type&#x3D;int, default&#x3D;0)</span><br><span class="line">    </span><br><span class="line">    # network related</span><br><span class="line">    parser.add_argument(&#39;--backbone&#39;, type&#x3D;str, default&#x3D;&#39;resnet50&#39;)</span><br><span class="line">    parser.add_argument(&#39;--use_bottleneck&#39;, type&#x3D;str2bool, default&#x3D;True)</span><br><span class="line"></span><br><span class="line">    # data loading related</span><br><span class="line">    parser.add_argument(&#39;--data_dir&#39;, type&#x3D;str, required&#x3D;True)</span><br><span class="line">    parser.add_argument(&#39;--src_domain&#39;, type&#x3D;str, required&#x3D;True)</span><br><span class="line">    parser.add_argument(&#39;--tgt_domain&#39;, type&#x3D;str, required&#x3D;True)</span><br><span class="line">    </span><br><span class="line">    # training related</span><br><span class="line">    parser.add_argument(&#39;--batch_size&#39;, type&#x3D;int, default&#x3D;32)</span><br><span class="line">    parser.add_argument(&#39;--n_epoch&#39;, type&#x3D;int, default&#x3D;100)</span><br><span class="line">    parser.add_argument(&#39;--early_stop&#39;, type&#x3D;int, default&#x3D;0, help&#x3D;&quot;Early stopping&quot;)</span><br><span class="line">    parser.add_argument(&#39;--epoch_based_training&#39;, type&#x3D;str2bool, default&#x3D;False, help&#x3D;&quot;Epoch-based training &#x2F; Iteration-based training&quot;)</span><br><span class="line">    parser.add_argument(&quot;--n_iter_per_epoch&quot;, type&#x3D;int, default&#x3D;20, help&#x3D;&quot;Used in Iteration-based training&quot;)</span><br><span class="line"></span><br><span class="line">    # optimizer related</span><br><span class="line">    parser.add_argument(&#39;--lr&#39;, type&#x3D;float, default&#x3D;1e-3)</span><br><span class="line">    parser.add_argument(&#39;--momentum&#39;, type&#x3D;float, default&#x3D;0.9)</span><br><span class="line">    parser.add_argument(&#39;--weight_decay&#39;, type&#x3D;float, default&#x3D;5e-4)</span><br><span class="line"></span><br><span class="line">    # learning rate scheduler related</span><br><span class="line">    parser.add_argument(&#39;--lr_gamma&#39;, type&#x3D;float, default&#x3D;0.0003)</span><br><span class="line">    parser.add_argument(&#39;--lr_decay&#39;, type&#x3D;float, default&#x3D;0.75)</span><br><span class="line">    parser.add_argument(&#39;--lr_scheduler&#39;, type&#x3D;str2bool, default&#x3D;True)</span><br><span class="line"></span><br><span class="line">    # transfer related</span><br><span class="line">    parser.add_argument(&#39;--transfer_loss_weight&#39;, type&#x3D;float, default&#x3D;10)</span><br><span class="line">    parser.add_argument(&#39;--transfer_loss&#39;, type&#x3D;str, default&#x3D;&#39;mmd&#39;)</span><br><span class="line">    return parser</span><br><span class="line">  </span><br><span class="line">def main():</span><br><span class="line">    parser &#x3D; get_parser()</span><br></pre></td></tr></table></figure>
+<p>就需要额外的配置了:比如如下，上述中无default的，require为true的都要配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python main.py --config DAN&#x2F;DAN.yaml --data_dir &#x2F;remote-home&#x2F;lwq&#x2F;transferlearning&#x2F;code&#x2F;DeepDA&#x2F;data18 --src_domain train18 --tgt_domain test18</span><br></pre></td></tr></table></figure>
 <h2 id="在jupyter中使用虚拟环境"><a href="#在jupyter中使用虚拟环境" class="headerlink" title="在jupyter中使用虚拟环境"></a>在jupyter中使用虚拟环境</h2><p>创建好新的环境后，如果使用jupyter时想用该环境的话，还需要配置一下：</p>
 <p>首先查看当前的所有环境：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda env <span class="built_in">list</span></span><br></pre></td></tr></table></figure>
@@ -805,7 +848,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%90%8D%E8%AF%8D"><span class="nav-number">1.</span> <span class="nav-text">常用名词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E7%A7%B0"><span class="nav-number">2.</span> <span class="nav-text">简称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">Pytorch &amp; Numpy基础原理类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%B9%BF%E6%92%AD%E6%9C%BA%E5%88%B6%E3%80%82"><span class="nav-number">3.1.</span> <span class="nav-text">1、广播机制。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%AD%98%E5%82%A8%E5%92%8C%E8%A7%86%E5%9B%BE%E3%80%82"><span class="nav-number">3.2.</span> <span class="nav-text">2、存储和视图。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%96%84%E7%94%A8%EF%BC%9F%E6%9F%A5%E7%9C%8B%E5%87%BD%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">善用？查看函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy"><span class="nav-number">4.</span> <span class="nav-text">Pytorch &amp; Numpy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96"><span class="nav-number">5.</span> <span class="nav-text">文件读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%93%E5%AE%89%E8%A3%85"><span class="nav-number">6.</span> <span class="nav-text">库安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anaconda%E4%B8%AD%E6%96%B0%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="nav-number">7.</span> <span class="nav-text">anaconda中新建环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8jupyter%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">8.</span> <span class="nav-text">在jupyter中使用虚拟环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8jupyter%E4%B8%AD%E6%9F%90%E4%B8%AA%E7%8E%AF%E5%A2%83kernel-error"><span class="nav-number">9.</span> <span class="nav-text">在jupyter中某个环境kernel error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pycharm%E4%B8%AD%E4%BD%BF%E7%94%A8anconda%E4%B8%AD%E7%9A%84%E7%8E%AF%E5%A2%83"><span class="nav-number">10.</span> <span class="nav-text">Pycharm中使用anconda中的环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E6%89%93%E5%BC%80%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84tensorboard"><span class="nav-number">11.</span> <span class="nav-text">本地打开服务器的tensorboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%90%AF%E5%8A%A8%E5%8D%B7%E7%A7%AF%E5%A4%B1%E8%B4%A5%EF%BC%8Ccuda%E7%AD%89%E7%AD%89%E9%97%AE%E9%A2%98%E3%80%82"><span class="nav-number">12.</span> <span class="nav-text">模型训练中显示启动卷积失败，cuda等等问题。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%AB%99"><span class="nav-number">13.</span> <span class="nav-text">学习网站</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%90%8D%E8%AF%8D"><span class="nav-number">1.</span> <span class="nav-text">常用名词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E7%A7%B0"><span class="nav-number">2.</span> <span class="nav-text">简称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">Pytorch &amp; Numpy基础原理类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%B9%BF%E6%92%AD%E6%9C%BA%E5%88%B6%E3%80%82"><span class="nav-number">3.1.</span> <span class="nav-text">1、广播机制。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%AD%98%E5%82%A8%E5%92%8C%E8%A7%86%E5%9B%BE%E3%80%82"><span class="nav-number">3.2.</span> <span class="nav-text">2、存储和视图。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%96%84%E7%94%A8%EF%BC%9F%E6%9F%A5%E7%9C%8B%E5%87%BD%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">善用？查看函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy"><span class="nav-number">4.</span> <span class="nav-text">Pytorch &amp; Numpy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96"><span class="nav-number">5.</span> <span class="nav-text">文件读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%93%E5%AE%89%E8%A3%85"><span class="nav-number">6.</span> <span class="nav-text">库安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anaconda%E4%B8%AD%E6%96%B0%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="nav-number">7.</span> <span class="nav-text">anaconda中新建环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85%E5%8C%85"><span class="nav-number">8.</span> <span class="nav-text">批量安装包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RuntimeError-CUDA-error-no-kernel-image-is-available-for-execution-on-the-device%E6%8A%A5%E9%94%99"><span class="nav-number">9.</span> <span class="nav-text">RuntimeError: CUDA error: no kernel image is available for execution on the device报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%BF%90%E8%A1%8Cpy%E6%96%87%E4%BB%B6"><span class="nav-number">10.</span> <span class="nav-text">命令行运行py文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8jupyter%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">11.</span> <span class="nav-text">在jupyter中使用虚拟环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8jupyter%E4%B8%AD%E6%9F%90%E4%B8%AA%E7%8E%AF%E5%A2%83kernel-error"><span class="nav-number">12.</span> <span class="nav-text">在jupyter中某个环境kernel error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pycharm%E4%B8%AD%E4%BD%BF%E7%94%A8anconda%E4%B8%AD%E7%9A%84%E7%8E%AF%E5%A2%83"><span class="nav-number">13.</span> <span class="nav-text">Pycharm中使用anconda中的环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E6%89%93%E5%BC%80%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84tensorboard"><span class="nav-number">14.</span> <span class="nav-text">本地打开服务器的tensorboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%90%AF%E5%8A%A8%E5%8D%B7%E7%A7%AF%E5%A4%B1%E8%B4%A5%EF%BC%8Ccuda%E7%AD%89%E7%AD%89%E9%97%AE%E9%A2%98%E3%80%82"><span class="nav-number">15.</span> <span class="nav-text">模型训练中显示启动卷积失败，cuda等等问题。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%AB%99"><span class="nav-number">16.</span> <span class="nav-text">学习网站</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -1145,13 +1188,13 @@ if(canvas.getContext){
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">94k</span>
+    <span title="站点总字数">98k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:25</span>
+    <span title="站点阅读时长">1:29</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
