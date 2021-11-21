@@ -1024,6 +1024,12 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
 <p>之所以新建一个环境，是因为mindspore所需要的python环境是3.7及以上的，若3.7之下的版本，是装不成功的。</p>
 <p>cv2安装：</p>
 <figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple opencv-python</span><br></pre></td></tr></table></figure>
+<h2 id="usr-bin-xauth-error-timeout-in-locking-authority-file-home-gezhilai-Xauthority"><a href="#usr-bin-xauth-error-timeout-in-locking-authority-file-home-gezhilai-Xauthority" class="headerlink" title="/usr/bin/xauth: error/timeout in locking authority file /home/gezhilai/.Xauthority"></a>/usr/bin/xauth: error/timeout in locking authority file /home/gezhilai/.Xauthority</h2><p>解决如下:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo mkdir &#x2F;home&#x2F;gezhilai</span><br><span class="line">sudo chown gezhilai:gezhilai -R &#x2F;home&#x2F;gezhilai</span><br><span class="line">sudo usermod -s &#x2F;bin&#x2F;bash gezhilai</span><br></pre></td></tr></table></figure>
+<p>参考链接:<blockquote class="blockquote-center">
+            <p><a href="https://blog.csdn.net/dong_liuqi/article/details/108842873">(29条消息) Liunx创建新用户登录异常：/usr/bin/xauth: error/timeout in locking authority file /home/liuqidong/.Xauthority_dong_liuqi的博客-CSDN博客</a></p>
+
+          </blockquote></p>
 <h2 id="anaconda中新建环境"><a href="#anaconda中新建环境" class="headerlink" title="anaconda中新建环境"></a>anaconda中新建环境</h2><p>命令如下：</p>
 <p>conda create —name=labelme python=3.6</p>
 <p>代表创建了一个新的环境，环境名称叫labelme，使用的是python版本是3.6.</p>
