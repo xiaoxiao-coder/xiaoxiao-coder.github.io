@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="Dc-vXTJ_Z0o0sirD51XHawJ1YZQdyEgKKbOXaI7Mo7E">
+  <meta name="baidu-site-verification" content="k7ID4DXsv2">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/pace-js@1/themes/blue/pace-theme-minimal.css">
+  <script src="//cdn.jsdelivr.net/npm/pace-js@1/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"gezhilai.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本节主要讲解剪枝模型，以此模型为基础顺带讲解一下torch中的一些常用方法，参数导出，梯度回溯，以及可视化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Torch类具体说明--以剪枝模型为例">
+<meta property="og:url" content="http://gezhilai.com/2021/11/28/Torch%E7%B1%BB%E5%85%B7%E4%BD%93%E8%AF%B4%E6%98%8E-%E4%BB%A5%E5%89%AA%E6%9E%9D%E6%A8%A1%E5%9E%8B%E4%B8%BA%E4%BE%8B/index.html">
+<meta property="og:site_name" content="Apers&#39; Blog">
+<meta property="og:description" content="本节主要讲解剪枝模型，以此模型为基础顺带讲解一下torch中的一些常用方法，参数导出，梯度回溯，以及可视化">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/27/oehbND.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/27/oehHAO.png">
+<meta property="article:published_time" content="2021-11-27T16:26:05.000Z">
+<meta property="article:modified_time" content="2021-11-27T08:29:59.587Z">
+<meta property="article:author" content="Apers">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="剪枝">
+<meta property="article:tag" content="Pytorch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://z3.ax1x.com/2021/11/27/oehbND.png">
+
+<link rel="canonical" href="http://gezhilai.com/2021/11/28/Torch%E7%B1%BB%E5%85%B7%E4%BD%93%E8%AF%B4%E6%98%8E-%E4%BB%A5%E5%89%AA%E6%9E%9D%E6%A8%A1%E5%9E%8B%E4%B8%BA%E4%BE%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Torch类具体说明--以剪枝模型为例 | Apers' Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e7dd5726174410a42696b9a0189c1ed0# <app_id>";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Apers' Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">茶亦醉人何必酒,书能香我不须花</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">30</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">24</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">20</span></a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links" rel="section"><i class="fa fa-fw fa-link"></i>友链</a>
+
+  </li>
+        <li class="menu-item menu-item-movies">
+
+    <a href="/movies/" rel="section"><i class="fa fa-fw fa-film"></i>观影</a>
+
+  </li>
+        <li class="menu-item menu-item-books">
+
+    <a href="/books/" rel="section"><i class="fa fa-fw fa-book"></i>阅读</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://gezhilai.com/2021/11/28/Torch%E7%B1%BB%E5%85%B7%E4%BD%93%E8%AF%B4%E6%98%8E-%E4%BB%A5%E5%89%AA%E6%9E%9D%E6%A8%A1%E5%9E%8B%E4%B8%BA%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg#QQ1.jpg">
+      <meta itemprop="name" content="Apers">
+      <meta itemprop="description" content="若有诗书藏于心,岁月从不败美人">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Apers' Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Torch类具体说明--以剪枝模型为例
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+	
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-11-27 16:26:05 / 修改时间：08:29:59" itemprop="dateCreated datePublished" datetime="2021-11-27T16:26:05Z">2021-11-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E5%89%AA%E6%9E%9D/" itemprop="url" rel="index"><span itemprop="name">剪枝</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/11/28/Torch%E7%B1%BB%E5%85%B7%E4%BD%93%E8%AF%B4%E6%98%8E-%E4%BB%A5%E5%89%AA%E6%9E%9D%E6%A8%A1%E5%9E%8B%E4%B8%BA%E4%BE%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Torch类具体说明--以剪枝模型为例" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/11/28/Torch%E7%B1%BB%E5%85%B7%E4%BD%93%E8%AF%B4%E6%98%8E-%E4%BB%A5%E5%89%AA%E6%9E%9D%E6%A8%A1%E5%9E%8B%E4%B8%BA%E4%BE%8B/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/11/28/Torch%E7%B1%BB%E5%85%B7%E4%BD%93%E8%AF%B4%E6%98%8E-%E4%BB%A5%E5%89%AA%E6%9E%9D%E6%A8%A1%E5%9E%8B%E4%B8%BA%E4%BE%8B/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>17k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>15 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本节主要讲解剪枝模型，以此模型为基础顺带讲解一下torch中的一些常用方法，参数导出，梯度回溯，以及可视化</p>
+<a id="more"></a>
+<h1 id="Torch类说明—以剪枝模型为例"><a href="#Torch类说明—以剪枝模型为例" class="headerlink" title="Torch类说明—以剪枝模型为例"></a>Torch类说明—以剪枝模型为例</h1><h2 id="Troch标准类格式01"><a href="#Troch标准类格式01" class="headerlink" title="Troch标准类格式01"></a>Troch标准类格式01</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">to_var</span>(<span class="params">x, requires_grad=<span class="literal">False</span></span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Automatically choose cpu or cuda</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> torch.cuda.is_available():</span><br><span class="line">        x = x.cuda()</span><br><span class="line">    <span class="keyword">return</span> x.clone().detach().requires_grad_(requires_grad)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MaskedLinear</span>(<span class="params">nn.Linear</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, in_features, out_features, bias=<span class="literal">True</span></span>):</span></span><br><span class="line">        <span class="built_in">super</span>(MaskedLinear, self).__init__(in_features, out_features, bias)</span><br><span class="line">        self.register_buffer(<span class="string">&#x27;mask&#x27;</span>, <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_mask</span>(<span class="params">self, mask</span>):</span></span><br><span class="line">        self.mask = to_var(mask, requires_grad=<span class="literal">False</span>)</span><br><span class="line">        self.weight.data = self.weight.data * self.mask.data</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_mask</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.mask</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        <span class="keyword">if</span> self.mask <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            weight = self.weight * self.mask</span><br><span class="line">            <span class="keyword">return</span> F.linear(x, weight, self.bias)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> F.linear(x, self.weight, self.bias)</span><br></pre></td></tr></table></figure>
+<p>torch中的主类一般如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MLP</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(MLP, self).__init__()</span><br><span class="line">        self.linear1 = MaskedLinear(<span class="number">28</span> * <span class="number">28</span>, <span class="number">200</span>)</span><br><span class="line">        self.relu1 = nn.ReLU(inplace=<span class="literal">True</span>)</span><br><span class="line">        self.linear2 = MaskedLinear(<span class="number">200</span>, <span class="number">200</span>)</span><br><span class="line">        self.relu2 = nn.ReLU(inplace=<span class="literal">True</span>)</span><br><span class="line">        self.linear3 = MaskedLinear(<span class="number">200</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        out = x.view(x.size(<span class="number">0</span>), -<span class="number">1</span>)</span><br><span class="line">        out = self.relu1(self.linear1(out))</span><br><span class="line">        out = self.relu2(self.linear2(out))</span><br><span class="line">        out = self.linear3(out)</span><br><span class="line">        <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_masks</span>(<span class="params">self, masks</span>):</span></span><br><span class="line">        <span class="comment"># Should be a less manual way to set masks</span></span><br><span class="line">        <span class="comment"># Leave it for the future</span></span><br><span class="line">        self.linear1.set_mask(masks[<span class="number">0</span>])</span><br><span class="line">        self.linear2.set_mask(masks[<span class="number">1</span>])</span><br><span class="line">        self.linear3.set_mask(masks[<span class="number">2</span>])</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">load_state_dict</span>(<span class="params">self, state_dict, strict=<span class="literal">True</span></span>):</span>        </span><br><span class="line">        <span class="built_in">super</span>().load_state_dict(state_dict, strict=<span class="literal">False</span>)     </span><br></pre></td></tr></table></figure>
+<p>其实上述只是我们常用的一些方法重写，但是还有nn.Module还有很多可以提供自由使用的方法，不过正常不需要修改重写而已。我们可以看一下nn.Module中的各个类,输入如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dir</span>(MLP())</span><br></pre></td></tr></table></figure>
+<p>得到结果如下：，可以看到其实dir自身也是类的方法，其可以显示类中的所有方法名，可以看到<strong>init</strong>中的liner1、2、3也作为了其独立的方法，其中还有常见的<strong>forward</strong>，其主要用于拼接一些方法进行前向推理，还有<strong>load_state_dict</strong>方法，其是用于参数加载的，以备模型迁移时候，直接读入权重系数，需要改方法时候，重写一下就好。还有比较常用的train和eval方法，因为有些内容，比如dropout，在训练时用，但测试时不用，所以需要通过一些方法来使一些方法(比如在init中定义的dropout可以理解为一个方法，像linear1就会加入到该类的方法里了)无效(理解为跳过)，或有效，所以需要train方法和eval方法，代表训练和推理模式，使得一些方法有效或无效。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">&#x27;T_destination&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__annotations__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__call__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__class__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__delattr__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__dict__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__dir__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__doc__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__eq__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__format__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__ge__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__getattr__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__getattribute__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__gt__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__hash__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__init__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__init_subclass__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__le__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__lt__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__module__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__ne__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__new__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__reduce__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__reduce_ex__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__repr__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__setattr__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__setstate__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__sizeof__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__slotnames__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__str__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__subclasshook__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;__weakref__&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_apply&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_backward_hooks&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_buffers&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_call_impl&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_forward_hooks&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_forward_pre_hooks&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_get_name&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_load_from_state_dict&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_load_state_dict_pre_hooks&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_modules&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_named_members&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_non_persistent_buffers_set&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_parameters&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_register_load_state_dict_pre_hook&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_register_state_dict_hook&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_replicate_for_data_parallel&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_save_to_state_dict&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_slow_forward&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_state_dict_hooks&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;_version&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;add_module&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;apply&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;bfloat16&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;buffers&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;children&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;cpu&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;cuda&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;double&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;dump_patches&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;eval&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;extra_repr&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;float&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;forward&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;half&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;linear1&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;linear2&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;linear3&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;load_state_dict&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;modules&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;named_buffers&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;named_children&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;named_modules&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;named_parameters&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;parameters&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;register_backward_hook&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;register_buffer&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;register_forward_hook&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;register_forward_pre_hook&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;register_parameter&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;relu1&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;relu2&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;requires_grad_&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;set_masks&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;share_memory&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;state_dict&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;to&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;train&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;training&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;type&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;zero_grad&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<p>下面仔细分析一下类:其中类中的self是认为实例自身的意思，__init__则是初始化方法的意思，实例创建的时候自动调用__init__方法，而super的意思可以理解为父类的自身，因为MLP继承了父类的所有方法，而初始化你重写了，但是你的初始化中并未对所有的方法初始化(有些方法要初始化)，所以需要调用父类的__init__进行初始化，super().__init__()就是调用父类的初始化函数，但是需要指定对象，即父类的初始化方法是对谁进行初始化的，所以就super(MLP, self).__init__()，前面的MLP代表子类，self代表实例自身，即对该子类的实例进行初始化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MLP</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span>        </span><br><span class="line">        <span class="built_in">super</span>(MLP, self).__init__()</span><br></pre></td></tr></table></figure>
+<p>调用父类初始化函数初始化对象举例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self,name,gender</span>):</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.gender = gender</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">printinfo</span>(<span class="params">self</span>):</span></span><br><span class="line">        print(self.name,self.gender)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Stu</span>(<span class="params">Person</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self,name,gender,school</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(Stu, self).__init__(name,gender) <span class="comment"># 使用父类的初始化方法来初始化子类</span></span><br><span class="line">        self.school = school</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">printinfo</span>(<span class="params">self</span>):</span> <span class="comment"># 对父类的printinfo方法进行重写</span></span><br><span class="line">        print(self.name,self.gender,self.school)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    stu = Stu(<span class="string">&#x27;djk&#x27;</span>,<span class="string">&#x27;man&#x27;</span>,<span class="string">&#x27;nwnu&#x27;</span>)</span><br><span class="line">    stu.printinfo()</span><br></pre></td></tr></table></figure>
+<p>参考链接：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/dongjinkun/article/details/114575998">(29条消息) 解惑（一） ——- super(XXX, self).<strong>init</strong>()到底是代表什么含义_奋斗の博客-CSDN博客</a></p>
+<p>再来看一下后续代码,为什么又用MaskedLinear这个类呢？__init__中，一般我们希望只定义方法或者变量，所以我们写了个类作为方法linear1。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MLP</span>(<span class="params">nn.Module</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(MLP, self).__init__()</span><br><span class="line">        self.linear1 = MaskedLinear(<span class="number">28</span> * <span class="number">28</span>, <span class="number">200</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="MaskedLinear子类01"><a href="#MaskedLinear子类01" class="headerlink" title="MaskedLinear子类01"></a>MaskedLinear子类01</h3><p>下面看一看MaskedLinear这个类，其是继承了Liner类，通过supe(MaskdLinear,self).__init__进行了初始化，注意这里初始化传入了输入单元数和输出单元数。然后<strong>定义了个变量叫mask</strong>，这里需要注意，其不是用self.mask定义变量的，而是self.register_buffer()定义的，self.register_buffer本质上定义的不是参数，而只是留出了一个缓冲区，缓冲区名为mask，初始值是None，这个在之前博客总结说过，即尚未定义的意思。torch中，一般参数存储都是存储成orderedDict形式的(所以模型的参数往往都是在一个字典里)，而orderedDict包括模型的各类module的参数，即nn.Parameter,另一种就是buffer，buffer很特殊的特征就是不会得到更新，即视为一个常数了，而不是变量。参考链接：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_38145317/article/details/104917218">(29条消息) pytorch 中register_buffer（）_shuijinghua的博客-CSDN博客_register_buffer</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MaskedLinear</span>(<span class="params">nn.Linear</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, in_features, out_features, bias=<span class="literal">True</span></span>):</span></span><br><span class="line">        <span class="built_in">super</span>(MaskedLinear, self).__init__(in_features, out_features, bias)</span><br><span class="line">        self.register_buffer(<span class="string">&#x27;mask&#x27;</span>, <span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+<p>再看如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_mask</span>(<span class="params">self, mask</span>):</span></span><br><span class="line">       self.mask = to_var(mask, requires_grad=<span class="literal">False</span>)</span><br><span class="line">       self.weight.data = self.weight.data * self.mask.data</span><br></pre></td></tr></table></figure>
+<h4 id="to-var类"><a href="#to-var类" class="headerlink" title="to_var类"></a>to_var类</h4><p>又嵌套了to_var类，来看一下to_var类，代码如下,如果GPU可以使用的话，那么将数据放到GPU上，返回的时候，不是直接返回x，而是使用了一系列方法。在np中，如果直接a=b的话，其实a和b是共享内存的，但如果进行切片的话，则是两个内存空间，由于np是为了数据处理，复杂度远不如神经网络大，所以复用性不需要那么高，但是torch中，由于数据太多，所以复用就很关键，所以不管是直接赋值还是切片，都是指向同一个内存单元，所以需要开辟新空间的话，就需要用clone这个方法了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">to_var</span>(<span class="params">x, requires_grad=<span class="literal">False</span></span>):</span></span><br><span class="line">    <span class="keyword">if</span> torch.cuda.is_available():</span><br><span class="line">        x = x.cuda()</span><br><span class="line">    <span class="keyword">return</span> x.clone().detach().requires_grad_(requires_grad)</span><br></pre></td></tr></table></figure>
+<p>下面来说明一下clone和detach方法，我们可以在jupyter中一下clone和detach的含义,创建一个torch.tensor变量a，然后a.clone?和a.detach？即可查看，detach说明结果如下，可以从描述文档中看出，detach是从来不用梯度的，即无梯度这个属性，即数据共享，但脱离了计算图；clone其实是可以追溯梯度的，后面再说。值得注意的是：<strong>clone是开辟了一个新内存空间，保存梯度信息，但是detach其实是共享了a的data内存，但是丢弃了梯度(为什么不说完全共享内存呢？因为torch中需要梯度等等信息，所以一个tensor变量并不仅仅只有存储数据的空间，还会有梯度空间等等(所以tensor变量有data方法，用于只取出data)，而此处detach只是共享了data空间，即a.data，所以a.detach的指针和a未必相同，即id（a) 和id(a.detach())可能不一样 </strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">detach--Docstring:</span><br><span class="line">Returns a new Tensor, detached from the current graph.</span><br><span class="line">The result will never require gradient.</span><br><span class="line"></span><br><span class="line">clone--Docstring:</span><br><span class="line">clone(*, memory_format&#x3D;torch.preserve_format) -&gt; Tensor</span><br><span class="line">See :func:&#96;torch.clone&#96;</span><br></pre></td></tr></table></figure>
+<p>如下代码测试：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">a=torch.tensor([<span class="number">1.0</span>,<span class="number">2</span>,<span class="number">3</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b=a</span><br><span class="line">c=a.clone()</span><br><span class="line">d=a.detach()</span><br><span class="line">print(a)</span><br><span class="line">print(b)</span><br><span class="line">print(c)</span><br><span class="line">print(d)</span><br></pre></td></tr></table></figure>
+<p>得到结果如下，可以看出，require_grad=True即可追溯计算梯度，clone的结果保留了梯度结果，而detach却没有。<code>grad_fn=&lt;CloneBackward&gt;</code>，表示clone后的返回值是个中间变量，<strong>因此支持梯度的回溯</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tensor([<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">tensor([<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">tensor([<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>], grad_fn=&lt;CloneBackward&gt;)</span><br><span class="line">tensor([<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>])</span><br></pre></td></tr></table></figure>
+<p>如下可以看出detach是共享data内存的，而clone不是</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a=torch.tensor([<span class="number">1.0</span>,<span class="number">2</span>,<span class="number">3</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">b=a</span><br><span class="line">c=a.clone()</span><br><span class="line">d=a.detach()</span><br><span class="line">d[<span class="number">0</span>]=<span class="number">5</span></span><br><span class="line">c[<span class="number">0</span>]=<span class="number">100</span></span><br><span class="line">print(a)</span><br><span class="line">print(b)</span><br><span class="line">print(c)</span><br><span class="line">print(d)</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tensor([<span class="number">5.</span>, <span class="number">2.</span>, <span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">tensor([<span class="number">5.</span>, <span class="number">2.</span>, <span class="number">3.</span>], requires_grad=<span class="literal">True</span>)</span><br><span class="line">tensor([<span class="number">100.</span>,   <span class="number">2.</span>,   <span class="number">3.</span>], grad_fn=&lt;CopySlices&gt;)</span><br><span class="line">tensor([<span class="number">5.</span>, <span class="number">2.</span>, <span class="number">3.</span>])</span><br></pre></td></tr></table></figure>
+<p>上述clone的梯度回溯是什么意思呢？就是对该clone的值的求导结果，值是累加在原值a上的,如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">a = torch.tensor(<span class="number">1.0</span>, requires_grad=<span class="literal">True</span>)</span><br><span class="line">a_ = a.clone()</span><br><span class="line">y = a**<span class="number">2</span></span><br><span class="line">z = a ** <span class="number">2</span>+a_ * <span class="number">3</span></span><br><span class="line">y.backward()</span><br><span class="line">print(a.grad)</span><br><span class="line">z.backward()</span><br><span class="line">print(a_.grad)</span><br><span class="line">print(a.grad)   </span><br></pre></td></tr></table></figure>
+<p>结果如下，可以看出y.backward()方法后，就会往回追溯梯度，得到的2结果存入在a的梯度中，但是z追溯梯度的时候，a_无梯度，是因为其可以梯度结果放在了原值上，此时累计2+2+3得到7，如果没有y.backward()这个句，结果就是5<strong>(由于梯度会进行累加，所以卷积神经网络搭建的时候，要进行清零操作)</strong>。<strong>即如果原数据的requires_grad的属性是True，则clone后也是True，只是梯度信息累加在了原数据上，可以通过a.requires_grad来或得是否进行梯度运算</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tensor(<span class="number">2.</span>)</span><br><span class="line"><span class="literal">None</span></span><br><span class="line">tensor(<span class="number">7.</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>如果原数据的requires_grad的属性是False，则clone后设置为True，那么梯度信息只能留在clone后的数据上</strong>，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">a = torch.tensor(<span class="number">1.0</span>)</span><br><span class="line">a_ = a.clone()</span><br><span class="line">a_.requires_grad_() <span class="comment">#require_grad=True</span></span><br><span class="line">y = a_ ** <span class="number">2</span></span><br><span class="line">y.backward()</span><br><span class="line">print(a.grad)   <span class="comment"># None</span></span><br><span class="line">print(a_.grad) </span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">None</span></span><br><span class="line">tensor(<span class="number">2.</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>注意：其实view其本质只是将数据拉成一个维度的，而torch中只是可视化不同，内存依旧是共享的原数据data的。</strong></p>
+<p>参考链接：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/weixin_43199584/article/details/106876679">(29条消息) PyTorch中的clone(),detach()及相关扩展_Breeze-CSDN博客</a></p>
+<p>而a.requires_grad_()是将梯度设置为True，也可以传入True/False,比如：a.requires_grad_(True)，不写默认为True，返回的依旧是a，不过梯度是否纪录这个属性被修改了。所以回到to_var类，其返回的就是clone后的一个新空间然后又detach使其脱离计算图，其实此时不需要再设置require_grad_了，因为其已经没有梯度了，再False没有意义。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">to_var</span>(<span class="params">x, requires_grad=<span class="literal">False</span></span>):</span></span><br><span class="line">    <span class="keyword">if</span> torch.cuda.is_available():</span><br><span class="line">        x = x.cuda()</span><br><span class="line">    <span class="keyword">return</span> x.clone().detach().requires_grad_(requires_grad)</span><br></pre></td></tr></table></figure>
+<h3 id="MaskedLinear子类02"><a href="#MaskedLinear子类02" class="headerlink" title="MaskedLinear子类02"></a>MaskedLinear子类02</h3><p>继续MaskedLinear类，所以如下就是传入一个mask，但是clone一个获取新内存同时通过detach使其脱离计算图。（因为剪枝的mask我们是希望不随梯度进行改变的）。<strong>如下self.weight就是得到权重，但是这个权重是加上了梯度属性的，self.weight则得到了简单的数据，其和self.state_dict()[“weight”],state_dict()由上述知道其实类的一个方法，主要是用于获取训练好的模型后的参数，用于保存的，所以self.state_dict()[“weight”]直接就是不带梯度的。所以self.state_dict()[“weight”].data这样是否有这个.data都无所谓，因为梯度属性为Fasle，就不需要空间存储梯度。</strong>如下就是将参数乘上掩码的过程，为了得到稀疏化的参数。<strong>值得注意的是：可以看到nn.Module是weight方法的，weight方法是nn.Linear的方法，因为线性模型只有weight和bias，所以还有bias属性。</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_mask</span>(<span class="params">self, mask</span>):</span></span><br><span class="line">       self.mask = to_var(mask, requires_grad=<span class="literal">False</span>)</span><br><span class="line">       self.weight.data = self.weight.data * self.mask.data</span><br></pre></td></tr></table></figure>
+<p>该类的forwar也是判断是否进行掩码操作的。</p>
+<h2 id="Troch标准类格式02"><a href="#Troch标准类格式02" class="headerlink" title="Troch标准类格式02"></a>Troch标准类格式02</h2><p>继续回到MLP类，如下，这个inplace我们似乎不太常用，这个属性作用是什么呢？其默认是False，即输入一个值时候，默认为是值传递，即返回的数值是一个新的内存空间，而True的话，则是地址传递，可以通过打印<strong>id(a)</strong>来查看，发现其输入输出是同一个地址，即共享内存了，会修改输入的值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.relu1 = nn.ReLU(inplace=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<p>然后下面如下，其实forward函数是类实例化后，输入参数自动执行的方法，其实本质是自动执行了__call__,然后该魔法函数中调用了forward。在该函数中，上述clone那写了，view只是改变可视化，内存依旧与之前的共享。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span>(<span class="params">self, x</span>):</span></span><br><span class="line">    out = x.view(x.size(<span class="number">0</span>), -<span class="number">1</span>)</span><br><span class="line">    out = self.relu1(self.linear1(out))</span><br><span class="line">    out = self.relu2(self.linear2(out))</span><br><span class="line">    out = self.linear3(out)</span><br><span class="line">    <span class="keyword">return</span> out</span><br></pre></td></tr></table></figure>
+<p>然后看下一个方法，这个方法显然是给linear方法设置参数的，linear方法即上面的MaskLinear类，其通过set_mask来设置掩码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_masks</span>(<span class="params">self, masks</span>):</span></span><br><span class="line">    <span class="comment"># Should be a less manual way to set masks</span></span><br><span class="line">    <span class="comment"># Leave it for the future</span></span><br><span class="line">    self.linear1.set_mask(masks[<span class="number">0</span>])</span><br><span class="line">    self.linear2.set_mask(masks[<span class="number">1</span>])</span><br><span class="line">    self.linear3.set_mask(masks[<span class="number">2</span>])</span><br></pre></td></tr></table></figure>
+<p>最后是加载权重的方法，如下。strcit的参数意思是，如果之前的网络时两层的，但是现在是3层的，那么直接加载会报错，因为两个模型不一致，但是将这个参数改为False，即表示能用多少用多少，即取两层作为当前模型的前两层的权重。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_state_dict</span>(<span class="params">self, state_dict, strict=<span class="literal">True</span></span>):</span>        </span><br><span class="line">    <span class="built_in">super</span>().load_state_dict(state_dict, strict=<span class="literal">False</span>)     </span><br></pre></td></tr></table></figure>
+<p>模型搭建好了后，下面是训练函数的定义,首先得到一个实例化的model后，调用方法model.train(),这个方法是使得一些训练的方法生效(比如dropout)，使得一些推理的方法失效，与之对应的是model.eval()，其代表推理模式。然后for循环给批量数据，每次需要把数据送到GPU里(这里实例化的模型传入之前应该就是已放在GPU上了)，然后梯度归零，因为梯度会进行累加，所以要进行清零。后面就是正向传播得到输出，计算损失，再对损失进行求反向梯度，然后优化器优化（各类梯度下降，SGD等等）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train</span>(<span class="params">model, device, train_loader, optimizer, epoch</span>):</span></span><br><span class="line">    model.train()</span><br><span class="line">    total = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> batch_idx, (data, target) <span class="keyword">in</span> <span class="built_in">enumerate</span>(train_loader):</span><br><span class="line">        data, target = data.to(device), target.to(device)</span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        output = model(data)</span><br><span class="line">        loss = F.cross_entropy(output, target)</span><br><span class="line">        loss.backward()</span><br><span class="line">        optimizer.step()</span><br><span class="line">        </span><br><span class="line">        total += <span class="built_in">len</span>(data)</span><br><span class="line">        progress = math.ceil(batch_idx / <span class="built_in">len</span>(train_loader) * <span class="number">50</span>)</span><br><span class="line">        print(<span class="string">&quot;\rTrain epoch %d: %d/%d, [%-51s] %d%%&quot;</span> %</span><br><span class="line">              (epoch, total, <span class="built_in">len</span>(train_loader.dataset),</span><br><span class="line">               <span class="string">&#x27;-&#x27;</span> * progress + <span class="string">&#x27;&gt;&#x27;</span>, progress * <span class="number">2</span>), end=<span class="string">&#x27;&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>推理函数如下，较为简单，讲解略：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span>(<span class="params">model, device, test_loader</span>):</span></span><br><span class="line">    model.<span class="built_in">eval</span>()</span><br><span class="line">    test_loss = <span class="number">0</span></span><br><span class="line">    correct = <span class="number">0</span></span><br><span class="line">    <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">        <span class="keyword">for</span> data, target <span class="keyword">in</span> test_loader:</span><br><span class="line">            data, target = data.to(device), target.to(device)</span><br><span class="line">            output = model(data)</span><br><span class="line">            test_loss += F.cross_entropy(output, target, reduction=<span class="string">&#x27;sum&#x27;</span>).item()  <span class="comment"># sum up batch loss</span></span><br><span class="line">            pred = output.argmax(dim=<span class="number">1</span>, keepdim=<span class="literal">True</span>)  <span class="comment"># get the index of the max log-probability</span></span><br><span class="line">            correct += pred.eq(target.view_as(pred)).<span class="built_in">sum</span>().item()</span><br><span class="line"></span><br><span class="line">    test_loss /= <span class="built_in">len</span>(test_loader.dataset)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">&#x27;\nTest: average loss: &#123;:.4f&#125;, accuracy: &#123;&#125;/&#123;&#125; (&#123;:.0f&#125;%)&#x27;</span>.<span class="built_in">format</span>(</span><br><span class="line">        test_loss, correct, <span class="built_in">len</span>(test_loader.dataset),</span><br><span class="line">        <span class="number">100.</span> * correct / <span class="built_in">len</span>(test_loader.dataset)))</span><br><span class="line">    <span class="keyword">return</span> test_loss, correct / <span class="built_in">len</span>(test_loader.dataset)</span><br></pre></td></tr></table></figure>
+<p>训练完成后，要考虑剪枝,如下，其中第一个参数是模型，第二个参数是需要剪枝的比例，比如0.9，即剪百分之九十的weight，即使得百分之90的weight为0。首先遍历参数，如果size长度不是1则需要裁剪(因为bias是一维的，即shape一维，所以bias不需要裁剪)，<strong>np.percentile(weight, pruning_perc)这个第一个参数传入一个数组，第二个参数传入0-100(代表0%-100%)的数a,返回的是一个值，比如传入60，返回的这个值超过了数组中百分之60的数，来举个例子，比如传入的数组是[[1,4,6],[2,5,7]],百分数参数是70，则把数组拉平从小到大排序，即1,2,4,5,6,7，那么百分之70在哪呢？numpy中下标是0开始到5，所以5<em>0.7=3.5,所以得到的下标应该是在3.5这，那么3.5不是整数怎么办？进行线性插值，所以结果就是5+(6-5)\</em>0.5=5.5。得到这个值即可通过判断data&gt;该值，得到0-1变量，即掩码。</strong>然后第二个for即是生成0-1变量的掩码，记得得变成float类型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">weight_prune</span>(<span class="params">model, pruning_perc</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    Prune pruning_perc % weights layer-wise</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    threshold_list = []</span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> model.parameters():</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(p.data.size()) != <span class="number">1</span>: <span class="comment"># bias</span></span><br><span class="line">            weight = p.cpu().data.<span class="built_in">abs</span>().numpy().flatten()</span><br><span class="line">            threshold = np.percentile(weight, pruning_perc)</span><br><span class="line">            threshold_list.append(threshold)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># generate mask</span></span><br><span class="line">    masks = []</span><br><span class="line">    idx = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> model.parameters():</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(p.data.size()) != <span class="number">1</span>:</span><br><span class="line">            pruned_inds = p.data.<span class="built_in">abs</span>() &gt; threshold_list[idx]</span><br><span class="line">            masks.append(pruned_inds.<span class="built_in">float</span>())</span><br><span class="line">            idx += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> masks</span><br></pre></td></tr></table></figure>
+<p>所有函数都定义好了，下面看一下主函数，torch.manual_seed(0)函数是设定随机数种子，后面生成的随机数都是固定的，即不会变化(ramdom.seed类似)，然后使用torch.utils.data.DataLoader读取MNIST数据集，如果没有该数据集，则将download设置为True，’../data/MNIST’即为下载的路径，同时也是MNIST数据集的路径，..和linux中的cd ..一样，代表路径回退一级的意思。在’../data/MNIST’下，还会有一个交MNIST的文件夹，里面有raw、processed文件夹，datasets.MNIST这个函数会自动识别的，transform参数代表数据预处理，即变为tensor然后还进行归一化（均值和方差）。torch.utils.data.DataLoader的batch_size是设定batch大小，shuffle代表是否打乱顺序。训练完成后测试，<strong>然后保存模型参数：torch.save(model.state_dict(), ‘not-pruned.ckpt’)</strong>，然后通过copy库的deepcopy来深度拷贝这个模型，作为剪枝，同时测试剪枝后的准确率。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    epochs = <span class="number">1</span></span><br><span class="line">    batch_size = <span class="number">64</span></span><br><span class="line">    torch.manual_seed(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    device = torch.device(<span class="string">&quot;cuda&quot;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span>)</span><br><span class="line"></span><br><span class="line">    train_loader = torch.utils.data.DataLoader(</span><br><span class="line">        datasets.MNIST(<span class="string">&#x27;../data/MNIST&#x27;</span>, train=<span class="literal">True</span>, download=<span class="literal">False</span>,</span><br><span class="line">                       transform=transforms.Compose([</span><br><span class="line">                           transforms.ToTensor(),</span><br><span class="line">                           transforms.Normalize((<span class="number">0.1307</span>,), (<span class="number">0.3081</span>,))</span><br><span class="line">                       ])),</span><br><span class="line">        batch_size=batch_size, shuffle=<span class="literal">True</span>)</span><br><span class="line">    test_loader = torch.utils.data.DataLoader(</span><br><span class="line">        datasets.MNIST(<span class="string">&#x27;../data/MNIST&#x27;</span>, train=<span class="literal">False</span>, download=<span class="literal">False</span>, transform=transforms.Compose([</span><br><span class="line">            transforms.ToTensor(),</span><br><span class="line">            transforms.Normalize((<span class="number">0.1307</span>,), (<span class="number">0.3081</span>,))</span><br><span class="line">        ])),</span><br><span class="line">        batch_size=<span class="number">1000</span>, shuffle=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    model = MLP().to(device)</span><br><span class="line">    optimizer = torch.optim.Adadelta(model.parameters())</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, epochs + <span class="number">1</span>):</span><br><span class="line">        train(model, device, train_loader, optimizer, epoch)</span><br><span class="line">        _, acc = test(model, device, test_loader)</span><br><span class="line">    </span><br><span class="line">    torch.save(model.state_dict(), <span class="string">&#x27;not-pruned.ckpt&#x27;</span>)</span><br><span class="line">    print(<span class="string">&quot;\n=====Pruning 60%=======\n&quot;</span>)</span><br><span class="line">    pruned_model = deepcopy(model)</span><br><span class="line">    mask = weight_prune(pruned_model, <span class="number">60</span>)</span><br><span class="line">    pruned_model.set_masks(mask)</span><br><span class="line">    test(pruned_model, device, test_loader)</span><br><span class="line">    torch.save(pruned_model.state_dict(), <span class="string">&#x27;pruned.ckpt&#x27;</span>)</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> model, pruned_model</span><br></pre></td></tr></table></figure>
+<p>剪枝完成后，需要考虑可视化问题，如下，其中model.modules是一个迭代器，可以遍历所有模型的所有子层(init中定义的层)，然后再通过hasattr函数来判断该层是否有weight属性来判断是否是全连接层，进行绘图，plt.subplot(131)代表1行3列的绘图板，在第一个格子里绘图，plt.subplot(132)，表示在第二个格子里绘图。结果可以发现剪枝百分之60后，准确率只掉了一个点，但是参数化绝对稀疏了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot_weights</span>(<span class="params">model</span>):</span></span><br><span class="line">    modules = [module <span class="keyword">for</span> module <span class="keyword">in</span> model.modules()]</span><br><span class="line">    num_sub_plot = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i, layer <span class="keyword">in</span> <span class="built_in">enumerate</span>(modules):</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">hasattr</span>(layer, <span class="string">&#x27;weight&#x27;</span>):</span><br><span class="line">            plt.subplot(<span class="number">131</span>+num_sub_plot)</span><br><span class="line">            w = layer.weight.data</span><br><span class="line">            w_one_dim = w.cpu().numpy().flatten()</span><br><span class="line">            plt.hist(w_one_dim[w_one_dim!=<span class="number">0</span>], bins=<span class="number">50</span>)</span><br><span class="line">            num_sub_plot += <span class="number">1</span></span><br><span class="line">    plt.show()</span><br><span class="line">plot_weights(model)</span><br><span class="line">plot_weights(pruned_model)</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/oehbND"><img src="https://z3.ax1x.com/2021/11/27/oehbND.png" alt="oehbND.png"></a><br><a target="_blank" rel="noopener external nofollow noreferrer" href="https://imgtu.com/i/oehHAO"><img src="https://z3.ax1x.com/2021/11/27/oehHAO.png" alt="oehHAO.png"></a></p>
+<p>下面具体说一下modules方法,测试代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">modules = [module <span class="keyword">for</span> module <span class="keyword">in</span> model.modules()]</span><br><span class="line"><span class="comment">#print(modules)</span></span><br><span class="line">count = <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> module <span class="keyword">in</span> model.modules():</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(module, <span class="string">&#x27;weight&#x27;</span>):</span><br><span class="line">        print(count,<span class="string">&quot;有weight属性&quot;</span>)</span><br><span class="line">    print(count,module)</span><br><span class="line">    count = count+<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>输出如下，可以看出，迭代器返回的第一个是MLP大类的所有方法层，后续开始返回单独子层，上面也说了MLP是继承nn.Module的，dir可以看出其是没有weight方法的，但是Linear是有的，所以通过判断是否有weight属性来判断是否是全连接or卷积层。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> MLP(</span><br><span class="line">  (linear1): MaskedLinear(in_features=<span class="number">784</span>, out_features=<span class="number">200</span>, bias=<span class="literal">True</span>)</span><br><span class="line">  (relu1): ReLU(inplace=<span class="literal">True</span>)</span><br><span class="line">  (linear2): MaskedLinear(in_features=<span class="number">200</span>, out_features=<span class="number">200</span>, bias=<span class="literal">True</span>)</span><br><span class="line">  (relu2): ReLU(inplace=<span class="literal">True</span>)</span><br><span class="line">  (linear3): MaskedLinear(in_features=<span class="number">200</span>, out_features=<span class="number">10</span>, bias=<span class="literal">True</span>)</span><br><span class="line">)</span><br><span class="line"><span class="number">2</span> 有weight属性</span><br><span class="line"><span class="number">2</span> MaskedLinear(in_features=<span class="number">784</span>, out_features=<span class="number">200</span>, bias=<span class="literal">True</span>)</span><br><span class="line"><span class="number">3</span> ReLU(inplace=<span class="literal">True</span>)</span><br><span class="line"><span class="number">4</span> 有weight属性</span><br><span class="line"><span class="number">4</span> MaskedLinear(in_features=<span class="number">200</span>, out_features=<span class="number">200</span>, bias=<span class="literal">True</span>)</span><br><span class="line"><span class="number">5</span> ReLU(inplace=<span class="literal">True</span>)</span><br><span class="line"><span class="number">6</span> 有weight属性</span><br><span class="line"><span class="number">6</span> MaskedLinear(in_features=<span class="number">200</span>, out_features=<span class="number">10</span>, bias=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<p>总结:a代表tensor变量，C代表一个类</p>
+<p>a.clone机制</p>
+<p>a.detach机制</p>
+<p>a.requires_grad_</p>
+<p>a.data</p>
+<p>id(a)#打印指针</p>
+<p>nn.Relu的inplace参数</p>
+<p>C.state_dict()#获得含所有参数的字典，无梯度信息，且不是迭代器，其他parameters等都是可迭代对象</p>
+<p>C.parameters()#获得所有参数，可以list(C.parameter)变成迭代器，也可以for，得到的参数含梯度信息。</p>
+<p>C.weight#获得网络权重，nn.Linear有这个方法，还有bias方法，nn.Module没有，</p>
+<p>np.percentile#返回超过百分之a的数。</p>
+<p>注：torch中梯度等需要数据是float，数据生成的时候，最好都是以float存储，至少tf中都不会自动类型转换，可能怕存储爆炸？torch测试了是会自动数据转换，但是还是最好float一下。</p>
+<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:25px;">- - - - - - - - - - - - - - 本文结束啦，感谢您的观看 - - - - - - - - - - - - - -</div>
+    
+</div>
+
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\07\24\深度学习常用词汇及常用编程语法\" rel="bookmark">深度学习常用词汇及常用编程语法--不断更新中</a></div>
+    </li>
+  </ul>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Apers
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://gezhilai.com/2021/11/28/Torch%E7%B1%BB%E5%85%B7%E4%BD%93%E8%AF%B4%E6%98%8E-%E4%BB%A5%E5%89%AA%E6%9E%9D%E6%A8%A1%E5%9E%8B%E4%B8%BA%E4%BE%8B/" title="Torch类具体说明--以剪枝模型为例">http://gezhilai.com/2021/11/28/Torch类具体说明-以剪枝模型为例/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-ship"></i> 深度学习</a>
+              <a href="/tags/%E5%89%AA%E6%9E%9D/" rel="tag"><i class="fa fa-ship"></i> 剪枝</a>
+              <a href="/tags/Pytorch/" rel="tag"><i class="fa fa-ship"></i> Pytorch</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/20/xml%E8%BD%ACMs-CoCo%E6%A0%BC%E5%BC%8F%E7%9A%84json/" rel="prev" title="xml转Ms CoCo格式的json">
+      <i class="fa fa-chevron-left"></i> xml转Ms CoCo格式的json
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Torch%E7%B1%BB%E8%AF%B4%E6%98%8E%E2%80%94%E4%BB%A5%E5%89%AA%E6%9E%9D%E6%A8%A1%E5%9E%8B%E4%B8%BA%E4%BE%8B"><span class="nav-number">1.</span> <span class="nav-text">Torch类说明—以剪枝模型为例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Troch%E6%A0%87%E5%87%86%E7%B1%BB%E6%A0%BC%E5%BC%8F01"><span class="nav-number">1.1.</span> <span class="nav-text">Troch标准类格式01</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MaskedLinear%E5%AD%90%E7%B1%BB01"><span class="nav-number">1.1.1.</span> <span class="nav-text">MaskedLinear子类01</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#to-var%E7%B1%BB"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">to_var类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MaskedLinear%E5%AD%90%E7%B1%BB02"><span class="nav-number">1.1.2.</span> <span class="nav-text">MaskedLinear子类02</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Troch%E6%A0%87%E5%87%86%E7%B1%BB%E6%A0%BC%E5%BC%8F02"><span class="nav-number">1.2.</span> <span class="nav-text">Troch标准类格式02</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Apers"
+      src="/images/avatar.jpg#QQ1.jpg">
+  <p class="site-author-name" itemprop="name">Apers</p>
+  <div class="site-description" itemprop="description">若有诗书藏于心,岁月从不败美人</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiaoxiao-coder" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoxiao-coder" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:xiaoxiaocoder1@gmail.com" title="E-Mail → mailto:xiaoxiaocoder1@gmail.com" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-google"></i>Google</a>
+      </span>
+  </div>
+
+
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Apers</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">118k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:47</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@2.7.8/unpacked/MathJax.js?config=TeX-MML-AM_CHTML';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'mLlhk74loQanT3wsKkyBMxve-gzGzoHsz',
+      appKey     : 'gie2FNStD4ro7YKzTQYJag4u',
+      placeholder: "留下你的痕迹吧!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+
+
+<div class="moon-menu">
+  <div class="moon-menu-items">
+    
+    <div class="moon-menu-item" onclick="back2bottom()">
+      <i class='fa fa-chevron-down'></i>    </div>
+    
+    <div class="moon-menu-item" onclick="back2top()">
+      <i class='fa fa-chevron-up'></i>    </div>
+    
+  </div>
+  <div class="moon-menu-button">
+    <svg class="moon-menu-bg">
+      <circle class="moon-menu-cricle" cx="50%" cy="50%" r="44%"></circle>
+      <circle class="moon-menu-border" cx="50%" cy="50%" r="48%"></circle>
+    </svg>
+    <div class="moon-menu-content">
+      <div class="moon-menu-icon"><i class='fas fa-ellipsis-v'></i></div>
+      <div class="moon-menu-text"></div>
+    </div>
+  </div>
+</div><script src="/js/injector.js"></script>
+</body>
+</html>

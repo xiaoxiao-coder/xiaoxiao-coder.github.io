@@ -32,7 +32,7 @@
 <meta property="og:description" content="之前说要更新一下本科期间做的一些东西，然后再讲解一下加速器如何在FPGA上搭建，结果太忙了。。。。木得时间，后面有时间慢慢补上。 最近读了faster rcnn和yolo的源码，里面用到的一些函数自己不常用或者用法新奇或者有时候自己忘掉的，而且最先读faster rcnn，two-stage的源码的确比较复杂，原理很快看懂，读源码花了几天才搞明白，写篇博客不断更新记录一下遇到的一些函数和用法，防止">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-07-23T19:52:32.000Z">
-<meta property="article:modified_time" content="2021-11-21T07:57:34.039Z">
+<meta property="article:modified_time" content="2021-11-27T08:30:06.472Z">
 <meta property="article:author" content="Apers">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="CNN">
@@ -143,17 +143,17 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">28</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">30</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">23</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">24</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">19</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">20</span></a>
 
   </li>
         <li class="menu-item menu-item-schedule">
@@ -273,7 +273,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-11-21 07:57:34" itemprop="dateModified" datetime="2021-11-21T07:57:34Z">2021-11-21</time>
+                <time title="修改时间：2021-11-27 08:30:06" itemprop="dateModified" datetime="2021-11-27T08:30:06Z">2021-11-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -323,14 +323,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>27k</span>
+              <span>29k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>24 分钟</span>
+              <span>26 分钟</span>
             </span>
 
         </div>
@@ -643,7 +643,7 @@
 <p>之所以新建一个环境，是因为mindspore所需要的python环境是3.7及以上的，若3.7之下的版本，是装不成功的。</p>
 <p>cv2安装：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple opencv-python</span><br></pre></td></tr></table></figure>
-<h2 id="usr-bin-xauth-error-timeout-in-locking-authority-file-home-gezhilai-Xauthority"><a href="#usr-bin-xauth-error-timeout-in-locking-authority-file-home-gezhilai-Xauthority" class="headerlink" title="/usr/bin/xauth: error/timeout in locking authority file /home/gezhilai/.Xauthority"></a>/usr/bin/xauth: error/timeout in locking authority file /home/gezhilai/.Xauthority</h2><p>解决如下:</p>
+<h2 id="远程服务器登录报错，账号创建问题-usr-bin-xauth-error-timeout-in-locking-authority-file-home-gezhilai-Xauthority"><a href="#远程服务器登录报错，账号创建问题-usr-bin-xauth-error-timeout-in-locking-authority-file-home-gezhilai-Xauthority" class="headerlink" title="远程服务器登录报错，账号创建问题:/usr/bin/xauth: error/timeout in locking authority file /home/gezhilai/.Xauthority"></a>远程服务器登录报错，账号创建问题:/usr/bin/xauth: error/timeout in locking authority file /home/gezhilai/.Xauthority</h2><p>解决如下:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir &#x2F;home&#x2F;gezhilai</span><br><span class="line">sudo chown gezhilai:gezhilai -R &#x2F;home&#x2F;gezhilai</span><br><span class="line">sudo usermod -s &#x2F;bin&#x2F;bash gezhilai</span><br></pre></td></tr></table></figure>
 <p>参考链接:<blockquote class="blockquote-center">
             <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/dong_liuqi/article/details/108842873">(29条消息) Liunx创建新用户登录异常：/usr/bin/xauth: error/timeout in locking authority file /home/liuqidong/.Xauthority_dong_liuqi的博客-CSDN博客</a></p>
@@ -726,6 +726,30 @@
 <p>其中jupyter kernelspec list可以查看所有的环境用的kernel路径（json中配置了python编译器位置）</p>
 <h2 id="Pycharm中使用anconda中的环境"><a href="#Pycharm中使用anconda中的环境" class="headerlink" title="Pycharm中使用anconda中的环境"></a>Pycharm中使用anconda中的环境</h2><p>file-setting-Project Interpreter-system Interperter处，将python编译器变成anconda的，如果anaconda已加入环境变量中，是可以自动识别出来的</p>
 <h2 id="本地打开服务器的tensorboard"><a href="#本地打开服务器的tensorboard" class="headerlink" title="本地打开服务器的tensorboard"></a>本地打开服务器的tensorboard</h2><p>tensorboard —logdir=. —bind_all然后ip:6006就可以在本地打开了</p>
+<h2 id="Torch中使用GPU"><a href="#Torch中使用GPU" class="headerlink" title="Torch中使用GPU"></a>Torch中使用GPU</h2><p>代码中，常会发现如下两句:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">device = torch.device(<span class="string">&quot;cuda:0&quot;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span>)</span><br><span class="line">model.to(device)</span><br></pre></td></tr></table></figure>
+<p>上述的”cuda:0”,如果电脑只有单张独立显卡，就是”cuda”。这两行是放在读取数据之前，意思是将模型复制一份到device上，如果GPU存在(同时torch是GPU版本，cudatooltik也匹配)，torch.cuda.is_available()就会判断成立。然后后面读取数据的时候也通过data.to(device)把数据复制一份到GPU上，初始数据复制到了GPU上，中间的数据自然就会存在GPU的显存中,torch类方法中就有这个to方法。</p>
+<p>而数据如下即可，g.cuda()如果之前没有特地的设置的，默认是cuda:0,所以如下即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> torch.cuda.is_available():</span><br><span class="line">    h = g.cuda()</span><br><span class="line">    print(h)</span><br></pre></td></tr></table></figure>
+<p>若是多块GPU，模型用到GPU上如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">model = Model()</span><br><span class="line"><span class="keyword">if</span> torch.cuda.device_count() &gt; <span class="number">1</span>:</span><br><span class="line">	model = nn.DataParallel(model，device_ids=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>])</span><br><span class="line"><span class="keyword">elif</span>:</span><br><span class="line">    device = torch.device(<span class="string">&quot;cuda:0&quot;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span>)</span><br><span class="line">    model.to(device)</span><br></pre></td></tr></table></figure>
+<p>或者如下：(推荐)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">os.environ[<span class="string">&#x27;CUDA_VISIBLE_DEVICES&#x27;</span>] = <span class="string">&#x27;0,3&#x27;</span></span><br><span class="line">net = torch.nn.DataParallel(model)</span><br></pre></td></tr></table></figure>
+<p>数据加载的话，需要如下,但是.cuda默认是第一章卡，所以还需要os.environ[‘CUDA_VISIBLE_DEVICES’] = ‘0,3’这个命令在之前才可以。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">inputs = inputs.cuda()</span><br><span class="line">labels = labels.cuda()</span><br></pre></td></tr></table></figure>
+<p>如果多GPU下只用一张卡，还可以如下(不推荐)，如下情况，虽然只指定了一张卡，但是print的结果不变，即不会改变可见显卡，后续还可以用<code>torch.nn.DataParallel(model, device_ids=[1, 2])</code>进行指定，但是必须包含<code>set_device(1)</code>指定的device:1的设备，缺点是仍然会存在占用一些device:0的gpu内存；</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">torch.cuda.set_device(<span class="number">1</span>)</span><br><span class="line">print(torch.cuda.device_count()) <span class="comment">#可用GPU数量</span></span><br></pre></td></tr></table></figure>
+<p>当然可以通过其他方式制定GPU:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#（1）直接终端中设定 </span></span><br><span class="line">CUDA_VISIBLE_DEVICES=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#（2）python代码中设定：</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">&#x27;CUDA_VISIBLE_DEVICE&#x27;</span>]=<span class="string">&#x27;1&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#（3）使用函数set_device</span></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">torch.cuda.set_device(<span class="built_in">id</span>)</span><br></pre></td></tr></table></figure>
+<p>把Tensor放到GPU上的方法如下，也可以g.to(device)。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> torch.cuda.is_available():</span><br><span class="line">    h = g.cuda()</span><br><span class="line">    print(h)</span><br></pre></td></tr></table></figure>
+<p>把GPU上的Tensor或者Variable的数据返回到CPU上变成numpy格式(比如绘图的时候需要用到，GPU上的数据没法直接在界面上可视化)：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch.autograd <span class="keyword">import</span> Variable</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将变量或者数据移到GPU</span></span><br><span class="line">gpu_info = Variable(torch.randn(<span class="number">3</span>,<span class="number">3</span>)).cuda()</span><br><span class="line"><span class="comment"># 将变量或者数据移到CPU</span></span><br><span class="line">cpu_info = gpu_info.cpu().numpy()</span><br></pre></td></tr></table></figure>
+<p>注:常用的torch.cuda函数:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">torch.cuda.is_available()<span class="comment">#如果可以cuda驱动gpu，则为true</span></span><br><span class="line">torch.cuda.device_count()<span class="comment">#返回GPU可用数量，2则代表2个</span></span><br><span class="line">torch.cuda.get_device_name()<span class="comment">#返回GPU型号，如GeForce RTX 3090</span></span><br><span class="line">torch.cuda.get_device_properties(<span class="string">&quot;cuda:0&quot;</span>)<span class="comment">#返回GPU性能，显存、线程等等</span></span><br><span class="line">torch.cuda.current_device()<span class="comment">#查看当前GPU使用序号。注意#os.environ[&quot;CUDA_VISIBLE_DEVICES&quot;] = &#x27;1,2&#x27;这种指令会改变torch感知设备的编号，使用了1和#2后，torch.cuda.current_device()感知只会是0或1，因为感知是从0开始的。</span></span><br></pre></td></tr></table></figure>
+<p>参考链接:<a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/shaopeng568/article/details/95205345">(29条消息) Pytorch to（device）_shaopeng568的专栏-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://blog.csdn.net/qq_34243930/article/details/106695877">(29条消息) pytorch之多GPU使用——#CUDA_VISIBLE_DEVICES使用 #torch.nn.DataParallel() #报错解决_夏普通-CSDN博客</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://zhuanlan.zhihu.com/p/86441879">pytorch多gpu并行训练 - 知乎 (zhihu.com)</a></p>
 <h2 id="模型训练中显示启动卷积失败，cuda等等问题。"><a href="#模型训练中显示启动卷积失败，cuda等等问题。" class="headerlink" title="模型训练中显示启动卷积失败，cuda等等问题。"></a>模型训练中显示启动卷积失败，cuda等等问题。</h2><p>os.environ[‘CUDA_VISIBLE_DEVICES’] = ‘/gpu:0’</p>
 <p>有一次写代码发现明明写的是：</p>
 <p>os.environ[“CUDA_VISIBLE_DEVICES”] = “0,1,2,3,4,5,6,7”</p>
@@ -754,6 +778,9 @@
     </li>
     <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="\2021\03\16\数据量化\" rel="bookmark">数据量化</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\11\28\Torch类具体说明-以剪枝模型为例\" rel="bookmark">Torch类具体说明--以剪枝模型为例</a></div>
     </li>
   </ul>
 
@@ -854,7 +881,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%90%8D%E8%AF%8D"><span class="nav-number">1.</span> <span class="nav-text">常用名词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E7%A7%B0"><span class="nav-number">2.</span> <span class="nav-text">简称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">Pytorch &amp; Numpy基础原理类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%B9%BF%E6%92%AD%E6%9C%BA%E5%88%B6%E3%80%82"><span class="nav-number">3.1.</span> <span class="nav-text">1、广播机制。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%AD%98%E5%82%A8%E5%92%8C%E8%A7%86%E5%9B%BE%E3%80%82"><span class="nav-number">3.2.</span> <span class="nav-text">2、存储和视图。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%96%84%E7%94%A8%EF%BC%9F%E6%9F%A5%E7%9C%8B%E5%87%BD%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">善用？查看函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy"><span class="nav-number">4.</span> <span class="nav-text">Pytorch &amp; Numpy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96"><span class="nav-number">5.</span> <span class="nav-text">文件读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%93%E5%AE%89%E8%A3%85"><span class="nav-number">6.</span> <span class="nav-text">库安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#usr-bin-xauth-error-timeout-in-locking-authority-file-home-gezhilai-Xauthority"><span class="nav-number">7.</span> <span class="nav-text">&#x2F;usr&#x2F;bin&#x2F;xauth: error&#x2F;timeout in locking authority file &#x2F;home&#x2F;gezhilai&#x2F;.Xauthority</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anaconda%E4%B8%AD%E6%96%B0%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="nav-number">8.</span> <span class="nav-text">anaconda中新建环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85%E5%8C%85"><span class="nav-number">9.</span> <span class="nav-text">批量安装包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RuntimeError-CUDA-error-no-kernel-image-is-available-for-execution-on-the-device%E6%8A%A5%E9%94%99"><span class="nav-number">10.</span> <span class="nav-text">RuntimeError: CUDA error: no kernel image is available for execution on the device报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%BF%90%E8%A1%8Cpy%E6%96%87%E4%BB%B6"><span class="nav-number">11.</span> <span class="nav-text">命令行运行py文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8jupyter%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">12.</span> <span class="nav-text">在jupyter中使用虚拟环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8jupyter%E4%B8%AD%E6%9F%90%E4%B8%AA%E7%8E%AF%E5%A2%83kernel-error"><span class="nav-number">13.</span> <span class="nav-text">在jupyter中某个环境kernel error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pycharm%E4%B8%AD%E4%BD%BF%E7%94%A8anconda%E4%B8%AD%E7%9A%84%E7%8E%AF%E5%A2%83"><span class="nav-number">14.</span> <span class="nav-text">Pycharm中使用anconda中的环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E6%89%93%E5%BC%80%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84tensorboard"><span class="nav-number">15.</span> <span class="nav-text">本地打开服务器的tensorboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%90%AF%E5%8A%A8%E5%8D%B7%E7%A7%AF%E5%A4%B1%E8%B4%A5%EF%BC%8Ccuda%E7%AD%89%E7%AD%89%E9%97%AE%E9%A2%98%E3%80%82"><span class="nav-number">16.</span> <span class="nav-text">模型训练中显示启动卷积失败，cuda等等问题。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%AB%99"><span class="nav-number">17.</span> <span class="nav-text">学习网站</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%90%8D%E8%AF%8D"><span class="nav-number">1.</span> <span class="nav-text">常用名词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E7%A7%B0"><span class="nav-number">2.</span> <span class="nav-text">简称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">Pytorch &amp; Numpy基础原理类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%B9%BF%E6%92%AD%E6%9C%BA%E5%88%B6%E3%80%82"><span class="nav-number">3.1.</span> <span class="nav-text">1、广播机制。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%AD%98%E5%82%A8%E5%92%8C%E8%A7%86%E5%9B%BE%E3%80%82"><span class="nav-number">3.2.</span> <span class="nav-text">2、存储和视图。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%96%84%E7%94%A8%EF%BC%9F%E6%9F%A5%E7%9C%8B%E5%87%BD%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">善用？查看函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pytorch-amp-Numpy"><span class="nav-number">4.</span> <span class="nav-text">Pytorch &amp; Numpy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96"><span class="nav-number">5.</span> <span class="nav-text">文件读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%93%E5%AE%89%E8%A3%85"><span class="nav-number">6.</span> <span class="nav-text">库安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%99%BB%E5%BD%95%E6%8A%A5%E9%94%99%EF%BC%8C%E8%B4%A6%E5%8F%B7%E5%88%9B%E5%BB%BA%E9%97%AE%E9%A2%98-usr-bin-xauth-error-timeout-in-locking-authority-file-home-gezhilai-Xauthority"><span class="nav-number">7.</span> <span class="nav-text">远程服务器登录报错，账号创建问题:&#x2F;usr&#x2F;bin&#x2F;xauth: error&#x2F;timeout in locking authority file &#x2F;home&#x2F;gezhilai&#x2F;.Xauthority</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#anaconda%E4%B8%AD%E6%96%B0%E5%BB%BA%E7%8E%AF%E5%A2%83"><span class="nav-number">8.</span> <span class="nav-text">anaconda中新建环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85%E5%8C%85"><span class="nav-number">9.</span> <span class="nav-text">批量安装包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RuntimeError-CUDA-error-no-kernel-image-is-available-for-execution-on-the-device%E6%8A%A5%E9%94%99"><span class="nav-number">10.</span> <span class="nav-text">RuntimeError: CUDA error: no kernel image is available for execution on the device报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%BF%90%E8%A1%8Cpy%E6%96%87%E4%BB%B6"><span class="nav-number">11.</span> <span class="nav-text">命令行运行py文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8jupyter%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83"><span class="nav-number">12.</span> <span class="nav-text">在jupyter中使用虚拟环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8jupyter%E4%B8%AD%E6%9F%90%E4%B8%AA%E7%8E%AF%E5%A2%83kernel-error"><span class="nav-number">13.</span> <span class="nav-text">在jupyter中某个环境kernel error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pycharm%E4%B8%AD%E4%BD%BF%E7%94%A8anconda%E4%B8%AD%E7%9A%84%E7%8E%AF%E5%A2%83"><span class="nav-number">14.</span> <span class="nav-text">Pycharm中使用anconda中的环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E6%89%93%E5%BC%80%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84tensorboard"><span class="nav-number">15.</span> <span class="nav-text">本地打开服务器的tensorboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Torch%E4%B8%AD%E4%BD%BF%E7%94%A8GPU"><span class="nav-number">16.</span> <span class="nav-text">Torch中使用GPU</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E4%B8%AD%E6%98%BE%E7%A4%BA%E5%90%AF%E5%8A%A8%E5%8D%B7%E7%A7%AF%E5%A4%B1%E8%B4%A5%EF%BC%8Ccuda%E7%AD%89%E7%AD%89%E9%97%AE%E9%A2%98%E3%80%82"><span class="nav-number">17.</span> <span class="nav-text">模型训练中显示启动卷积失败，cuda等等问题。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%AB%99"><span class="nav-number">18.</span> <span class="nav-text">学习网站</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -870,20 +897,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-count">30</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1194,13 +1221,13 @@ if(canvas.getContext){
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">99k</span>
+    <span title="站点总字数">118k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:30</span>
+    <span title="站点阅读时长">1:47</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
