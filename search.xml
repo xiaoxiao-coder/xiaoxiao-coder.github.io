@@ -923,6 +923,7 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
 <p>元组赋值方式，要么直接赋值给一个变量，那个变量就是接收到一个元组，即那个变量也是元组方式，要么接收值的变量个数和元组内元素数量一样（否则报错），变量之间用逗号隔开。</p>
 <p><strong>2、for循环使用方法</strong></p>
 <p>for常用功能两个：循环遍历和列表生成式 (其实列表生成式本质也是循环遍历，都用到了<strong>iter</strong>和<strong>next</strong>方法，即迭代器生成和不断获取下一个元素方法)。</p>
+<p>本节看完后可以继续看迭代器扩展—生成器等等：<a href="http://gezhilai.com/2021/12/20/算法精粹-一/">算法精粹(一) | Apers’ Blog (gezhilai.com)</a></p>
 <p>2.1、循环遍历</p>
 <p>循环遍历常用的 for i in range(start,end,stride)：不用细讲(需要注意的是，python语法中需要起始终止位置的，似乎从来不包括end的，比如切片，和verilog区别度显然)。此处主要想讲的是循环遍历的原理，for循环中，起始本质是使用了<strong>iter</strong>制造迭代器，然后用<strong>next</strong>方法不断顺序的读取下一个数据，不可回退，直至最后无元素可读，此刻抛出StopIteration 异常(这个异常估计就是try except处理了)，然后退出。下面介绍一下迭代器等。</p>
 <p>2.1.1、Iterable</p>
