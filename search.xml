@@ -1156,6 +1156,7 @@ G=\sqrt{(G^2_x+G^2_y)}</script><p>我们此时还需要设定一个阈值，该�
 <p>函数+？可以得到函数介绍，比如torch.stack?，记得函数后面不要加括号。</p>
 <p>verilog中负数不能比较大小，坑爹呀</p>
 <p>json</p>
+<p>torch中迭代器输入的数据，(batchsize，维度，行，列)，label是(batchsize)，输入的数据类型是torch.float,分类的label需要是int64(交叉熵函数需要这个数据类型)，int64在torch中是torch.long,一般定义数据的时候，可以直接指定dtype，也可以定义好变量a后，a.long这样修改dtype。对于一些机器学习的分类算法，比如sklearn的svm或者随机森林等等，输入(行，列)，一行是一个数据，label是(行数)</p>
 <h2 id="文件读取"><a href="#文件读取" class="headerlink" title="文件读取"></a>文件读取</h2><p>np.loadtxt(“a.txt”,dtype = np.complex128),这就是以复数的形式读取文件，否则默认形式是float，float是实数域的，自然不可以读复数域的。</p>
 <h2 id="库安装"><a href="#库安装" class="headerlink" title="库安装"></a>库安装</h2><p>指定镜像地址的命令如下</p>
 <p>pip install -i 镜像地址 包名</p>

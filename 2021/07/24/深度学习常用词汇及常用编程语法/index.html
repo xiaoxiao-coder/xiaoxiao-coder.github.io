@@ -32,7 +32,7 @@
 <meta property="og:description" content="之前说要更新一下本科期间做的一些东西，然后再讲解一下加速器如何在FPGA上搭建，结果太忙了。。。。木得时间，后面有时间慢慢补上。 最近读了faster rcnn和yolo的源码，里面用到的一些函数自己不常用或者用法新奇或者有时候自己忘掉的，而且最先读faster rcnn，two-stage的源码的确比较复杂，原理很快看懂，读源码花了几天才搞明白，写篇博客不断更新记录一下遇到的一些函数和用法，防止">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-07-23T19:52:32.000Z">
-<meta property="article:modified_time" content="2021-12-19T12:29:02.560Z">
+<meta property="article:modified_time" content="2021-12-22T06:22:12.862Z">
 <meta property="article:author" content="Apers">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="CNN">
@@ -273,7 +273,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-19 12:29:02" itemprop="dateModified" datetime="2021-12-19T12:29:02Z">2021-12-19</time>
+                <time title="修改时间：2021-12-22 06:22:12" itemprop="dateModified" datetime="2021-12-22T06:22:12Z">2021-12-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -626,6 +626,7 @@
 <p>函数+？可以得到函数介绍，比如torch.stack?，记得函数后面不要加括号。</p>
 <p>verilog中负数不能比较大小，坑爹呀</p>
 <p>json</p>
+<p>torch中迭代器输入的数据，(batchsize，维度，行，列)，label是(batchsize)，输入的数据类型是torch.float,分类的label需要是int64(交叉熵函数需要这个数据类型)，int64在torch中是torch.long,一般定义数据的时候，可以直接指定dtype，也可以定义好变量a后，a.long这样修改dtype。对于一些机器学习的分类算法，比如sklearn的svm或者随机森林等等，输入(行，列)，一行是一个数据，label是(行数)</p>
 <h2 id="文件读取"><a href="#文件读取" class="headerlink" title="文件读取"></a>文件读取</h2><p>np.loadtxt(“a.txt”,dtype = np.complex128),这就是以复数的形式读取文件，否则默认形式是float，float是实数域的，自然不可以读复数域的。</p>
 <h2 id="库安装"><a href="#库安装" class="headerlink" title="库安装"></a>库安装</h2><p>指定镜像地址的命令如下</p>
 <p>pip install -i 镜像地址 包名</p>
