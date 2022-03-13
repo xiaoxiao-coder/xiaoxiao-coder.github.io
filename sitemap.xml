@@ -277,13 +277,6 @@
   </url>
   
   <url>
-    <loc>http://gezhilai.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-tensorflow/</loc>
-    <lastmod>2022-03-13</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://gezhilai.com/tags/latex/</loc>
     <lastmod>2022-03-13</lastmod>
     <changefreq>daily</changefreq>
@@ -292,6 +285,13 @@
   
   <url>
     <loc>http://gezhilai.com/tags/word/</loc>
+    <lastmod>2022-03-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://gezhilai.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-tensorflow/</loc>
     <lastmod>2022-03-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -361,6 +361,20 @@
   </url>
   
   <url>
+    <loc>http://gezhilai.com/tags/%E5%85%89%E5%8D%8E%E6%A5%BC/</loc>
+    <lastmod>2022-03-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://gezhilai.com/tags/%E6%BC%AB%E8%B0%88/</loc>
+    <lastmod>2022-03-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://gezhilai.com/tags/%E7%AE%97%E6%B3%95%E7%B2%BE%E9%AB%93-python/</loc>
     <lastmod>2022-03-13</lastmod>
     <changefreq>daily</changefreq>
@@ -376,20 +390,6 @@
   
   <url>
     <loc>http://gezhilai.com/tags/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/</loc>
-    <lastmod>2022-03-13</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://gezhilai.com/tags/%E5%85%89%E5%8D%8E%E6%A5%BC/</loc>
-    <lastmod>2022-03-13</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://gezhilai.com/tags/%E6%BC%AB%E8%B0%88/</loc>
     <lastmod>2022-03-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -489,14 +489,14 @@
   </url>
   
   <url>
-    <loc>http://gezhilai.com/categories/Python/%E9%AD%94%E6%B3%95%E5%87%BD%E6%95%B0/</loc>
+    <loc>http://gezhilai.com/categories/latex/</loc>
     <lastmod>2022-03-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://gezhilai.com/categories/latex/</loc>
+    <loc>http://gezhilai.com/categories/Python/%E9%AD%94%E6%B3%95%E5%87%BD%E6%95%B0/</loc>
     <lastmod>2022-03-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -531,6 +531,13 @@
   </url>
   
   <url>
+    <loc>http://gezhilai.com/categories/%E5%85%89%E5%8D%8E%E6%A5%BC/</loc>
+    <lastmod>2022-03-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://gezhilai.com/categories/%E7%AE%97%E6%B3%95%E7%B2%BE%E9%AB%93/</loc>
     <lastmod>2022-03-13</lastmod>
     <changefreq>daily</changefreq>
@@ -539,13 +546,6 @@
   
   <url>
     <loc>http://gezhilai.com/categories/%E8%A5%BF%E7%93%9C%E4%B9%A6/</loc>
-    <lastmod>2022-03-13</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://gezhilai.com/categories/%E5%85%89%E5%8D%8E%E6%A5%BC/</loc>
     <lastmod>2022-03-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
